@@ -1,4 +1,7 @@
 {
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#0b0b5e"
+  },
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
