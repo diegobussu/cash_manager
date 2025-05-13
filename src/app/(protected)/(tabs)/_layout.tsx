@@ -5,7 +5,10 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 export default function BottomTabsLayout() {
   return (
     <Tabs
-      screenOptions={{ tabBarActiveTintColor: "teal" }}
+      screenOptions={{
+        tabBarInactiveTintColor: "#6EB2FF",
+        tabBarActiveTintColor: "#0853A9",
+      }}
       backBehavior="order"
     >
       <Tabs.Screen
@@ -13,10 +16,10 @@ export default function BottomTabsLayout() {
         options={{
           title: "Home",
           headerShown: false,
-          tabBarLabel: "Index",
+          tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
-              name="numeric-1-box-outline"
+              name="home-outline"
               size={size}
               color={color}
             />
@@ -24,14 +27,14 @@ export default function BottomTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="second"
+        name="(products)"
         options={{
-          title: "Second",
+          title: "Products",
           headerShown: false,
           popToTopOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
-              name="numeric-2-box-outline"
+              name="cart-outline"
               size={size}
               color={color}
             />
@@ -39,30 +42,23 @@ export default function BottomTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="third"
+        name="(history)"
         options={{
-          title: "Third",
+          title: "History",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="numeric-3-box-outline"
-              size={size}
-              color={color}
-            />
+            <MaterialCommunityIcons name="history" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="fourth"
+        name="(settings)"
         options={{
-          tabBarBadge: 2,
-          tabBarBadgeStyle: {
-            backgroundColor: "tomato",
-            color: "white",
-          },
-          title: "Fourth",
+          title: "Settings",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
-              name="numeric-4-box-outline"
+              name="cog-outline"
               size={size}
               color={color}
             />
