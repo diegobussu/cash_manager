@@ -4,6 +4,7 @@ import { AuthContext } from "@/utils/authContext";
 import { useContext, useState } from "react";
 import { TextInput, View } from "react-native";
 import { Link } from "expo-router";
+import Utils from "@/utils/Utils";
 
 export default function LoginScreen() {
   const authContext = useContext(AuthContext);
@@ -12,22 +13,18 @@ export default function LoginScreen() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
   const handleLogin = () => {
     if (!email || !password) {
       setErrorMessage("Please fill in all fields");
       return;
     }
 
-    if (!emailRegex.test(email)) {
+    if (!Utils.isValidEmail(email)) {
       setErrorMessage("Please enter a valid email address");
       return;
     }
 
-    if (!passwordRegex.test(password)) {
+    if (!Utils.isValidPassword(password)) {
       setErrorMessage(
         "Password must be at least 8 characters long and include letters, numbers, and special characters",
       );

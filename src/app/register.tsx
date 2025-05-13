@@ -3,28 +3,26 @@ import { Button } from "@/components/Button";
 import { useState } from "react";
 import { TextInput, View } from "react-native";
 import { Link, useRouter } from "expo-router";
+import Utils from "@/utils/Utils";
+import { User } from "@/models/User";
 
 export default function RegisterScreen() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<User>({
     first_name: "",
     last_name: "",
     email: "",
-    phone_number: "",
+    phone_number: undefined,
     address: "",
-    zip_code: "",
+    zip_code: undefined,
     country: "",
     password: "",
-    confirmPassword: "",
   });
+  const [confirmPassword, setConfirmPassword] = useState(""); // Ajout de confirmPassword
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: keyof User, value: string | number) => {
     setFormData({ ...formData, [field]: value });
   };
 
@@ -38,7 +36,6 @@ export default function RegisterScreen() {
       zip_code,
       country,
       password,
-      confirmPassword,
     } = formData;
 
     if (
@@ -49,19 +46,18 @@ export default function RegisterScreen() {
       !address ||
       !zip_code ||
       !country ||
-      !password ||
-      !confirmPassword
+      !password
     ) {
       setErrorMessage("Please fill in all fields");
       return;
     }
 
-    if (!emailRegex.test(email)) {
+    if (!Utils.isValidEmail(email)) {
       setErrorMessage("Please enter a valid email address");
       return;
     }
 
-    if (!passwordRegex.test(password)) {
+    if (!Utils.isValidPassword(password)) {
       setErrorMessage(
         "Password must be at least 8 characters long and include letters, numbers, and special characters",
       );
@@ -107,7 +103,7 @@ export default function RegisterScreen() {
       />
       <TextInput
         placeholder="Phone Number"
-        value={formData.phone_number}
+        value={formData.phone_number?.toString()}
         onChangeText={(value) => handleInputChange("phone_number", value)}
         keyboardType="phone-pad"
         className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
@@ -120,7 +116,7 @@ export default function RegisterScreen() {
       />
       <TextInput
         placeholder="Zip Code"
-        value={formData.zip_code}
+        value={formData.zip_code?.toString()}
         onChangeText={(value) => handleInputChange("zip_code", value)}
         keyboardType="numeric"
         className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
@@ -140,8 +136,8 @@ export default function RegisterScreen() {
       />
       <TextInput
         placeholder="Confirm Password"
-        value={formData.confirmPassword}
-        onChangeText={(value) => handleInputChange("confirmPassword", value)}
+        value={confirmPassword} // Utilisation de confirmPassword
+        onChangeText={setConfirmPassword} // Mise à jour de confirmPassword
         secureTextEntry
         className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
       />
@@ -162,12 +158,8 @@ export default function RegisterScreen() {
           !formData.first_name ||
           !formData.last_name ||
           !formData.email ||
-          !formData.phone_number ||
-          !formData.address ||
-          !formData.zip_code ||
-          !formData.country ||
           !formData.password ||
-          !formData.confirmPassword
+          !confirmPassword
         }
       />
       <Link href="/login" push asChild>
