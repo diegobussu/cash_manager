@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import base64 from "base64-js";
 import { View, ActivityIndicator, ScrollView, Image } from "react-native";
-import UserService from "@/services/userService";
 import { User } from "@/models/User";
 import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import UserService from "@/services/userService";
+import base64 from "base64-js";
 
 export default function ProfileScreen() {
   const [user, setUser] = useState<User | null>(null);
@@ -37,7 +37,7 @@ export default function ProfileScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center">
+      <View className="flex-1 justify-center items-center bg-gray-100">
         <ActivityIndicator size="large" color="#007AFF" />
       </View>
     );
@@ -45,7 +45,7 @@ export default function ProfileScreen() {
 
   if (error) {
     return (
-      <View className="flex-1 justify-center items-center">
+      <View className="flex-1 justify-center items-center bg-gray-100">
         <AppText size="medium" color="secondary" center>
           {error}
         </AppText>
@@ -54,68 +54,89 @@ export default function ProfileScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16 }}>
-      <AppText size="extraHeading" bold>
-        Profile
-      </AppText>
-
-      <View className="mt-4 items-center">
+    <ScrollView
+      contentContainerStyle={{ padding: 16, backgroundColor: "#f9f9f9" }}
+    >
+      <View className="items-center mb-6">
         {user?.image ? (
           <Image
             source={{ uri: `data:image/png;base64,${user.image}` }}
-            style={{ width: 100, height: 100, borderRadius: 50 }}
+            style={{
+              width: 120,
+              height: 120,
+              borderRadius: 60,
+              borderWidth: 2,
+              borderColor: "#007AFF",
+            }}
           />
         ) : (
           <MaterialCommunityIcons
             name="account-circle"
-            size={100}
+            size={120}
             color="#ccc"
           />
         )}
       </View>
 
-      <View className="mt-4">
-        <AppText size="large" bold>
+      <View className="bg-white rounded-lg shadow-md p-4 mb-4">
+        <AppText size="large" bold className="text-gray-700">
           Name:
         </AppText>
-        <AppText size="medium">{`${user?.first_name} ${user?.last_name}`}</AppText>
+        <AppText size="medium" className="text-gray-500">
+          {`${user?.first_name} ${user?.last_name}`}
+        </AppText>
       </View>
-      <View className="mt-4">
-        <AppText size="large" bold>
+
+      <View className="bg-white rounded-lg shadow-md p-4 mb-4">
+        <AppText size="large" bold className="text-gray-700">
           Email:
         </AppText>
-        <AppText size="medium">{user?.email}</AppText>
+        <AppText size="medium" className="text-gray-500">
+          {user?.email}
+        </AppText>
       </View>
+
       {user?.phone_number && (
-        <View className="mt-4">
-          <AppText size="large" bold>
+        <View className="bg-white rounded-lg shadow-md p-4 mb-4">
+          <AppText size="large" bold className="text-gray-700">
             Phone Number:
           </AppText>
-          <AppText size="medium">{user.phone_number}</AppText>
+          <AppText size="medium" className="text-gray-500">
+            {user.phone_number}
+          </AppText>
         </View>
       )}
+
       {user?.address && (
-        <View className="mt-4">
-          <AppText size="large" bold>
+        <View className="bg-white rounded-lg shadow-md p-4 mb-4">
+          <AppText size="large" bold className="text-gray-700">
             Address:
           </AppText>
-          <AppText size="medium">{user.address}</AppText>
+          <AppText size="medium" className="text-gray-500">
+            {user.address}
+          </AppText>
         </View>
       )}
+
       {user?.zip_code && (
-        <View className="mt-4">
-          <AppText size="large" bold>
+        <View className="bg-white rounded-lg shadow-md p-4 mb-4">
+          <AppText size="large" bold className="text-gray-700">
             Zip Code:
           </AppText>
-          <AppText size="medium">{user.zip_code}</AppText>
+          <AppText size="medium" className="text-gray-500">
+            {user.zip_code}
+          </AppText>
         </View>
       )}
+
       {user?.country && (
-        <View className="mt-4">
-          <AppText size="large" bold>
+        <View className="bg-white rounded-lg shadow-md p-4 mb-4">
+          <AppText size="large" bold className="text-gray-700">
             Country:
           </AppText>
-          <AppText size="medium">{user.country}</AppText>
+          <AppText size="medium" className="text-gray-500">
+            {user.country}
+          </AppText>
         </View>
       )}
     </ScrollView>
