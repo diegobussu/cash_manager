@@ -3,7 +3,20 @@ import axios from "axios";
 import { User } from "../models/User";
 
 export default class AuthService {
-  private static readonly BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+  public static readonly BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+
+  public static getAuthToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token not found");
+      }
+      return token;
+    } catch (error) {
+      console.error("Error retrieving token:", error);
+      throw error;
+    }
+  };
 
   public static async login(
     email: string,
