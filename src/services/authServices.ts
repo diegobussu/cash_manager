@@ -24,4 +24,19 @@ export default class AuthService {
       throw error;
     }
   }
+
+  public static async register(userData: User): Promise<{ message: string }> {
+    try {
+      const response = await axios.post(
+        `${this.BASE_URL}/auth/register`,
+        userData,
+      );
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        throw new Error(error.response.data.message || "Registration failed");
+      }
+      throw new Error("An unexpected error occurred");
+    }
+  }
 }

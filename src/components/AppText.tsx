@@ -3,7 +3,7 @@ import { cn } from "../utils/cn";
 
 type AppTextProps = {
   children: React.ReactNode;
-  size?: "small" | "medium" | "large" | "heading";
+  size?: "small" | "medium" | "large" | "heading" | "extraHeading";
   bold?: boolean;
   color?: "primary" | "secondary" | "tertiary";
   center?: boolean;
@@ -25,6 +25,7 @@ export function AppText({
         size === "medium" && "text-base mb-3",
         size === "large" && "text-lg mb-4",
         size === "heading" && "text-xl mb-5",
+        size === "extraHeading" && "text-2xl mb-6",
         bold && "font-bold",
         color === "primary" && "text-black",
         color === "secondary" && "text-gray-500",
