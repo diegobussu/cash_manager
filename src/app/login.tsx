@@ -3,6 +3,7 @@ import { Button } from "@/components/Button";
 import { AuthContext } from "@/utils/authContext";
 import { useContext, useState } from "react";
 import { TextInput, View } from "react-native";
+import { Link } from "expo-router";
 
 export default function LoginScreen() {
   const authContext = useContext(AuthContext);
@@ -38,7 +39,7 @@ export default function LoginScreen() {
 
   return (
     <View className="flex-1 justify-center p-4">
-      <AppText size="heading" center>
+      <AppText size="heading" center bold>
         Login
       </AppText>
       <TextInput
@@ -66,6 +67,9 @@ export default function LoginScreen() {
         onPress={handleLogin}
         disabled={!email || !password}
       />
+      <Link href="/register" asChild>
+        <Button title="Don't have an account ? Sign Up" theme="tertiary" />
+      </Link>
     </View>
   );
 }

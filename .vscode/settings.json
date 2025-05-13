@@ -1,9 +1,5 @@
 {
   "workbench.colorCustomizations": {
     "activityBar.background": "#0b0b5e"
-  },
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "eslint.validate": ["javascript", "typescript"]
+  }
 }
