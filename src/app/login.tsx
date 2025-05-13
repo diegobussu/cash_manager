@@ -36,10 +36,13 @@ export default function LoginScreen() {
 
     try {
       await AuthService.login(email, password);
-      authContext.logIn();
 
       setErrorMessage("");
-      setSuccessMessage("Login successful! Redirecting...");
+      setSuccessMessage("Login successful ! Redirecting...");
+
+      setTimeout(() => {
+        authContext.logIn();
+      }, 1000);
     } catch (error: any) {
       setErrorMessage(
         error.response?.data?.message || "An error occurred during login",
@@ -49,7 +52,7 @@ export default function LoginScreen() {
 
   return (
     <View className="flex-1 justify-center p-4">
-      <AppText size="heading" center bold>
+      <AppText size="extraHeading" center bold>
         Login
       </AppText>
       <TextInput

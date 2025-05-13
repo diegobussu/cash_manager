@@ -101,12 +101,10 @@ export default function RegisterScreen() {
         password,
       });
 
-      setSuccessMessage(
-        response.message || "Registration successful! Redirecting to login...",
-      );
+      setSuccessMessage("Registration successful ! Redirecting to login...");
       setTimeout(() => {
         router.push("/login");
-      }, 2000);
+      }, 1000);
     } catch (error: any) {
       if (error.response?.status === 400) {
         setErrorMessage("Email already exists");
@@ -130,7 +128,7 @@ export default function RegisterScreen() {
         }}
         keyboardShouldPersistTaps="handled"
       >
-        <AppText size="heading" center bold>
+        <AppText size="extraHeading" center bold>
           Sign Up
         </AppText>
         <TextInput
