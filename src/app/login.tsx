@@ -10,6 +10,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex =
@@ -33,8 +34,11 @@ export default function LoginScreen() {
       return;
     }
 
-    setErrorMessage(""); // Clear error message if validation passes
-    authContext.logIn();
+    setErrorMessage("");
+    setSuccessMessage("Login successful ! Redirecting...");
+    setTimeout(() => {
+      authContext.logIn();
+    }, 2000);
   };
 
   return (
@@ -60,6 +64,11 @@ export default function LoginScreen() {
       {errorMessage ? (
         <AppText size="small" center className="text-red-500 mb-4">
           {errorMessage}
+        </AppText>
+      ) : null}
+      {successMessage ? (
+        <AppText size="small" center className="text-green-500 mb-4">
+          {successMessage}
         </AppText>
       ) : null}
       <Button
