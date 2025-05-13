@@ -37,7 +37,7 @@ export default class UserService {
     }
   }
 
-  public static async updateUser(userData: User): Promise<User> {
+  public static async updateUser(userData: Partial<User>): Promise<User> {
     try {
       const token = await AuthService.getAuthToken();
       const userId = await UserService.getUserIdFromToken();
