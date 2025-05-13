@@ -13,6 +13,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UserService from "@/services/userService";
 import * as ImagePicker from "expo-image-picker";
 import base64 from "base64-js";
+import Constants from "@/utils/Constants";
+import Utils from "@/utils/Utils";
 
 export default function ProfileScreen() {
   const [user, setUser] = useState<User | null>(null);
@@ -56,7 +58,7 @@ export default function ProfileScreen() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
@@ -65,8 +67,53 @@ export default function ProfileScreen() {
 
     if (!result.canceled) {
       const newImage = result.assets[0].base64;
-      setUser((prevUser) =>
-        prevUser ? { ...prevUser, image: newImage || undefined } : null,
+
+      if (!newImage) {
+        Alert.alert("Error", "Failed to process the selected image.");
+        return;
+      }
+
+      const imgSize = Utils.getImageSize(newImage);
+      if (imgSize > Constants.MAX_IMAGE_SIZE) {
+        Alert.alert(
+          "Image Too Large",
+          `The selected image exceeds the ${Constants.MAX_IMAGE_SIZE} KB size limit. Please choose a smaller image.`,
+        );
+        return;
+      }
+
+      Alert.alert(
+        "Confirm Update",
+        "Do you want to update your profile picture?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Yes",
+            onPress: async () => {
+              try {
+                if (user) {
+                  const updatedUser = await UserService.updateUser({
+                    ...user,
+                    image: newImage || "",
+                  });
+                  setUser({ ...user, image: updatedUser.image });
+                  Alert.alert(
+                    "Success",
+                    "Profile picture updated successfully!",
+                  );
+                }
+              } catch (error: any) {
+                Alert.alert(
+                  "Error",
+                  error.message || "Failed to update profile picture.",
+                );
+              }
+            },
+          },
+        ],
       );
     }
   };

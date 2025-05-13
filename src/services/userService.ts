@@ -36,4 +36,28 @@ export default class UserService {
       throw new Error("An unexpected error occurred");
     }
   }
+
+  public static async updateUser(userData: User): Promise<User> {
+    try {
+      const token = await AuthService.getAuthToken();
+      const userId = await UserService.getUserIdFromToken();
+      const response = await axios.put(
+        `${AuthService.BASE_URL}/users/${userId}`,
+        userData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      return response.data as User;
+    } catch (error: any) {
+      console.error("Error updating user:", error);
+      if (error.response && error.response.data) {
+        throw new Error(error.response.data.message || "Failed to update user");
+      }
+      throw new Error("An unexpected error occurred");
+    }
+  }
 }
