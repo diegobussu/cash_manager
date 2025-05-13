@@ -10,7 +10,7 @@ export default class AuthService {
     password: string,
   ): Promise<{ token: string; user: Partial<User> }> {
     try {
-      const response = await axios.post(`${this.BASE_URL}/login`, {
+      const response = await axios.post(`${this.BASE_URL}/auth/login`, {
         email,
         password,
       });
