@@ -2,7 +2,13 @@ import { AppText } from "@/components/AppText";
 import { Button } from "@/components/Button";
 import { AuthContext } from "@/utils/authContext";
 import { useContext, useState } from "react";
-import { TextInput, TouchableOpacity, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Link } from "expo-router";
 import Utils from "@/utils/Utils";
 import { Ionicons } from "@expo/vector-icons";
@@ -51,55 +57,60 @@ export default function LoginScreen() {
   };
 
   return (
-    <View className="flex-1 justify-center p-4">
-      <AppText size="extraHeading" center bold>
-        Login
-      </AppText>
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
-      />
-      <View className="relative mb-4">
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <View className="flex-1 justify-center p-4">
+        <AppText size="extraHeading" center bold>
+          Login
+        </AppText>
         <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!showPassword}
-          className="border border-gray-300 rounded-md px-4 py-3 mb-2 bg-white"
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+          className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
         />
-        <TouchableOpacity
-          onPress={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-3"
-        >
-          <Ionicons
-            name={showPassword ? "eye-off" : "eye"}
-            size={24}
-            color="#000000"
+        <View className="relative mb-4">
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+            className="border border-gray-300 rounded-md px-4 py-3 mb-2 bg-white"
           />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-3"
+          >
+            <Ionicons
+              name={showPassword ? "eye-off" : "eye"}
+              size={24}
+              color="#000000"
+            />
+          </TouchableOpacity>
+        </View>
+        {errorMessage ? (
+          <AppText size="small" center className="text-red-500 mb-4">
+            {errorMessage}
+          </AppText>
+        ) : null}
+        {successMessage ? (
+          <AppText size="small" center className="text-green-500 mb-4">
+            {successMessage}
+          </AppText>
+        ) : null}
+        <Button
+          title="Log in"
+          onPress={handleLogin}
+          disabled={!email || !password}
+        />
+        <Link href="/register" asChild>
+          <Button title="Don't have an account ? Sign Up" theme="tertiary" />
+        </Link>
       </View>
-      {errorMessage ? (
-        <AppText size="small" center className="text-red-500 mb-4">
-          {errorMessage}
-        </AppText>
-      ) : null}
-      {successMessage ? (
-        <AppText size="small" center className="text-green-500 mb-4">
-          {successMessage}
-        </AppText>
-      ) : null}
-      <Button
-        title="Log in"
-        onPress={handleLogin}
-        disabled={!email || !password}
-      />
-      <Link href="/register" asChild>
-        <Button title="Don't have an account ? Sign Up" theme="tertiary" />
-      </Link>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
