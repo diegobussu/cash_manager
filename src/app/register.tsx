@@ -1,6 +1,6 @@
 import { AppText } from "@/components/AppText";
 import { Button } from "@/components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 import { Link, useRouter } from "expo-router";
 import Utils from "@/utils/Utils";
@@ -28,6 +28,22 @@ export default function RegisterScreen() {
   const handleInputChange = (field: keyof User, value: string | number) => {
     setFormData({ ...formData, [field]: value });
   };
+
+  useEffect(() => {
+    setFormData({
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone_number: undefined,
+      address: "",
+      zip_code: undefined,
+      country: "",
+      password: "",
+    });
+    setConfirmPassword("");
+    setErrorMessage("");
+    setSuccessMessage("");
+  }, [router]);
 
   const handleRegister = async () => {
     const {
