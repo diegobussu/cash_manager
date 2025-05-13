@@ -170,7 +170,7 @@ export default function RegisterScreen() {
           !formData.confirmPassword
         }
       />
-      <Link href="/login" asChild>
+      <Link href="/login" push asChild>
         <Button title="Already have an account ? Log In" theme="tertiary" />
       </Link>
     </View>
