@@ -5,7 +5,7 @@
     "scheme": "Cash Manager",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/router-icon.png",
+    "icon": "./assets/router-icon-cart.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
