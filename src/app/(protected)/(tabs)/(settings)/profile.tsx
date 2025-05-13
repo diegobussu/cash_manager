@@ -95,9 +95,16 @@ export default function ProfileScreen() {
             onPress: async () => {
               try {
                 if (user) {
-                  const updatedUser = await UserService.updateUser({
-                    image: newImage || "",
-                  });
+                  await UserService.updateUser({ image: newImage || "" });
+                  const userId = await UserService.getUserIdFromToken();
+                  const updatedUser = await UserService.getUserByID(userId);
+
+                  if (updatedUser.image) {
+                    const base64String = base64.fromByteArray(
+                      new Uint8Array((updatedUser.image as any).data),
+                    );
+                    updatedUser.image = `data:image/png;base64,${base64String}`;
+                  }
 
                   setUser(updatedUser);
                   Alert.alert(
