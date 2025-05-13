@@ -34,9 +34,15 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
   };
 
-  const logIn = () => {
+  const logIn = async () => {
     setIsLoggedIn(true);
     storeAuthState({ isLoggedIn: true });
+
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      console.log("Token:", token);
+    }
+
     router.replace("/");
   };
 

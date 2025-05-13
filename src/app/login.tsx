@@ -6,6 +6,7 @@ import { TextInput, TouchableOpacity, View } from "react-native";
 import { Link } from "expo-router";
 import Utils from "@/utils/Utils";
 import { Ionicons } from "@expo/vector-icons";
+import AuthService from "@/services/authServices";
 
 export default function LoginScreen() {
   const authContext = useContext(AuthContext);
@@ -15,7 +16,7 @@ export default function LoginScreen() {
   const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       setErrorMessage("Please fill in all fields");
       return;
@@ -33,11 +34,17 @@ export default function LoginScreen() {
       return;
     }
 
-    setErrorMessage("");
-    setSuccessMessage("Login successful ! Redirecting...");
-    setTimeout(() => {
+    try {
+      await AuthService.login(email, password);
       authContext.logIn();
-    }, 2000);
+
+      setErrorMessage("");
+      setSuccessMessage("Login successful! Redirecting...");
+    } catch (error: any) {
+      setErrorMessage(
+        error.response?.data?.message || "An error occurred during login",
+      );
+    }
   };
 
   return (
