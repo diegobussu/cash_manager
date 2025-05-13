@@ -2,9 +2,10 @@ import { AppText } from "@/components/AppText";
 import { Button } from "@/components/Button";
 import { AuthContext } from "@/utils/authContext";
 import { useContext, useState } from "react";
-import { TextInput, View } from "react-native";
+import { TextInput, TouchableOpacity, View } from "react-native";
 import { Link } from "expo-router";
 import Utils from "@/utils/Utils";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function LoginScreen() {
   const authContext = useContext(AuthContext);
@@ -12,6 +13,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
     if (!email || !password) {
@@ -51,13 +53,25 @@ export default function LoginScreen() {
         keyboardType="email-address"
         className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
       />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        className="border border-gray-300 rounded-md px-4 py-3 mb-2 bg-white"
-      />
+      <View className="relative mb-4">
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+          className="border border-gray-300 rounded-md px-4 py-3 mb-2 bg-white"
+        />
+        <TouchableOpacity
+          onPress={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-3"
+        >
+          <Ionicons
+            name={showPassword ? "eye-off" : "eye"}
+            size={24}
+            color="#000000"
+          />
+        </TouchableOpacity>
+      </View>
       {errorMessage ? (
         <AppText size="small" center className="text-red-500 mb-4">
           {errorMessage}

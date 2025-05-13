@@ -1,10 +1,11 @@
 import { AppText } from "@/components/AppText";
 import { Button } from "@/components/Button";
 import { useState } from "react";
-import { TextInput, View } from "react-native";
+import { TextInput, TouchableOpacity, View } from "react-native";
 import { Link, useRouter } from "expo-router";
 import Utils from "@/utils/Utils";
 import { User } from "@/models/User";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -18,9 +19,10 @@ export default function RegisterScreen() {
     country: "",
     password: "",
   });
-  const [confirmPassword, setConfirmPassword] = useState(""); // Ajout de confirmPassword
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (field: keyof User, value: string | number) => {
     setFormData({ ...formData, [field]: value });
@@ -127,20 +129,34 @@ export default function RegisterScreen() {
         onChangeText={(value) => handleInputChange("country", value)}
         className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
       />
-      <TextInput
-        placeholder="Password"
-        value={formData.password}
-        onChangeText={(value) => handleInputChange("password", value)}
-        secureTextEntry
-        className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
-      />
-      <TextInput
-        placeholder="Confirm Password"
-        value={confirmPassword} // Utilisation de confirmPassword
-        onChangeText={setConfirmPassword} // Mise à jour de confirmPassword
-        secureTextEntry
-        className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
-      />
+      <View className="relative mb-4">
+        <TextInput
+          placeholder="Password"
+          value={formData.password}
+          onChangeText={(value) => handleInputChange("password", value)}
+          secureTextEntry={!showPassword}
+          className="border border-gray-300 rounded-md px-4 py-3 bg-white"
+        />
+        <TouchableOpacity
+          onPress={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-3"
+        >
+          <Ionicons
+            name={showPassword ? "eye-off" : "eye"}
+            size={24}
+            color="#000000"
+          />
+        </TouchableOpacity>
+      </View>
+      <View className="relative mb-4">
+        <TextInput
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry={!showPassword}
+          className="border border-gray-300 rounded-md px-4 py-3 bg-white"
+        />
+      </View>
       {errorMessage ? (
         <AppText size="small" center className="text-red-500 mb-4">
           {errorMessage}
