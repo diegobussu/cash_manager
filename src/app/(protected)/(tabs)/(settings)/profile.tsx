@@ -3,6 +3,7 @@ import {
   View,
   ActivityIndicator,
   ScrollView,
+  TextInput,
   Image,
   TouchableOpacity,
   Alert,
@@ -13,13 +14,15 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UserService from "@/services/userService";
 import * as ImagePicker from "expo-image-picker";
 import base64 from "base64-js";
-import Constants from "@/utils/Constants";
 import Utils from "@/utils/Utils";
+import Constants from "@/utils/Constants";
 
 export default function ProfileScreen() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState<Partial<User>>({});
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -35,6 +38,7 @@ export default function ProfileScreen() {
         }
 
         setUser(userData);
+        setFormData(userData);
       } catch (err: any) {
         setError(err.message || "Failed to load user data");
       } finally {
@@ -125,6 +129,30 @@ export default function ProfileScreen() {
     }
   };
 
+  const handleSave = async () => {
+    try {
+      if (!user) return;
+
+      await UserService.updateUser(formData);
+      const userId = await UserService.getUserIdFromToken();
+      const updatedUser = await UserService.getUserByID(userId);
+
+      if (updatedUser.image) {
+        const base64String = base64.fromByteArray(
+          new Uint8Array((updatedUser.image as any).data),
+        );
+        updatedUser.image = `data:image/png;base64,${base64String}`;
+      }
+
+      setUser(updatedUser);
+      setFormData(updatedUser);
+      setIsEditing(false);
+      Alert.alert("Success", "Profile updated successfully!");
+    } catch (error: any) {
+      Alert.alert("Error", error.message || "Failed to update profile.");
+    }
+  };
+
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-gray-100">
@@ -187,65 +215,161 @@ export default function ProfileScreen() {
 
       <View className="bg-white rounded-lg shadow-md p-4 mb-4">
         <AppText size="large" bold className="text-gray-700">
-          Name:
+          First Name
         </AppText>
-        <AppText size="medium" className="text-gray-500">
-          {`${user?.first_name} ${user?.last_name}`}
-        </AppText>
+        <TextInput
+          value={formData.first_name}
+          onChangeText={(text) =>
+            setFormData((prev) => ({ ...prev, first_name: text }))
+          }
+          editable={isEditing}
+          style={{
+            borderBottomWidth: 1,
+            borderColor: "#ccc",
+            padding: 8,
+            marginBottom: 8,
+          }}
+        />
       </View>
 
       <View className="bg-white rounded-lg shadow-md p-4 mb-4">
         <AppText size="large" bold className="text-gray-700">
-          Email:
+          Last Name
         </AppText>
-        <AppText size="medium" className="text-gray-500">
-          {user?.email}
+        <TextInput
+          value={formData.last_name}
+          onChangeText={(text) =>
+            setFormData((prev) => ({ ...prev, last_name: text }))
+          }
+          editable={isEditing}
+          style={{
+            borderBottomWidth: 1,
+            borderColor: "#ccc",
+            padding: 8,
+          }}
+        />
+      </View>
+
+      <View className="bg-white rounded-lg shadow-md p-4 mb-4">
+        <AppText size="large" bold className="text-gray-700">
+          Email
         </AppText>
+        <TextInput
+          value={formData.email}
+          onChangeText={(text) =>
+            setFormData((prev) => ({ ...prev, email: text }))
+          }
+          editable={isEditing}
+          style={{
+            borderBottomWidth: 1,
+            borderColor: "#ccc",
+            padding: 8,
+          }}
+        />
       </View>
 
       {user?.phone_number && (
         <View className="bg-white rounded-lg shadow-md p-4 mb-4">
           <AppText size="large" bold className="text-gray-700">
-            Phone Number:
+            Phone Number
           </AppText>
-          <AppText size="medium" className="text-gray-500">
-            {user.phone_number}
-          </AppText>
+          <TextInput
+            value={
+              formData.phone_number !== undefined
+                ? String(formData.phone_number)
+                : undefined
+            }
+            onChangeText={(text) =>
+              setFormData((prev) => ({ ...prev, phone_number: Number(text) }))
+            }
+            editable={isEditing}
+            style={{
+              borderBottomWidth: 1,
+              borderColor: "#ccc",
+              padding: 8,
+            }}
+          />
         </View>
       )}
 
       {user?.address && (
         <View className="bg-white rounded-lg shadow-md p-4 mb-4">
           <AppText size="large" bold className="text-gray-700">
-            Address:
+            Address
           </AppText>
-          <AppText size="medium" className="text-gray-500">
-            {user.address}
-          </AppText>
+          <TextInput
+            value={formData.address}
+            onChangeText={(text) =>
+              setFormData((prev) => ({ ...prev, address: text }))
+            }
+            editable={isEditing}
+            style={{
+              borderBottomWidth: 1,
+              borderColor: "#ccc",
+              padding: 8,
+            }}
+          />
         </View>
       )}
 
       {user?.zip_code && (
         <View className="bg-white rounded-lg shadow-md p-4 mb-4">
           <AppText size="large" bold className="text-gray-700">
-            Zip Code:
+            Zip Code
           </AppText>
-          <AppText size="medium" className="text-gray-500">
-            {user.zip_code}
-          </AppText>
+          <TextInput
+            value={
+              formData.zip_code !== undefined
+                ? String(formData.zip_code)
+                : undefined
+            }
+            onChangeText={(text) =>
+              setFormData((prev) => ({ ...prev, zip_code: Number(text) }))
+            }
+            editable={isEditing}
+            style={{
+              borderBottomWidth: 1,
+              borderColor: "#ccc",
+              padding: 8,
+            }}
+          />
         </View>
       )}
 
       {user?.country && (
         <View className="bg-white rounded-lg shadow-md p-4 mb-4">
           <AppText size="large" bold className="text-gray-700">
-            Country:
+            Country
           </AppText>
-          <AppText size="medium" className="text-gray-500">
-            {user.country}
-          </AppText>
+          <TextInput
+            value={formData.country}
+            onChangeText={(text) =>
+              setFormData((prev) => ({ ...prev, country: text }))
+            }
+            editable={isEditing}
+            style={{
+              borderBottomWidth: 1,
+              borderColor: "#ccc",
+              padding: 8,
+            }}
+          />
         </View>
       )}
+
+      <TouchableOpacity
+        onPress={() => (isEditing ? handleSave() : setIsEditing(true))}
+        style={{
+          backgroundColor: "#007AFF",
+          padding: 12,
+          borderRadius: 8,
+          alignItems: "center",
+          marginTop: 16,
+        }}
+      >
+        <AppText size="medium" bold className="text-white">
+          {isEditing ? "Save" : "Update"}
+        </AppText>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
