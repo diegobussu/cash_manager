@@ -6,6 +6,7 @@ import { Link, useRouter } from "expo-router";
 import Utils from "@/utils/Utils";
 import { User } from "@/models/User";
 import { Ionicons } from "@expo/vector-icons";
+import AuthService from "@/services/authServices";
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function RegisterScreen() {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     const {
       first_name,
       last_name,
@@ -40,16 +41,7 @@ export default function RegisterScreen() {
       password,
     } = formData;
 
-    if (
-      !first_name ||
-      !last_name ||
-      !email ||
-      !phone_number ||
-      !address ||
-      !zip_code ||
-      !country ||
-      !password
-    ) {
+    if (!first_name || !last_name || !email || !password) {
       setErrorMessage("Please fill in all fields");
       return;
     }
@@ -71,11 +63,35 @@ export default function RegisterScreen() {
       return;
     }
 
-    setErrorMessage("");
-    setSuccessMessage("Registration successful! Redirecting to login...");
-    setTimeout(() => {
-      router.push("/login");
-    }, 2000);
+    try {
+      setErrorMessage("");
+      setSuccessMessage("Registering...");
+
+      const response = await AuthService.register({
+        first_name,
+        last_name,
+        email,
+        phone_number,
+        address,
+        zip_code,
+        country,
+        password,
+      });
+
+      setSuccessMessage(
+        response.message || "Registration successful! Redirecting to login...",
+      );
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    } catch (error: any) {
+      if (error.response?.status === 400) {
+        setErrorMessage("Email already exists");
+      } else {
+        setErrorMessage(error.message || "Registration failed");
+      }
+      setSuccessMessage("");
+    }
   };
 
   return (
