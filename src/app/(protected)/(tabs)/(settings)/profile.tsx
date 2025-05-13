@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
-import { View, ActivityIndicator, ScrollView, Image } from "react-native";
+import {
+  View,
+  ActivityIndicator,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { User } from "@/models/User";
 import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UserService from "@/services/userService";
+import * as ImagePicker from "expo-image-picker";
 import base64 from "base64-js";
 
 export default function ProfileScreen() {
@@ -35,6 +43,34 @@ export default function ProfileScreen() {
     fetchUser();
   }, []);
 
+  const handleImagePick = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permissionResult.granted) {
+      Alert.alert(
+        "Permission Denied",
+        "You need to allow access to your photos to update your profile picture.",
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      const newImage = result.assets[0].base64;
+      setUser((prevUser) =>
+        prevUser ? { ...prevUser, image: newImage || undefined } : null,
+      );
+    }
+  };
+
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-gray-100">
@@ -57,25 +93,42 @@ export default function ProfileScreen() {
     <ScrollView
       contentContainerStyle={{ padding: 16, backgroundColor: "#f9f9f9" }}
     >
-      <View className="items-center mb-6">
-        {user?.image ? (
-          <Image
-            source={{ uri: `data:image/png;base64,${user.image}` }}
+      <View className="items-center mb-6 relative">
+        <TouchableOpacity
+          onPress={handleImagePick}
+          style={{ position: "relative" }}
+        >
+          {user?.image ? (
+            <Image
+              source={{ uri: `data:image/png;base64,${user.image}` }}
+              style={{
+                width: 120,
+                height: 120,
+                borderRadius: 60,
+                borderWidth: 2,
+                borderColor: "#007AFF",
+              }}
+            />
+          ) : (
+            <MaterialCommunityIcons
+              name="account-circle"
+              size={120}
+              color="#ccc"
+            />
+          )}
+          <View
             style={{
-              width: 120,
-              height: 120,
-              borderRadius: 60,
-              borderWidth: 2,
-              borderColor: "#007AFF",
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              backgroundColor: "#007AFF",
+              borderRadius: 20,
+              padding: 6,
             }}
-          />
-        ) : (
-          <MaterialCommunityIcons
-            name="account-circle"
-            size={120}
-            color="#ccc"
-          />
-        )}
+          >
+            <MaterialCommunityIcons name="pencil" size={20} color="#fff" />
+          </View>
+        </TouchableOpacity>
       </View>
 
       <View className="bg-white rounded-lg shadow-md p-4 mb-4">
