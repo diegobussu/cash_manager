@@ -7,7 +7,7 @@ export default function ProfileButton() {
 
   return (
     <TouchableOpacity onPress={() => router.push("/profile")}>
-      <MaterialCommunityIcons name="account-circle" size={22} color="#007AFF" />
+      <MaterialCommunityIcons name="account-circle" size={22} color="#0853A9" />
     </TouchableOpacity>
   );
 }
