@@ -30,13 +30,6 @@ export default function ProfileScreen() {
         const userId = await UserService.getUserIdFromToken();
         const userData = await UserService.getUserByID(userId);
 
-        if (userData.image) {
-          const base64String = base64.fromByteArray(
-            new Uint8Array((userData.image as any).data),
-          );
-          userData.image = `data:image/png;base64,${base64String}`;
-        }
-
         setUser(userData);
         setFormData(userData);
       } catch (err: any) {
@@ -102,14 +95,6 @@ export default function ProfileScreen() {
                   await UserService.updateUser({ image: newImage || "" });
                   const userId = await UserService.getUserIdFromToken();
                   const updatedUser = await UserService.getUserByID(userId);
-
-                  if (updatedUser.image) {
-                    const base64String = base64.fromByteArray(
-                      new Uint8Array((updatedUser.image as any).data),
-                    );
-                    updatedUser.image = `data:image/png;base64,${base64String}`;
-                  }
-
                   setUser(updatedUser);
                   Alert.alert(
                     "Success",
@@ -136,13 +121,6 @@ export default function ProfileScreen() {
       await UserService.updateUser(formData);
       const userId = await UserService.getUserIdFromToken();
       const updatedUser = await UserService.getUserByID(userId);
-
-      if (updatedUser.image) {
-        const base64String = base64.fromByteArray(
-          new Uint8Array((updatedUser.image as any).data),
-        );
-        updatedUser.image = `data:image/png;base64,${base64String}`;
-      }
 
       setUser(updatedUser);
       setFormData(updatedUser);
@@ -182,7 +160,7 @@ export default function ProfileScreen() {
         >
           {user?.image ? (
             <Image
-              source={{ uri: `data:image/png;base64,${user.image}` }}
+              source={{ uri: user.image as string }}
               style={{
                 width: 120,
                 height: 120,
