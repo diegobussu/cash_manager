@@ -8,5 +8,5 @@ export interface User {
   city?: string;
   country?: string;
   password: string;
-  image?: string;
+  image?: string | null;
 }
