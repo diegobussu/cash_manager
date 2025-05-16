@@ -151,12 +151,24 @@ export default function ProfileScreen() {
 
   return (
     <ScrollView
-      contentContainerStyle={{ padding: 16, backgroundColor: "#f9f9f9" }}
+      contentContainerStyle={{
+        padding: 20,
+        backgroundColor: "#f4f6fb",
+        minHeight: "100%",
+      }}
+      keyboardShouldPersistTaps="handled"
     >
-      <View className="items-center mb-6 relative">
+      <View
+        style={{
+          alignItems: "center",
+          marginBottom: 32,
+          position: "relative",
+        }}
+      >
         <TouchableOpacity
           onPress={handleImagePick}
           style={{ position: "relative" }}
+          activeOpacity={0.8}
         >
           {user?.image ? (
             <Image
@@ -165,28 +177,39 @@ export default function ProfileScreen() {
                 width: 120,
                 height: 120,
                 borderRadius: 60,
-                borderWidth: 2,
+                borderWidth: 3,
                 borderColor: "#007AFF",
+                backgroundColor: "#e5e7eb",
               }}
             />
           ) : (
             <MaterialCommunityIcons
               name="account-circle"
               size={120}
-              color="#ccc"
+              color="#d1d5db"
+              style={{
+                backgroundColor: "#e5e7eb",
+                borderRadius: 60,
+              }}
             />
           )}
           <View
             style={{
               position: "absolute",
               bottom: 0,
-              right: 0,
+              right: -10,
               backgroundColor: "#007AFF",
               borderRadius: 20,
-              padding: 6,
+              padding: 7,
+              borderWidth: 2,
+              borderColor: "#fff",
+              shadowColor: "#000",
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
+              elevation: 2,
             }}
           >
-            <MaterialCommunityIcons name="pencil" size={20} color="#fff" />
+            <MaterialCommunityIcons name="pencil" size={18} color="#fff" />
           </View>
           {user?.image && (
             <TouchableOpacity
@@ -195,10 +218,7 @@ export default function ProfileScreen() {
                   "Confirm Deletion",
                   "Are you sure you want to remove your profile picture ?",
                   [
-                    {
-                      text: "Cancel",
-                      style: "cancel",
-                    },
+                    { text: "Cancel", style: "cancel" },
                     {
                       text: "Delete",
                       style: "destructive",
@@ -228,182 +248,316 @@ export default function ProfileScreen() {
               style={{
                 position: "absolute",
                 bottom: 0,
-                left: 0,
+                left: -10,
                 backgroundColor: "#FF3B30",
                 borderRadius: 20,
-                padding: 6,
+                padding: 7,
+                borderWidth: 2,
+                borderColor: "#fff",
+                shadowColor: "#000",
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 2,
               }}
             >
-              <MaterialCommunityIcons name="trash-can" size={20} color="#fff" />
+              <MaterialCommunityIcons name="trash-can" size={18} color="#fff" />
             </TouchableOpacity>
           )}
         </TouchableOpacity>
       </View>
 
-      <View className="bg-white rounded-lg shadow-md p-4 mb-4">
-        <AppText size="large" bold className="text-gray-700">
+      {/* Champs du formulaire */}
+      <View
+        style={{
+          backgroundColor: "#fff",
+          borderRadius: 16,
+          padding: 20,
+          marginBottom: 18,
+          shadowColor: "#000",
+          shadowOpacity: 0.06,
+          shadowRadius: 8,
+          shadowOffset: { width: 0, height: 2 },
+          elevation: 2,
+        }}
+      >
+        <Text
+          style={{
+            color: "#374151",
+            fontWeight: "bold",
+            fontSize: 15,
+            marginBottom: 6,
+          }}
+        >
           First Name
-        </AppText>
+        </Text>
         <TextInput
           value={formData.first_name}
           onChangeText={(text) =>
             setFormData((prev) => ({ ...prev, first_name: text }))
           }
           editable={isEditing}
+          placeholder="Enter your first name"
+          placeholderTextColor="#9ca3af"
           style={{
-            borderBottomWidth: 1,
-            borderColor: "#ccc",
-            padding: 8,
-            marginBottom: 8,
+            borderWidth: 1,
+            borderColor: isEditing ? "#007AFF" : "#e5e7eb",
+            borderRadius: 8,
+            padding: 10,
+            backgroundColor: isEditing ? "#fff" : "#f3f4f6",
+            marginBottom: 14,
+            fontSize: 16,
+            color: "#111827",
           }}
         />
-      </View>
 
-      <View className="bg-white rounded-lg shadow-md p-4 mb-4">
-        <AppText size="large" bold className="text-gray-700">
+        <Text
+          style={{
+            color: "#374151",
+            fontWeight: "bold",
+            fontSize: 15,
+            marginBottom: 6,
+          }}
+        >
           Last Name
-        </AppText>
+        </Text>
         <TextInput
           value={formData.last_name}
           onChangeText={(text) =>
             setFormData((prev) => ({ ...prev, last_name: text }))
           }
           editable={isEditing}
+          placeholder="Enter your last name"
+          placeholderTextColor="#9ca3af"
           style={{
-            borderBottomWidth: 1,
-            borderColor: "#ccc",
-            padding: 8,
+            borderWidth: 1,
+            borderColor: isEditing ? "#007AFF" : "#e5e7eb",
+            borderRadius: 8,
+            padding: 10,
+            backgroundColor: isEditing ? "#fff" : "#f3f4f6",
+            marginBottom: 14,
+            fontSize: 16,
+            color: "#111827",
           }}
         />
-      </View>
 
-      <View className="bg-white rounded-lg shadow-md p-4 mb-4">
-        <AppText size="large" bold className="text-gray-700">
+        <Text
+          style={{
+            color: "#374151",
+            fontWeight: "bold",
+            fontSize: 15,
+            marginBottom: 6,
+          }}
+        >
           Email
-        </AppText>
+        </Text>
         <TextInput
           value={formData.email}
           onChangeText={(text) =>
             setFormData((prev) => ({ ...prev, email: text }))
           }
           editable={isEditing}
+          placeholder="Enter your email"
+          placeholderTextColor="#9ca3af"
+          keyboardType="email-address"
+          autoCapitalize="none"
           style={{
-            borderBottomWidth: 1,
-            borderColor: "#ccc",
-            padding: 8,
+            borderWidth: 1,
+            borderColor: isEditing ? "#007AFF" : "#e5e7eb",
+            borderRadius: 8,
+            padding: 10,
+            backgroundColor: isEditing ? "#fff" : "#f3f4f6",
+            marginBottom: 14,
+            fontSize: 16,
+            color: "#111827",
           }}
         />
+
+        {user?.phone_number !== undefined && (
+          <>
+            <Text
+              style={{
+                color: "#374151",
+                fontWeight: "bold",
+                fontSize: 15,
+                marginBottom: 6,
+              }}
+            >
+              Phone Number
+            </Text>
+            <TextInput
+              value={
+                formData.phone_number !== undefined
+                  ? String(formData.phone_number)
+                  : ""
+              }
+              onChangeText={(text) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  phone_number: Number(text.replace(/[^0-9]/g, "")),
+                }))
+              }
+              editable={isEditing}
+              placeholder="Enter your phone number"
+              placeholderTextColor="#9ca3af"
+              keyboardType="phone-pad"
+              style={{
+                borderWidth: 1,
+                borderColor: isEditing ? "#007AFF" : "#e5e7eb",
+                borderRadius: 8,
+                padding: 10,
+                backgroundColor: isEditing ? "#fff" : "#f3f4f6",
+                marginBottom: 14,
+                fontSize: 16,
+                color: "#111827",
+              }}
+            />
+          </>
+        )}
+
+        {user?.address !== undefined && (
+          <>
+            <Text
+              style={{
+                color: "#374151",
+                fontWeight: "bold",
+                fontSize: 15,
+                marginBottom: 6,
+              }}
+            >
+              Address
+            </Text>
+            <TextInput
+              value={formData.address}
+              onChangeText={(text) =>
+                setFormData((prev) => ({ ...prev, address: text }))
+              }
+              editable={isEditing}
+              placeholder="Enter your address"
+              placeholderTextColor="#9ca3af"
+              style={{
+                borderWidth: 1,
+                borderColor: isEditing ? "#007AFF" : "#e5e7eb",
+                borderRadius: 8,
+                padding: 10,
+                backgroundColor: isEditing ? "#fff" : "#f3f4f6",
+                marginBottom: 14,
+                fontSize: 16,
+                color: "#111827",
+              }}
+            />
+          </>
+        )}
+
+        {user?.zip_code !== undefined && (
+          <>
+            <Text
+              style={{
+                color: "#374151",
+                fontWeight: "bold",
+                fontSize: 15,
+                marginBottom: 6,
+              }}
+            >
+              Zip Code
+            </Text>
+            <TextInput
+              value={
+                formData.zip_code !== undefined ? String(formData.zip_code) : ""
+              }
+              onChangeText={(text) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  zip_code: Number(text.replace(/[^0-9]/g, "")),
+                }))
+              }
+              editable={isEditing}
+              placeholder="Enter your zip code"
+              placeholderTextColor="#9ca3af"
+              keyboardType="number-pad"
+              style={{
+                borderWidth: 1,
+                borderColor: isEditing ? "#007AFF" : "#e5e7eb",
+                borderRadius: 8,
+                padding: 10,
+                backgroundColor: isEditing ? "#fff" : "#f3f4f6",
+                marginBottom: 14,
+                fontSize: 16,
+                color: "#111827",
+              }}
+            />
+          </>
+        )}
+
+        {user?.country !== undefined && (
+          <>
+            <Text
+              style={{
+                color: "#374151",
+                fontWeight: "bold",
+                fontSize: 15,
+                marginBottom: 6,
+              }}
+            >
+              Country
+            </Text>
+            <TextInput
+              value={formData.country}
+              onChangeText={(text) =>
+                setFormData((prev) => ({ ...prev, country: text }))
+              }
+              editable={isEditing}
+              placeholder="Enter your country"
+              placeholderTextColor="#9ca3af"
+              style={{
+                borderWidth: 1,
+                borderColor: isEditing ? "#007AFF" : "#e5e7eb",
+                borderRadius: 8,
+                padding: 10,
+                backgroundColor: isEditing ? "#fff" : "#f3f4f6",
+                marginBottom: 0,
+                fontSize: 16,
+                color: "#111827",
+              }}
+            />
+          </>
+        )}
       </View>
-
-      {user?.phone_number && (
-        <View className="bg-white rounded-lg shadow-md p-4 mb-4">
-          <AppText size="large" bold className="text-gray-700">
-            Phone Number
-          </AppText>
-          <TextInput
-            value={
-              formData.phone_number !== undefined
-                ? String(formData.phone_number)
-                : undefined
-            }
-            onChangeText={(text) =>
-              setFormData((prev) => ({ ...prev, phone_number: Number(text) }))
-            }
-            editable={isEditing}
-            style={{
-              borderBottomWidth: 1,
-              borderColor: "#ccc",
-              padding: 8,
-            }}
-          />
-        </View>
-      )}
-
-      {user?.address && (
-        <View className="bg-white rounded-lg shadow-md p-4 mb-4">
-          <AppText size="large" bold className="text-gray-700">
-            Address
-          </AppText>
-          <TextInput
-            value={formData.address}
-            onChangeText={(text) =>
-              setFormData((prev) => ({ ...prev, address: text }))
-            }
-            editable={isEditing}
-            style={{
-              borderBottomWidth: 1,
-              borderColor: "#ccc",
-              padding: 8,
-            }}
-          />
-        </View>
-      )}
-
-      {user?.zip_code && (
-        <View className="bg-white rounded-lg shadow-md p-4 mb-4">
-          <AppText size="large" bold className="text-gray-700">
-            Zip Code
-          </AppText>
-          <TextInput
-            value={
-              formData.zip_code !== undefined
-                ? String(formData.zip_code)
-                : undefined
-            }
-            onChangeText={(text) =>
-              setFormData((prev) => ({ ...prev, zip_code: Number(text) }))
-            }
-            editable={isEditing}
-            style={{
-              borderBottomWidth: 1,
-              borderColor: "#ccc",
-              padding: 8,
-            }}
-          />
-        </View>
-      )}
-
-      {user?.country && (
-        <View className="bg-white rounded-lg shadow-md p-4 mb-4">
-          <AppText size="large" bold className="text-gray-700">
-            Country
-          </AppText>
-          <TextInput
-            value={formData.country}
-            onChangeText={(text) =>
-              setFormData((prev) => ({ ...prev, country: text }))
-            }
-            editable={isEditing}
-            style={{
-              borderBottomWidth: 1,
-              borderColor: "#ccc",
-              padding: 8,
-            }}
-          />
-        </View>
-      )}
 
       <TouchableOpacity
         onPress={() => (isEditing ? handleSave() : setIsEditing(true))}
+        activeOpacity={0.85}
         style={{
           backgroundColor: "#007AFF",
-          padding: 12,
-          borderRadius: 8,
+          paddingVertical: 14,
+          paddingHorizontal: 24,
+          borderRadius: 10,
           alignItems: "center",
-          marginTop: 16,
+          marginTop: 10,
           flexDirection: "row",
           justifyContent: "center",
+          shadowColor: "#007AFF",
+          shadowOpacity: 0.18,
+          shadowRadius: 8,
+          shadowOffset: { width: 0, height: 2 },
+          elevation: 2,
         }}
       >
-        <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>
-          {isEditing ? "Save" : "Update"}
-        </Text>
         <MaterialCommunityIcons
           name={isEditing ? "content-save" : "pencil"}
-          size={20}
+          size={22}
           color="#fff"
-          style={{ marginLeft: 8 }}
+          style={{ marginRight: 10 }}
         />
+        <Text
+          style={{
+            color: "#fff",
+            fontWeight: "bold",
+            fontSize: 17,
+            letterSpacing: 0.5,
+          }}
+        >
+          {isEditing ? "Save" : "Update"}
+        </Text>
       </TouchableOpacity>
     </ScrollView>
   );
