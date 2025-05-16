@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  Text,
 } from "react-native";
 import { User } from "@/models/User";
 import { AppText } from "@/components/AppText";
@@ -390,11 +391,19 @@ export default function ProfileScreen() {
           borderRadius: 8,
           alignItems: "center",
           marginTop: 16,
+          flexDirection: "row",
+          justifyContent: "center",
         }}
       >
-        <AppText size="medium" bold className="text-white">
+        <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>
           {isEditing ? "Save" : "Update"}
-        </AppText>
+        </Text>
+        <MaterialCommunityIcons
+          name={isEditing ? "content-save" : "pencil"}
+          size={20}
+          color="#fff"
+          style={{ marginLeft: 8 }}
+        />
       </TouchableOpacity>
     </ScrollView>
   );
