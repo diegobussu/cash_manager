@@ -542,12 +542,6 @@ export default function ProfileScreen() {
           elevation: 2,
         }}
       >
-        <MaterialCommunityIcons
-          name={isEditing ? "content-save" : "pencil"}
-          size={22}
-          color="#fff"
-          style={{ marginRight: 10 }}
-        />
         <Text
           style={{
             color: "#fff",
@@ -558,6 +552,12 @@ export default function ProfileScreen() {
         >
           {isEditing ? "Save" : "Update"}
         </Text>
+        <MaterialCommunityIcons
+          name={isEditing ? "content-save" : "pencil"}
+          size={22}
+          color="#fff"
+          style={{ marginLeft: 10 }}
+        />
       </TouchableOpacity>
     </ScrollView>
   );
