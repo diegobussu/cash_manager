@@ -13,7 +13,6 @@ import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UserService from "@/services/userService";
 import * as ImagePicker from "expo-image-picker";
-import base64 from "base64-js";
 import Utils from "@/utils/Utils";
 import Constants from "@/utils/Constants";
 
@@ -188,6 +187,55 @@ export default function ProfileScreen() {
           >
             <MaterialCommunityIcons name="pencil" size={20} color="#fff" />
           </View>
+          {user?.image && (
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  "Confirm Deletion",
+                  "Are you sure you want to remove your profile picture ?",
+                  [
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Delete",
+                      style: "destructive",
+                      onPress: async () => {
+                        try {
+                          await UserService.updateUser({ image: null });
+                          const userId = await UserService.getUserIdFromToken();
+                          const updatedUser =
+                            await UserService.getUserByID(userId);
+                          setUser(updatedUser);
+                          Alert.alert(
+                            "Success",
+                            "Profile picture removed successfully!",
+                          );
+                        } catch (error: any) {
+                          Alert.alert(
+                            "Error",
+                            error.message ||
+                              "Failed to remove profile picture.",
+                          );
+                        }
+                      },
+                    },
+                  ],
+                );
+              }}
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                backgroundColor: "#FF3B30",
+                borderRadius: 20,
+                padding: 6,
+              }}
+            >
+              <MaterialCommunityIcons name="trash-can" size={20} color="#fff" />
+            </TouchableOpacity>
+          )}
         </TouchableOpacity>
       </View>
 
