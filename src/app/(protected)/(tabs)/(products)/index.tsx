@@ -1,1 +1,1 @@
-export default function SecondScreen() {}
+export default function IndexScreen() {}
