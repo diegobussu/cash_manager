@@ -30,11 +30,11 @@ export default function BottomTabsLayout() {
         name="(products)"
         options={{
           title: "Products",
+          tabBarLabel: "Products",
           headerShown: false,
-          popToTopOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
-              name="cart-outline"
+              name="tag-outline"
               size={size}
               color={color}
             />
@@ -42,12 +42,32 @@ export default function BottomTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="(history)"
+        name="(scanner)"
         options={{
-          title: "History",
+          title: "Scan",
+          tabBarLabel: "Scan",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="history" size={size} color={color} />
+            <MaterialCommunityIcons
+              name="barcode-scan"
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="(checkout)"
+        options={{
+          title: "Checkout",
+          headerShown: false,
+          tabBarLabel: "Checkout",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="cart-outline"
+              size={size}
+              color={color}
+            />
           ),
         }}
       />
