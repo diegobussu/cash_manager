@@ -4,7 +4,7 @@ import {
   useCameraPermissions,
   BarcodeScanningResult,
 } from "expo-camera";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Button,
   StyleSheet,
@@ -16,6 +16,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ProductService from "@/services/productService";
 import { router } from "expo-router";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function IndexScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -24,14 +25,31 @@ export default function IndexScreen() {
   const [barcodeData, setBarcodeData] = useState<string | null>(null);
   const [torchOn, setTorchOn] = useState(false);
   const [cameraIconOutline, setCameraIconOutline] = useState(false);
+  const isFetchingRef = useRef(false);
+  const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  useFocusEffect(() => {
+    setScanned(false);
+    setBarcodeData(null);
+    isFetchingRef.current = false;
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+  });
 
   if (!permission) {
-    // Camera permissions are still loading.
     return <View />;
   }
 
   if (!permission.granted) {
-    // Camera permissions are not granted yet.
     return (
       <View style={{ flex: 1, justifyContent: "center" }}>
         <Text style={styles.message}>
@@ -45,7 +63,7 @@ export default function IndexScreen() {
   function toggleCameraFacing() {
     setFacing((current) => (current === "back" ? "front" : "back"));
     setCameraIconOutline((prev) => !prev);
-    // Ensure torch is turned off when switching to front camera
+
     if (facing === "back") {
       setTorchOn(false);
     }
@@ -59,22 +77,39 @@ export default function IndexScreen() {
     type,
     data,
   }: BarcodeScanningResult) => {
-    if (scanned || barcodeData === data) return;
+    if (scanned || barcodeData === data || isFetchingRef.current) return;
+
     setScanned(true);
     setBarcodeData(data);
+    isFetchingRef.current = true;
 
     try {
       const product = await ProductService.getProductByID(data);
       router.push({
-        pathname: "/product",
+        pathname: "/(protected)/(tabs)/(products)/product",
         params: { product: JSON.stringify(product) },
       });
+
+      timeoutRef.current = setTimeout(() => {
+        setScanned(false);
+        setBarcodeData(null);
+        isFetchingRef.current = false;
+      }, 5000);
     } catch (error: any) {
       Alert.alert(
         "Error",
         error.message || "Failed to fetch product. Please try again.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              setScanned(false);
+              setBarcodeData(null);
+              isFetchingRef.current = false;
+            },
+          },
+        ],
       );
-      setScanned(false);
     }
   };
 
@@ -89,7 +124,7 @@ export default function IndexScreen() {
         }}
         onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
       />
-      {/* Superposition des éléments */}
+
       <View style={styles.overlay}>
         <View style={styles.scanArea} />
       </View>

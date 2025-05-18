@@ -9,6 +9,12 @@ export default function Layout() {
           title: "Products",
         }}
       />
+      <Stack.Screen
+        name="product"
+        options={{
+          title: "Product details",
+        }}
+      />
     </Stack>
   );
 }
