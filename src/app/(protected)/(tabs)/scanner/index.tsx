@@ -80,14 +80,17 @@ export default function IndexScreen() {
 
       <View style={styles.controlsContainer}>
         <TouchableOpacity
-          style={styles.torchButton}
+          style={[
+            styles.torchButton,
+            facing === "front" && styles.torchButtonDisabled,
+          ]}
           onPress={toggleTorch}
           disabled={facing === "front"}
         >
           <MaterialCommunityIcons
             name={torchOn ? "flashlight" : "flashlight-off"}
             size={24}
-            color="white"
+            color={facing === "front" ? "gray" : "white"}
           />
         </TouchableOpacity>
       </View>
@@ -150,6 +153,9 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
+  },
+  torchButtonDisabled: {
+    backgroundColor: "rgba(128,128,128,0.5)",
   },
   button: {
     alignItems: "center",
