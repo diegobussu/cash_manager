@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import AuthService from "./authServices";
+import AuthService from "./authService";
 import { User } from "@/models/User";
 import axios from "axios";
 
@@ -53,7 +53,6 @@ export default class UserService {
 
       return response.data as User;
     } catch (error: any) {
-      console.error("Error updating user:", error);
       if (error.response && error.response.data) {
         throw new Error(error.response.data.message || "Failed to update user");
       }

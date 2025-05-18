@@ -13,7 +13,7 @@ import { Link, useRouter } from "expo-router";
 import Utils from "@/utils/Utils";
 import { User } from "@/models/User";
 import { Ionicons } from "@expo/vector-icons";
-import AuthService from "@/services/authServices";
+import AuthService from "@/services/authService";
 
 export default function RegisterScreen() {
   const router = useRouter();

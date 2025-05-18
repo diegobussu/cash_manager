@@ -42,7 +42,7 @@ export default function BottomTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="(scanner)"
+        name="scanner"
         options={{
           title: "Scan",
           tabBarLabel: "Scan",

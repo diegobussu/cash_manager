@@ -13,21 +13,19 @@ export default function RootLayout() {
           name="(protected)"
           options={{
             headerShown: false,
-            animation: "none",
           }}
         />
         <Stack.Screen
           name="login"
           options={{
             headerShown: false,
-            animation: "none",
           }}
         />
         <Stack.Screen
           name="register"
           options={{
             headerShown: false,
-            animation: "none",
+            animation: "slide_from_bottom",
           }}
         />
       </Stack>
