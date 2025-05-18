@@ -32,12 +32,12 @@ export default function IndexScreen() {
   if (!permission.granted) {
     // Camera permissions are not granted yet.
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
         <Text style={styles.message}>
           We need your permission to show the camera
         </Text>
         <Button onPress={requestPermission} title="grant permission" />
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -63,7 +63,7 @@ export default function IndexScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
       <CameraView
         style={styles.camera}
         facing={facing}
@@ -121,10 +121,6 @@ export default function IndexScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
   message: {
     textAlign: "center",
     paddingBottom: 10,
