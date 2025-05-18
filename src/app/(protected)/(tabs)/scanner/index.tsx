@@ -72,50 +72,50 @@ export default function IndexScreen() {
           barcodeTypes: ["ean13", "qr", "pdf417", "aztec", "code39", "code128"],
         }}
         onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
-      >
-        <View style={styles.overlay}>
-          <View style={styles.scanArea} />
-        </View>
+      />
+      {/* Superposition des éléments */}
+      <View style={styles.overlay}>
+        <View style={styles.scanArea} />
+      </View>
 
-        <View style={styles.controlsContainer}>
+      <View style={styles.controlsContainer}>
+        <TouchableOpacity
+          style={styles.torchButton}
+          onPress={toggleTorch}
+          disabled={facing === "front"}
+        >
+          <MaterialCommunityIcons
+            name={torchOn ? "flashlight" : "flashlight-off"}
+            size={24}
+            color="white"
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+          <MaterialCommunityIcons
+            name={cameraIconOutline ? "camera-flip" : "camera-flip-outline"}
+            size={24}
+            color="white"
+          />
+        </TouchableOpacity>
+
+        {scanned && (
           <TouchableOpacity
-            style={styles.torchButton}
-            onPress={toggleTorch}
-            disabled={facing === "front"}
+            style={[styles.button, styles.scanAgainButton]}
+            onPress={() => setScanned(false)}
           >
-            <MaterialCommunityIcons
-              name={torchOn ? "flashlight" : "flashlight-off"}
-              size={24}
-              color="white"
-            />
+            <Text style={styles.text}>Scanner à nouveau</Text>
           </TouchableOpacity>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-            <MaterialCommunityIcons
-              name={cameraIconOutline ? "camera-flip" : "camera-flip-outline"}
-              size={24}
-              color="white"
-            />
-          </TouchableOpacity>
-
-          {scanned && (
-            <TouchableOpacity
-              style={[styles.button, styles.scanAgainButton]}
-              onPress={() => setScanned(false)}
-            >
-              <Text style={styles.text}>Scanner à nouveau</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        {barcodeData && (
-          <View style={styles.resultContainer}>
-            <Text style={styles.resultText}>Code: {barcodeData}</Text>
-          </View>
         )}
-      </CameraView>
+      </View>
+
+      {barcodeData && (
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultText}>Code: {barcodeData}</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: "absolute",
-    bottom: 0,
+    bottom: 40,
     flexDirection: "row",
     width: "100%",
     backgroundColor: "transparent",
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   controlsContainer: {
     position: "absolute",
-    top: 20,
+    top: 80,
     right: 20,
     zIndex: 10,
   },
