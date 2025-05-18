@@ -56,9 +56,6 @@ export default function IndexScreen() {
   const handleBarcodeScanned = ({ type, data }: BarcodeScanningResult) => {
     setScanned(true);
     setBarcodeData(data);
-    Alert.alert("Code-barres détecté", `Type: ${type}\nDonnées: ${data}`, [
-      { text: "OK", onPress: () => setScanned(false) },
-    ]);
   };
 
   return (
@@ -188,7 +185,7 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     position: "absolute",
-    top: 40,
+    top: 150,
     alignSelf: "center",
     backgroundColor: "rgba(0,0,0,0.7)",
     padding: 10,
