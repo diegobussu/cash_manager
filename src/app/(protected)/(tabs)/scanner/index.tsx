@@ -14,6 +14,8 @@ import {
   Alert,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import ProductService from "@/services/productService";
+import { router } from "expo-router";
 
 export default function IndexScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -53,9 +55,26 @@ export default function IndexScreen() {
     setTorchOn((previous) => !previous);
   }
 
-  const handleBarcodeScanned = ({ type, data }: BarcodeScanningResult) => {
+  const handleBarcodeScanned = async ({
+    type,
+    data,
+  }: BarcodeScanningResult) => {
     setScanned(true);
     setBarcodeData(data);
+
+    try {
+      const product = await ProductService.getProductByID(data);
+      router.push({
+        pathname: "/product",
+        params: { product: JSON.stringify(product) },
+      });
+    } catch (error: any) {
+      Alert.alert(
+        "Error",
+        error.message || "Failed to fetch product. Please try again.",
+      );
+      setScanned(false);
+    }
   };
 
   return (
@@ -99,22 +118,7 @@ export default function IndexScreen() {
             color="white"
           />
         </TouchableOpacity>
-
-        {scanned && (
-          <TouchableOpacity
-            style={[styles.button, styles.scanAgainButton]}
-            onPress={() => setScanned(false)}
-          >
-            <Text style={styles.text}>Scanner à nouveau</Text>
-          </TouchableOpacity>
-        )}
       </View>
-
-      {barcodeData && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>Code: {barcodeData}</Text>
-        </View>
-      )}
     </View>
   );
 }
@@ -159,14 +163,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
   },
-  scanAgainButton: {
-    backgroundColor: "#2196F3",
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
-  },
   overlay: {
     position: "absolute",
     top: 0,
@@ -182,19 +178,5 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#ffffff",
     borderRadius: 10,
-  },
-  resultContainer: {
-    position: "absolute",
-    top: 150,
-    alignSelf: "center",
-    backgroundColor: "rgba(0,0,0,0.7)",
-    padding: 10,
-    borderRadius: 8,
-    width: "80%",
-  },
-  resultText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
   },
 });

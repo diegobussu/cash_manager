@@ -6,7 +6,7 @@ import { TextInput, TouchableOpacity, View } from "react-native";
 import { Link } from "expo-router";
 import Utils from "@/utils/Utils";
 import { Ionicons } from "@expo/vector-icons";
-import AuthService from "@/services/authServices";
+import AuthService from "@/services/authService";
 
 export default function LoginScreen() {
   const authContext = useContext(AuthContext);
