@@ -59,6 +59,7 @@ export default function IndexScreen() {
     type,
     data,
   }: BarcodeScanningResult) => {
+    if (scanned || barcodeData === data) return;
     setScanned(true);
     setBarcodeData(data);
 
