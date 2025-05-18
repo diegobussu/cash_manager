@@ -3,11 +3,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useContext } from "react";
 import { AuthContext } from "@/utils/authContext";
 import { AppText } from "@/components/AppText";
+import UserService from "@/services/userService";
 
 export default function IndexScreen() {
   const authState = useContext(AuthContext);
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     Alert.alert(
       "Delete Account",
       "Are you sure you want to delete your account? This action cannot be undone.",
@@ -16,7 +17,18 @@ export default function IndexScreen() {
         {
           text: "Delete",
           style: "destructive",
-          onPress: () => console.log("Account deleted"),
+          onPress: async () => {
+            try {
+              await UserService.deleteAccount();
+              authState.logOut();
+            } catch (error) {
+              console.error("Error deleting account:", error);
+              Alert.alert(
+                "Error",
+                "Failed to delete account. Please try again.",
+              );
+            }
+          },
         },
       ],
     );
@@ -146,6 +158,13 @@ export default function IndexScreen() {
           Delete Account
         </AppText>
       </TouchableOpacity>
+
+      {/* Copyright */}
+      <View style={{ marginTop: 32, alignItems: "center" }}>
+        <AppText size="small" color="tertiary" center>
+          *© 2025 Diego BUSSU*
+        </AppText>
+      </View>
     </ScrollView>
   );
 }
