@@ -14,7 +14,6 @@ import {
   Alert,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function IndexScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -32,12 +31,12 @@ export default function IndexScreen() {
   if (!permission.granted) {
     // Camera permissions are not granted yet.
     return (
-      <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
+      <View style={{ flex: 1, justifyContent: "center" }}>
         <Text style={styles.message}>
           We need your permission to show the camera
         </Text>
         <Button onPress={requestPermission} title="grant permission" />
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -63,7 +62,7 @@ export default function IndexScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <CameraView
         style={styles.camera}
         facing={facing}
@@ -119,7 +118,7 @@ export default function IndexScreen() {
           <Text style={styles.resultText}>Code: {barcodeData}</Text>
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: "absolute",
-    bottom: 40,
+    bottom: 20,
     flexDirection: "row",
     width: "100%",
     backgroundColor: "transparent",
