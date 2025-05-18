@@ -7,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
   Alert,
-  Text,
 } from "react-native";
 import { User } from "@/models/User";
 import { AppText } from "@/components/AppText";
@@ -280,16 +279,9 @@ export default function ProfileScreen() {
           elevation: 2,
         }}
       >
-        <Text
-          style={{
-            color: "#374151",
-            fontWeight: "bold",
-            fontSize: 15,
-            marginBottom: 6,
-          }}
-        >
+        <AppText bold color="primary" className="text-[15px] mb-1.5">
           First Name
-        </Text>
+        </AppText>
         <TextInput
           value={formData.first_name}
           onChangeText={(text) =>
@@ -310,16 +302,9 @@ export default function ProfileScreen() {
           }}
         />
 
-        <Text
-          style={{
-            color: "#374151",
-            fontWeight: "bold",
-            fontSize: 15,
-            marginBottom: 6,
-          }}
-        >
+        <AppText bold color="primary" className="text-[15px] mb-1.5">
           Last Name
-        </Text>
+        </AppText>
         <TextInput
           value={formData.last_name}
           onChangeText={(text) =>
@@ -340,16 +325,9 @@ export default function ProfileScreen() {
           }}
         />
 
-        <Text
-          style={{
-            color: "#374151",
-            fontWeight: "bold",
-            fontSize: 15,
-            marginBottom: 6,
-          }}
-        >
+        <AppText bold color="primary" className="text-[15px] mb-1.5">
           Email
-        </Text>
+        </AppText>
         <TextInput
           value={formData.email}
           onChangeText={(text) =>
@@ -374,16 +352,9 @@ export default function ProfileScreen() {
 
         {user?.phone_number !== undefined && (
           <>
-            <Text
-              style={{
-                color: "#374151",
-                fontWeight: "bold",
-                fontSize: 15,
-                marginBottom: 6,
-              }}
-            >
+            <AppText bold color="primary" className="text-[15px] mb-1.5">
               Phone Number
-            </Text>
+            </AppText>
             <TextInput
               value={
                 formData.phone_number !== undefined
@@ -416,16 +387,9 @@ export default function ProfileScreen() {
 
         {user?.address !== undefined && (
           <>
-            <Text
-              style={{
-                color: "#374151",
-                fontWeight: "bold",
-                fontSize: 15,
-                marginBottom: 6,
-              }}
-            >
+            <AppText bold color="primary" className="text-[15px] mb-1.5">
               Address
-            </Text>
+            </AppText>
             <TextInput
               value={formData.address}
               onChangeText={(text) =>
@@ -450,16 +414,9 @@ export default function ProfileScreen() {
 
         {user?.zip_code !== undefined && (
           <>
-            <Text
-              style={{
-                color: "#374151",
-                fontWeight: "bold",
-                fontSize: 15,
-                marginBottom: 6,
-              }}
-            >
+            <AppText bold color="primary" className="text-[15px] mb-1.5">
               Zip Code
-            </Text>
+            </AppText>
             <TextInput
               value={
                 formData.zip_code !== undefined ? String(formData.zip_code) : ""
@@ -490,16 +447,9 @@ export default function ProfileScreen() {
 
         {user?.country !== undefined && (
           <>
-            <Text
-              style={{
-                color: "#374151",
-                fontWeight: "bold",
-                fontSize: 15,
-                marginBottom: 6,
-              }}
-            >
+            <AppText bold color="primary" className="text-[15px] mb-1.5">
               Country
-            </Text>
+            </AppText>
             <TextInput
               value={formData.country}
               onChangeText={(text) =>
@@ -542,16 +492,9 @@ export default function ProfileScreen() {
           elevation: 2,
         }}
       >
-        <Text
-          style={{
-            color: "#fff",
-            fontWeight: "bold",
-            fontSize: 17,
-            letterSpacing: 0.5,
-          }}
-        >
+        <AppText bold color="white" className="text-[15px] mb-1.5">
           {isEditing ? "Save" : "Update"}
-        </Text>
+        </AppText>
         <MaterialCommunityIcons
           name={isEditing ? "content-save" : "pencil"}
           size={22}

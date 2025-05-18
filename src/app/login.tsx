@@ -52,7 +52,7 @@ export default function LoginScreen() {
 
   return (
     <View className="flex-1 justify-center p-4">
-      <AppText size="extraHeading" center bold>
+      <AppText size="extraHeading" center bold className="mb-4">
         Login
       </AppText>
       <TextInput
@@ -88,7 +88,7 @@ export default function LoginScreen() {
         </AppText>
       ) : null}
       {successMessage ? (
-        <AppText size="small" center className="text-green-500 mb-4">
+        <AppText size="small" center color="success" className="mb-4">
           {successMessage}
         </AppText>
       ) : null}

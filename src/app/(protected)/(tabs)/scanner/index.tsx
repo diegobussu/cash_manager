@@ -8,7 +8,6 @@ import { useState, useRef, useEffect } from "react";
 import {
   Button,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   Alert,
@@ -17,6 +16,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ProductService from "@/services/productService";
 import { router } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
+import { AppText } from "@/components/AppText";
 
 export default function IndexScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -52,9 +52,9 @@ export default function IndexScreen() {
   if (!permission.granted) {
     return (
       <View style={{ flex: 1, justifyContent: "center" }}>
-        <Text style={styles.message}>
+        <AppText className="text-center pb-4">
           We need your permission to show the camera
-        </Text>
+        </AppText>
         <Button onPress={requestPermission} title="grant permission" />
       </View>
     );
@@ -160,10 +160,6 @@ export default function IndexScreen() {
 }
 
 const styles = StyleSheet.create({
-  message: {
-    textAlign: "center",
-    paddingBottom: 10,
-  },
   camera: {
     flex: 1,
   },

@@ -5,7 +5,7 @@ type AppTextProps = {
   children: React.ReactNode;
   size?: "small" | "medium" | "large" | "heading" | "extraHeading";
   bold?: boolean;
-  color?: "primary" | "secondary" | "tertiary";
+  color?: "primary" | "secondary" | "tertiary" | "danger" | "white" | "success";
   center?: boolean;
   className?: string;
 };
@@ -18,18 +18,31 @@ export function AppText({
   center = false,
   className,
 }: AppTextProps) {
+  const textColor =
+    color === "primary"
+      ? "#000000"
+      : color === "secondary"
+        ? "#6B7280"
+        : color === "tertiary"
+          ? "#9CA3AF"
+          : color === "danger"
+            ? "#FF3B30"
+            : color === "white"
+              ? "#FFFFFF"
+              : color === "success"
+                ? "#2CDE32"
+                : "#FFFFFF";
+
   return (
     <Text
+      style={{ color: textColor }}
       className={cn(
-        size === "small" && "text-sm mb-2",
-        size === "medium" && "text-base mb-3",
-        size === "large" && "text-lg mb-4",
-        size === "heading" && "text-xl mb-5",
-        size === "extraHeading" && "text-2xl mb-6",
+        size === "small" && "text-sm",
+        size === "medium" && "text-base",
+        size === "large" && "text-lg",
+        size === "heading" && "text-xl",
+        size === "extraHeading" && "text-2xl",
         bold && "font-bold",
-        color === "primary" && "text-black",
-        color === "secondary" && "text-gray-500",
-        color === "tertiary" && "text-gray-400",
         center && "text-center",
         className,
       )}

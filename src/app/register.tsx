@@ -128,7 +128,7 @@ export default function RegisterScreen() {
         }}
         keyboardShouldPersistTaps="handled"
       >
-        <AppText size="extraHeading" center bold>
+        <AppText size="extraHeading" center bold className="mb-4">
           Sign Up
         </AppText>
         <TextInput
