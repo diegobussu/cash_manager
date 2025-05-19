@@ -30,7 +30,7 @@ export function AppText({
             : color === "white"
               ? "#FFFFFF"
               : color === "success"
-                ? "#2CDE32"
+                ? "#19C11E"
                 : "#FFFFFF";
 
   return (
