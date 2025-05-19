@@ -17,6 +17,48 @@ export default function Layout() {
           title: "Profile",
         }}
       />
+      <Stack.Screen
+        name="security"
+        options={{
+          title: "Security",
+        }}
+      />
+      <Stack.Screen
+        name="notifications"
+        options={{
+          title: "Notifications",
+        }}
+      />
+      <Stack.Screen
+        name="invite-friends"
+        options={{
+          title: "Invite Friends",
+        }}
+      />
+      <Stack.Screen
+        name="faq"
+        options={{
+          title: "FAQ",
+        }}
+      />
+      <Stack.Screen
+        name="about-us"
+        options={{
+          title: "About Us",
+        }}
+      />
+      <Stack.Screen
+        name="rate-us"
+        options={{
+          title: "Rate Us",
+        }}
+      />
+      <Stack.Screen
+        name="privacy-policy"
+        options={{
+          title: "Privacy Policy",
+        }}
+      />
     </Stack>
   );
 }

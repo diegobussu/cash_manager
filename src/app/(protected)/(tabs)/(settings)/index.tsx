@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { AuthContext } from "@/utils/authContext";
 import { AppText } from "@/components/AppText";
 import UserService from "@/services/userService";
+import { router } from "expo-router";
 
 export default function IndexScreen() {
   const authState = useContext(AuthContext);
@@ -60,25 +61,43 @@ export default function IndexScreen() {
             {
               icon: "shield-lock-outline",
               label: "Security",
-              onPress: () => {},
+              onPress: () =>
+                router.push("/(protected)/(tabs)/(settings)/security"),
             },
-            { icon: "bell-outline", label: "Notifications", onPress: () => {} },
+            {
+              icon: "bell-outline",
+              label: "Notifications",
+              onPress: () =>
+                router.push("/(protected)/(tabs)/(settings)/notifications"),
+            },
             {
               icon: "account-multiple-plus-outline",
               label: "Invite Friends",
-              onPress: () => {},
+              onPress: () =>
+                router.push("/(protected)/(tabs)/(settings)/invite-friends"),
             },
-            { icon: "help-circle-outline", label: "FAQ", onPress: () => {} },
+            {
+              icon: "help-circle-outline",
+              label: "FAQ",
+              onPress: () => router.push("/(protected)/(tabs)/(settings)/faq"),
+            },
             {
               icon: "information-outline",
               label: "About Us",
-              onPress: () => {},
+              onPress: () =>
+                router.push("/(protected)/(tabs)/(settings)/about-us"),
             },
-            { icon: "star-outline", label: "Rate Us", onPress: () => {} },
+            {
+              icon: "star-outline",
+              label: "Rate Us",
+              onPress: () =>
+                router.push("/(protected)/(tabs)/(settings)/rate-us"),
+            },
             {
               icon: "file-document-outline",
               label: "Privacy Policy",
-              onPress: () => {},
+              onPress: () =>
+                router.push("/(protected)/(tabs)/(settings)/privacy-policy"),
             },
           ] as {
             icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
