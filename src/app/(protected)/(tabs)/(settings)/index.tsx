@@ -92,7 +92,7 @@ export default function IndexScreen() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              paddingVertical: 12,
+              paddingVertical: 15,
               borderBottomWidth: index < 6 ? 1 : 0,
               borderBottomColor: "#e5e7eb",
             }}
