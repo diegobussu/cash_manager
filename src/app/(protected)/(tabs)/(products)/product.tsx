@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import { View, StyleSheet, ScrollView, Image } from "react-native";
+import { View, ScrollView, Image } from "react-native";
 import { Product } from "@/models/Product";
 import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -19,18 +19,21 @@ export default function ProductScreen() {
   };
 
   return (
-    <ScrollView style={styles.scrollView}>
-      <View style={styles.imageContainer}>
+    <ScrollView className="bg-gray-100">
+      <View className="h-60 items-center justify-center bg-white">
         {productData.image_url ? (
-          <Image source={{ uri: productData.image_url }} style={styles.image} />
+          <Image
+            source={{ uri: productData.image_url }}
+            className="mt-4 w-[200] h-[200]"
+          />
         ) : (
-          <View style={styles.placeholderImage}>
+          <View className="w-full h-full items-center justify-center bg-gray-200">
             <MaterialCommunityIcons name="food" size={80} color="#ccc" />
           </View>
         )}
       </View>
 
-      <View style={styles.container}>
+      <View className="p-4 bg-white rounded-t-3xl -mt-5">
         <AppText size="heading" bold center>
           {productData.name}
         </AppText>
@@ -39,8 +42,8 @@ export default function ProductScreen() {
         </AppText>
 
         {/* Basic Info Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
+        <View className="mb-6 bg-white rounded-lg p-4 shadow">
+          <View className="flex-row pb-3 mb-3 border-b border-gray-200">
             <MaterialCommunityIcons
               name="information"
               size={22}
@@ -51,7 +54,7 @@ export default function ProductScreen() {
             </AppText>
           </View>
 
-          <View style={styles.infoRow}>
+          <View className="flex-row justify-between py-2 border-b border-gray-100">
             <AppText size="small" color="secondary" className="w-1/3">
               Barcode
             </AppText>
@@ -60,7 +63,7 @@ export default function ProductScreen() {
             </AppText>
           </View>
 
-          <View style={styles.infoRow}>
+          <View className="flex-row justify-between py-2 border-b border-gray-100">
             <AppText size="small" color="secondary" className="w-1/3">
               Manufacturing
             </AppText>
@@ -69,7 +72,7 @@ export default function ProductScreen() {
             </AppText>
           </View>
 
-          <View style={styles.infoRow}>
+          <View className="flex-row justify-between py-2">
             <AppText size="small" color="secondary" className="w-1/3">
               Quantity
             </AppText>
@@ -80,8 +83,8 @@ export default function ProductScreen() {
         </View>
 
         {/* Nutrition Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
+        <View className="mb-6 bg-white rounded-lg p-4 shadow">
+          <View className="flex-row pb-3 mb-3 border-b border-gray-200">
             <MaterialCommunityIcons
               name="food-apple"
               size={22}
@@ -92,8 +95,8 @@ export default function ProductScreen() {
             </AppText>
           </View>
 
-          <View style={styles.nutritionGrid}>
-            <View style={styles.nutritionItem}>
+          <View className="flex-row flex-wrap justify-between">
+            <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
                 Energy
               </AppText>
@@ -102,7 +105,7 @@ export default function ProductScreen() {
               </AppText>
             </View>
 
-            <View style={styles.nutritionItem}>
+            <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
                 Fat
               </AppText>
@@ -111,7 +114,7 @@ export default function ProductScreen() {
               </AppText>
             </View>
 
-            <View style={styles.nutritionItem}>
+            <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
                 Saturated Fat
               </AppText>
@@ -120,7 +123,7 @@ export default function ProductScreen() {
               </AppText>
             </View>
 
-            <View style={styles.nutritionItem}>
+            <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
                 Carbohydrates
               </AppText>
@@ -129,7 +132,7 @@ export default function ProductScreen() {
               </AppText>
             </View>
 
-            <View style={styles.nutritionItem}>
+            <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
                 Sugars
               </AppText>
@@ -138,7 +141,7 @@ export default function ProductScreen() {
               </AppText>
             </View>
 
-            <View style={styles.nutritionItem}>
+            <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
                 Proteins
               </AppText>
@@ -147,7 +150,7 @@ export default function ProductScreen() {
               </AppText>
             </View>
 
-            <View style={styles.nutritionItem}>
+            <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
                 Salt
               </AppText>
@@ -159,15 +162,15 @@ export default function ProductScreen() {
         </View>
 
         {/* Ingredients & Allergens */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
+        <View className="mb-6 bg-white rounded-lg p-4 shadow">
+          <View className="flex-row pb-3 mb-3 border-b border-gray-200">
             <MaterialCommunityIcons name="flask" size={22} color="#0853A9" />
             <AppText size="large" bold className="ml-2">
               Composition
             </AppText>
           </View>
 
-          <View style={styles.compositionItem}>
+          <View className="mb-4 pb-4 border-b border-gray-100">
             <AppText size="medium" bold>
               Ingredients
             </AppText>
@@ -176,7 +179,7 @@ export default function ProductScreen() {
             </AppText>
           </View>
 
-          <View style={styles.compositionItem}>
+          <View className="mb-4 pb-4 border-b border-gray-100">
             <AppText size="medium" bold>
               Allergens
             </AppText>
@@ -185,7 +188,7 @@ export default function ProductScreen() {
             </AppText>
           </View>
 
-          <View style={styles.compositionItem}>
+          <View className="mb-4 pb-4 border-b border-gray-100">
             <AppText size="medium" bold>
               Additives
             </AppText>
@@ -194,7 +197,7 @@ export default function ProductScreen() {
             </AppText>
           </View>
 
-          <View style={styles.compositionItem}>
+          <View>
             <AppText size="medium" bold>
               Labels
             </AppText>
@@ -205,7 +208,7 @@ export default function ProductScreen() {
         </View>
 
         {/* Footer Info */}
-        <View style={styles.footer}>
+        <View className="mt-2 mb-5 items-center">
           <AppText size="small" color="tertiary">
             Product ID: {productData.id}
           </AppText>
@@ -220,82 +223,3 @@ export default function ProductScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: "#f5f5f5",
-  },
-  container: {
-    padding: 16,
-    backgroundColor: "#fff",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    marginTop: -20,
-  },
-  imageContainer: {
-    height: 240,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-  },
-  placeholderImage: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f9f9f9",
-  },
-  section: {
-    marginBottom: 24,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2.5,
-    elevation: 2,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    paddingBottom: 12,
-    marginBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
-  },
-  infoRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f5f5f5",
-  },
-  nutritionGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  nutritionItem: {
-    width: "48%",
-    padding: 12,
-    marginBottom: 12,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
-  },
-  compositionItem: {
-    marginBottom: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f5f5f5",
-  },
-  footer: {
-    marginTop: 8,
-    marginBottom: 20,
-    alignItems: "center",
-  },
-});
