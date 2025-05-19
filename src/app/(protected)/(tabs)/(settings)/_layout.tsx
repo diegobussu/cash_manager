@@ -24,15 +24,15 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="notifications"
+        name="payment-cards"
         options={{
-          title: "Notifications",
+          title: "Manage Payment Cards",
         }}
       />
       <Stack.Screen
-        name="invite-friends"
+        name="notifications"
         options={{
-          title: "Invite Friends",
+          title: "Notifications",
         }}
       />
       <Stack.Screen

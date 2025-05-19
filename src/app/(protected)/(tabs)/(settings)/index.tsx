@@ -64,16 +64,16 @@ export default function IndexScreen() {
                 router.push("/(protected)/(tabs)/(settings)/security"),
             },
             {
+              icon: "credit-card-outline",
+              label: "Manage Payment Cards",
+              onPress: () =>
+                router.push("/(protected)/(tabs)/(settings)/payment-cards"),
+            },
+            {
               icon: "bell-outline",
               label: "Notifications",
               onPress: () =>
                 router.push("/(protected)/(tabs)/(settings)/notifications"),
-            },
-            {
-              icon: "account-multiple-plus-outline",
-              label: "Invite Friends",
-              onPress: () =>
-                router.push("/(protected)/(tabs)/(settings)/invite-friends"),
             },
             {
               icon: "help-circle-outline",
