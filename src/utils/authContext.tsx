@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SplashScreen, useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
+import { setupAxiosInterceptors } from "@/services/axiosInstance";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -53,6 +54,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
   };
 
   useEffect(() => {
+    setupAxiosInterceptors(logOut);
+
     const getAuthFromStorage = async () => {
       // simulate a delay, e.g. for an API request
       await new Promise((res) => setTimeout(() => res(null), 1000));
