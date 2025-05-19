@@ -3,6 +3,7 @@ import AuthService from "./authService";
 import { User } from "@/models/User";
 import axios from "axios";
 import Utils from "@/utils/Utils";
+import axiosInstance from "./axiosInstance";
 
 export default class UserService {
   public static async getUserIdFromToken(): Promise<string> {
@@ -19,7 +20,7 @@ export default class UserService {
   public static async getUserByID(userId: string): Promise<User> {
     try {
       const token = await AuthService.getAuthToken();
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `${AuthService.BASE_URL}/users/${userId}`,
         {
           headers: {

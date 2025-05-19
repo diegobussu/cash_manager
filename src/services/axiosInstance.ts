@@ -1,0 +1,34 @@
+import axios from "axios";
+import AuthService from "./authService";
+import { Alert } from "react-native";
+
+const axiosInstance = axios.create({
+  baseURL: AuthService.BASE_URL,
+});
+
+export const setupAxiosInterceptors = (logOut: () => void) => {
+  axiosInstance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+
+      if (error.response?.status === 403 && !originalRequest._retry) {
+        originalRequest._retry = true;
+
+        try {
+          Alert.alert(
+            "Session Expired",
+            "You have been logged out due to an expired session.",
+            [{ text: "OK", onPress: () => logOut() }],
+          );
+        } catch (logoutError) {
+          console.error("Error during logout:", logoutError);
+        }
+      }
+
+      return Promise.reject(error);
+    },
+  );
+};
+
+export default axiosInstance;
