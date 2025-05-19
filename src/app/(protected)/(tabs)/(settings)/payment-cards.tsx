@@ -117,20 +117,6 @@ export default function PaymentCardsScreen() {
         backgroundColor: "#f4f6fb",
       }}
     >
-      {isLoading && <ActivityIndicator size="large" color="#0853A9" />}
-
-      {errorMessage && (
-        <AppText
-          size="small"
-          center
-          bold
-          color="danger"
-          className="text-red-500 mb-4"
-        >
-          {errorMessage}
-        </AppText>
-      )}
-
       {!isLoading && (
         <FlatList
           data={cards}
@@ -180,6 +166,20 @@ export default function PaymentCardsScreen() {
             </View>
           )}
         />
+      )}
+
+      {isLoading && <ActivityIndicator size="large" color="#0853A9" />}
+
+      {errorMessage && (
+        <AppText
+          size="small"
+          center
+          bold
+          color="danger"
+          className="text-red-500 mb-4"
+        >
+          {errorMessage}
+        </AppText>
       )}
 
       <TouchableOpacity
