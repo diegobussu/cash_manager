@@ -1,13 +1,16 @@
 import { AuthContext } from "@/utils/authContext";
-import { Redirect, Stack } from "expo-router";
-import { useContext } from "react";
-
-export const unstable_settings = {
-  initialRouteName: "(tabs)", // anchor
-};
+import { Redirect, Stack, useRouter } from "expo-router";
+import { useContext, useEffect } from "react";
 
 export default function ProtectedLayout() {
   const authState = useContext(AuthContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (authState.isReady && authState.isLoggedIn) {
+      router.replace("/(protected)/(tabs)/(home)");
+    }
+  }, [authState.isReady, authState.isLoggedIn, router]);
 
   if (!authState.isReady) {
     return null;
