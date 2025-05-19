@@ -1,7 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import AuthService from "./authService";
 import { User } from "@/models/User";
-import axios from "axios";
 import Utils from "@/utils/Utils";
 import axiosInstance from "./axiosInstance";
 
@@ -41,7 +40,7 @@ export default class UserService {
     try {
       const token = await AuthService.getAuthToken();
       const userId = await UserService.getUserIdFromToken();
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `${AuthService.BASE_URL}/users/${userId}`,
         userData,
         {
@@ -74,7 +73,7 @@ export default class UserService {
       const token = await AuthService.getAuthToken();
       const userId = await UserService.getUserIdFromToken();
 
-      await axios.put(
+      await axiosInstance.put(
         `${AuthService.BASE_URL}/users/${userId}/update-password`,
         {
           oldPassword,
@@ -115,7 +114,7 @@ export default class UserService {
     try {
       const token = await AuthService.getAuthToken();
       const userId = await UserService.getUserIdFromToken();
-      await axios.put(
+      await axiosInstance.put(
         `${AuthService.BASE_URL}/users/${userId}/update-email`,
         {
           newEmail,
@@ -146,7 +145,7 @@ export default class UserService {
       const token = await AuthService.getAuthToken();
       const userId = await UserService.getUserIdFromToken();
 
-      await axios.delete(
+      await axiosInstance.delete(
         `${AuthService.BASE_URL}/users/${userId}/delete-account`,
         {
           headers: {
