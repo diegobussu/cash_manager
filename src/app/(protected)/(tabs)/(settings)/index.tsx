@@ -76,9 +76,10 @@ export default function IndexScreen() {
                 router.push("/(protected)/(tabs)/(settings)/notifications"),
             },
             {
-              icon: "help-circle-outline",
-              label: "FAQ",
-              onPress: () => router.push("/(protected)/(tabs)/(settings)/faq"),
+              icon: "translate",
+              label: "Languages",
+              onPress: () =>
+                router.push("/(protected)/(tabs)/(settings)/languages"),
             },
             {
               icon: "information-outline",

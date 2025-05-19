@@ -36,9 +36,9 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="faq"
+        name="languages"
         options={{
-          title: "FAQ",
+          title: "Languages",
         }}
       />
       <Stack.Screen
