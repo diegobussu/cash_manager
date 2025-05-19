@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, TextInput, Button, Alert } from "react-native";
 import { AppText } from "@/components/AppText";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons"; // Import pour l'icône de l'œil
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UserService from "@/services/userService";
 
 export default function SecurityScreen() {
@@ -85,53 +84,61 @@ export default function SecurityScreen() {
         </TouchableOpacity>
         {showPasswordForm && (
           <View style={{ marginTop: 16 }}>
-            <View style={{ position: "relative" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "#e5e7eb",
+                borderRadius: 8,
+                paddingHorizontal: 8,
+                marginBottom: 8,
+                backgroundColor: "#fff",
+              }}
+            >
               <TextInput
                 placeholder="Current Password"
                 secureTextEntry={!showOldPassword}
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#e5e7eb",
-                  borderRadius: 8,
-                  padding: 8,
-                  marginBottom: 8,
-                }}
+                style={{ flex: 1, paddingVertical: 8 }}
                 value={oldPassword}
                 onChangeText={setOldPassword}
               />
               <TouchableOpacity
                 onPress={() => setShowOldPassword(!showOldPassword)}
-                style={{ position: "absolute", right: 10, top: 10 }}
               >
-                <Ionicons
+                <MaterialCommunityIcons
                   name={showOldPassword ? "eye-off" : "eye"}
                   size={24}
-                  color="#000"
+                  color="#0853A9"
                 />
               </TouchableOpacity>
             </View>
-            <View style={{ position: "relative" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "#e5e7eb",
+                borderRadius: 8,
+                paddingHorizontal: 8,
+                marginBottom: 8,
+                backgroundColor: "#fff",
+              }}
+            >
               <TextInput
                 placeholder="New Password"
                 secureTextEntry={!showNewPassword}
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#e5e7eb",
-                  borderRadius: 8,
-                  padding: 8,
-                  marginBottom: 8,
-                }}
+                style={{ flex: 1, paddingVertical: 8 }}
                 value={newPassword}
                 onChangeText={setNewPassword}
               />
               <TouchableOpacity
                 onPress={() => setShowNewPassword(!showNewPassword)}
-                style={{ position: "absolute", right: 10, top: 10 }}
               >
-                <Ionicons
+                <MaterialCommunityIcons
                   name={showNewPassword ? "eye-off" : "eye"}
                   size={24}
-                  color="#000"
+                  color="#0853A9"
                 />
               </TouchableOpacity>
             </View>
@@ -173,28 +180,32 @@ export default function SecurityScreen() {
               value={newEmail}
               onChangeText={setNewEmail}
             />
-            <View style={{ position: "relative" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "#e5e7eb",
+                borderRadius: 8,
+                paddingHorizontal: 8,
+                marginBottom: 8,
+                backgroundColor: "#fff",
+              }}
+            >
               <TextInput
                 placeholder="Password"
                 secureTextEntry={!showPasswordForEmail}
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#e5e7eb",
-                  borderRadius: 8,
-                  padding: 8,
-                  marginBottom: 8,
-                }}
+                style={{ flex: 1, paddingVertical: 8 }}
                 value={passwordForEmail}
                 onChangeText={setPasswordForEmail}
               />
               <TouchableOpacity
                 onPress={() => setShowPasswordForEmail(!showPasswordForEmail)}
-                style={{ position: "absolute", right: 10, top: 10 }}
               >
-                <Ionicons
+                <MaterialCommunityIcons
                   name={showPasswordForEmail ? "eye-off" : "eye"}
                   size={24}
-                  color="#000"
+                  color="#0853A9"
                 />
               </TouchableOpacity>
             </View>
