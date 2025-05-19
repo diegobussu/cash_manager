@@ -61,7 +61,7 @@ export default class UserService {
     }
   }
 
-  public static async changePassword(
+  public static async updatePassword(
     oldPassword: string,
     newPassword: string,
   ): Promise<void> {
@@ -76,7 +76,7 @@ export default class UserService {
       const userId = await UserService.getUserIdFromToken();
 
       await axios.put(
-        `${AuthService.BASE_URL}/users/${userId}/change-password`,
+        `${AuthService.BASE_URL}/users/${userId}/update-password`,
         {
           oldPassword,
           newPassword,
@@ -89,11 +89,46 @@ export default class UserService {
       );
     } catch (error: any) {
       console.error("Error changing password:", error);
-      if (error.response?.status === 401) {
+      if (error.response?.status === 400) {
         throw new Error("Current password is incorrect");
       } else if (error.response && error.response.data) {
         throw new Error(
           error.response.data.message || "Failed to change password",
+        );
+      }
+      throw new Error("An unexpected error occurred");
+    }
+  }
+
+  public static async updateEmail(
+    newEmail: string,
+    password: string,
+  ): Promise<void> {
+    if (!Utils.isValidEmail(newEmail)) {
+      throw new Error("Invalid email format");
+    }
+    try {
+      const token = await AuthService.getAuthToken();
+      const userId = await UserService.getUserIdFromToken();
+      await axios.put(
+        `${AuthService.BASE_URL}/users/${userId}/update-email`,
+        {
+          newEmail,
+          password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+    } catch (error: any) {
+      console.error("Error changing email:", error);
+      if (error.response?.status === 400) {
+        throw new Error("Current password is incorrect");
+      } else if (error.response && error.response.data) {
+        throw new Error(
+          error.response.data.message || "Failed to change email",
         );
       }
       throw new Error("An unexpected error occurred");
