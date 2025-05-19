@@ -2,7 +2,8 @@ export interface Invoice {
   id: number;
   user_id: number;
   total_price: number;
-  createdAt: string;
+  created_at: Date;
+  updated_at: Date;
   items: InvoiceItem[];
 }
 
