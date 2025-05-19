@@ -107,6 +107,13 @@ export default class UserService {
     if (!Utils.isValidEmail(newEmail)) {
       throw new Error("Invalid email format");
     }
+
+    if (!Utils.isValidPassword(password)) {
+      throw new Error(
+        "Password must be at least 8 characters long and include letters, numbers, and special characters",
+      );
+    }
+
     try {
       const token = await AuthService.getAuthToken();
       const userId = await UserService.getUserIdFromToken();

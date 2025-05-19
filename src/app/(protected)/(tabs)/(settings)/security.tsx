@@ -1,8 +1,51 @@
-import { View, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, TouchableOpacity, TextInput, Button, Alert } from "react-native";
 import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons"; // Import pour l'icône de l'œil
+import UserService from "@/services/userService";
 
 export default function SecurityScreen() {
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [passwordForEmail, setPasswordForEmail] = useState("");
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showPasswordForEmail, setShowPasswordForEmail] = useState(false);
+
+  const handleUpdatePassword = async () => {
+    try {
+      await UserService.updatePassword(oldPassword, newPassword);
+      Alert.alert("Success", "Password updated successfully");
+      setShowPasswordForm(false);
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    }
+  };
+
+  const handleUpdateEmail = async () => {
+    try {
+      await UserService.updateEmail(newEmail, passwordForEmail);
+      Alert.alert("Success", "Email updated successfully");
+      setShowEmailForm(false);
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    }
+  };
+
+  const togglePasswordForm = () => {
+    setShowPasswordForm(!showPasswordForm);
+    if (showEmailForm) setShowEmailForm(false);
+  };
+
+  const toggleEmailForm = () => {
+    setShowEmailForm(!showEmailForm);
+    if (showPasswordForm) setShowPasswordForm(false);
+  };
+
   return (
     <View
       style={{
@@ -24,6 +67,7 @@ export default function SecurityScreen() {
           elevation: 2,
         }}
       >
+        {/* Update Password Section */}
         <TouchableOpacity
           style={{
             flexDirection: "row",
@@ -32,13 +76,74 @@ export default function SecurityScreen() {
             borderBottomWidth: 1,
             borderBottomColor: "#e5e7eb",
           }}
+          onPress={togglePasswordForm}
         >
           <MaterialCommunityIcons name="lock-reset" size={24} color="#0853A9" />
           <AppText size="medium" className="ml-4">
             Update Password
           </AppText>
         </TouchableOpacity>
+        {showPasswordForm && (
+          <View style={{ marginTop: 16 }}>
+            <View style={{ position: "relative" }}>
+              <TextInput
+                placeholder="Current Password"
+                secureTextEntry={!showOldPassword}
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#e5e7eb",
+                  borderRadius: 8,
+                  padding: 8,
+                  marginBottom: 8,
+                }}
+                value={oldPassword}
+                onChangeText={setOldPassword}
+              />
+              <TouchableOpacity
+                onPress={() => setShowOldPassword(!showOldPassword)}
+                style={{ position: "absolute", right: 10, top: 10 }}
+              >
+                <Ionicons
+                  name={showOldPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="#000"
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={{ position: "relative" }}>
+              <TextInput
+                placeholder="New Password"
+                secureTextEntry={!showNewPassword}
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#e5e7eb",
+                  borderRadius: 8,
+                  padding: 8,
+                  marginBottom: 8,
+                }}
+                value={newPassword}
+                onChangeText={setNewPassword}
+              />
+              <TouchableOpacity
+                onPress={() => setShowNewPassword(!showNewPassword)}
+                style={{ position: "absolute", right: 10, top: 10 }}
+              >
+                <Ionicons
+                  name={showNewPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="#000"
+                />
+              </TouchableOpacity>
+            </View>
+            <Button
+              title="Save"
+              onPress={handleUpdatePassword}
+              disabled={!oldPassword || !newPassword}
+            />
+          </View>
+        )}
 
+        {/* Update Email Section */}
         <TouchableOpacity
           style={{
             flexDirection: "row",
@@ -47,12 +152,59 @@ export default function SecurityScreen() {
             borderBottomWidth: 1,
             borderBottomColor: "#e5e7eb",
           }}
+          onPress={toggleEmailForm}
         >
           <MaterialCommunityIcons name="email-edit" size={24} color="#0853A9" />
           <AppText size="medium" className="ml-4">
             Update Email
           </AppText>
         </TouchableOpacity>
+        {showEmailForm && (
+          <View style={{ marginTop: 16 }}>
+            <TextInput
+              placeholder="New Email"
+              style={{
+                borderWidth: 1,
+                borderColor: "#e5e7eb",
+                borderRadius: 8,
+                padding: 8,
+                marginBottom: 8,
+              }}
+              value={newEmail}
+              onChangeText={setNewEmail}
+            />
+            <View style={{ position: "relative" }}>
+              <TextInput
+                placeholder="Password"
+                secureTextEntry={!showPasswordForEmail}
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#e5e7eb",
+                  borderRadius: 8,
+                  padding: 8,
+                  marginBottom: 8,
+                }}
+                value={passwordForEmail}
+                onChangeText={setPasswordForEmail}
+              />
+              <TouchableOpacity
+                onPress={() => setShowPasswordForEmail(!showPasswordForEmail)}
+                style={{ position: "absolute", right: 10, top: 10 }}
+              >
+                <Ionicons
+                  name={showPasswordForEmail ? "eye-off" : "eye"}
+                  size={24}
+                  color="#000"
+                />
+              </TouchableOpacity>
+            </View>
+            <Button
+              title="Save"
+              onPress={handleUpdateEmail}
+              disabled={!newEmail || !passwordForEmail}
+            />
+          </View>
+        )}
       </View>
     </View>
   );
