@@ -13,7 +13,6 @@ export default class AuthService {
       }
       return token;
     } catch (error) {
-      console.error("Error retrieving token:", error);
       throw error;
     }
   };

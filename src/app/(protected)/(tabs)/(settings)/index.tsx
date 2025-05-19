@@ -23,7 +23,6 @@ export default function IndexScreen() {
               await UserService.deleteAccount();
               authState.logOut();
             } catch (error) {
-              console.error("Error deleting account:", error);
               Alert.alert(
                 "Error",
                 "Failed to delete account. Please try again.",
