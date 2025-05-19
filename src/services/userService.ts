@@ -12,7 +12,6 @@ export default class UserService {
       const decodedToken: { userId: string } = jwtDecode(token);
       return decodedToken.userId;
     } catch (error) {
-      console.error("Error decoding token:", error);
       throw new Error("Failed to retrieve user ID from token");
     }
   }
@@ -31,7 +30,6 @@ export default class UserService {
 
       return response.data as User;
     } catch (error: any) {
-      console.error("Error fetching user by ID:", error);
       if (error.response && error.response.data) {
         throw new Error(error.response.data.message || "Failed to fetch user");
       }
@@ -89,7 +87,6 @@ export default class UserService {
         },
       );
     } catch (error: any) {
-      console.error("Error changing password:", error);
       if (error.response?.status === 400) {
         throw new Error("Current password is incorrect");
       } else if (error.response && error.response.data) {
@@ -131,8 +128,9 @@ export default class UserService {
         },
       );
     } catch (error: any) {
-      console.error("Error changing email:", error);
       if (error.response?.status === 400) {
+        throw new Error("New email must be different from current email");
+      } else if (error.response?.status === 401) {
         throw new Error("Current password is incorrect");
       } else if (error.response && error.response.data) {
         throw new Error(
@@ -157,7 +155,6 @@ export default class UserService {
         },
       );
     } catch (error: any) {
-      console.error("Error deleting account:", error);
       if (error.response && error.response.data) {
         throw new Error(
           error.response.data.message || "Failed to delete account",

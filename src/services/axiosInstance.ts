@@ -21,8 +21,8 @@ export const setupAxiosInterceptors = (logOut: () => void) => {
             "You have been logged out due to an expired session.",
             [{ text: "OK", onPress: () => logOut() }],
           );
-        } catch (logoutError) {
-          console.error("Error during logout:", logoutError);
+        } catch (error) {
+          throw new Error("Logout failed");
         }
       }
 
