@@ -117,10 +117,6 @@ export default function PaymentCardsScreen() {
         backgroundColor: "#f4f6fb",
       }}
     >
-      <AppText size="heading" bold center className="mb-6">
-        Manage Payment Cards
-      </AppText>
-
       {isLoading && <ActivityIndicator size="large" color="#0853A9" />}
 
       {errorMessage && (
