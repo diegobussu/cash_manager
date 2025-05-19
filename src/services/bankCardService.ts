@@ -1,15 +1,23 @@
 import { BankCard } from "@/models/BankCard";
 import axiosInstance from "./axiosInstance";
 import UserService from "./userService";
+import AuthService from "./authService";
 
 export default class BankCardService {
   public static async getCardsByUserID(): Promise<BankCard[]> {
     try {
       const userId = await UserService.getUserIdFromToken();
-      const response = await axiosInstance.get(`/users/${userId}/cards`);
+      const token = await AuthService.getAuthToken();
+      const response = await axiosInstance.get(`/cards/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.data) {
+      if (error.response?.status === 404) {
+        throw new Error("No bank cards found for this user");
+      } else if (error.response && error.response.data) {
         throw new Error(
           error.response.data.message || "Failed to fetch bank cards",
         );
@@ -20,8 +28,12 @@ export default class BankCardService {
 
   public static async addBankCard(cardData: Partial<BankCard>): Promise<void> {
     try {
-      const userId = await UserService.getUserIdFromToken();
-      await axiosInstance.post(`/users/${userId}/cards`, cardData);
+      const token = await AuthService.getAuthToken();
+      await axiosInstance.post(`/cards`, cardData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     } catch (error: any) {
       if (error.response?.status === 400) {
         throw new Error("Missing required fields for adding a bank card");
@@ -38,7 +50,12 @@ export default class BankCardService {
 
   public static async deleteBankCard(cardId: number): Promise<void> {
     try {
-      await axiosInstance.delete(`/cards/${cardId}`);
+      const token = await AuthService.getAuthToken();
+      await axiosInstance.delete(`/cards/${cardId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     } catch (error: any) {
       if (error.response?.status === 404) {
         throw new Error("Bank card not found");
@@ -59,7 +76,12 @@ export default class BankCardService {
 
   public static async setDefaultBankCard(cardId: number): Promise<void> {
     try {
-      await axiosInstance.put(`/cards/${cardId}/set-default`);
+      const token = await AuthService.getAuthToken();
+      await axiosInstance.put(`/cards/${cardId}/set-default`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     } catch (error: any) {
       if (error.response?.status === 404) {
         throw new Error("Bank card not found");

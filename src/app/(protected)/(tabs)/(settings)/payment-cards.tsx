@@ -259,7 +259,17 @@ export default function PaymentCardsScreen() {
               marginBottom: 8,
             }}
           />
-          <Button title="Save Card" onPress={handleAddCard} />
+          <Button
+            title="Save Card"
+            onPress={handleAddCard}
+            disabled={
+              isLoading ||
+              !cardNumber ||
+              !cardHolder ||
+              !expiryDate ||
+              !cardType
+            }
+          />
         </View>
       )}
     </View>
