@@ -26,7 +26,7 @@ export default function Layout() {
       <Stack.Screen
         name="payment-cards"
         options={{
-          title: "Manage Payment Cards",
+          title: "Payment Cards",
         }}
       />
       <Stack.Screen
