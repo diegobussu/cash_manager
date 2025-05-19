@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { View, TouchableOpacity, TextInput, Button, Alert } from "react-native";
+import React, { useContext, useState } from "react";
+import { View, TouchableOpacity, TextInput, Button } from "react-native";
 import { AppText } from "@/components/AppText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UserService from "@/services/userService";
+import { AuthContext } from "@/utils/authContext";
+import { ActivityIndicator } from "react-native";
 
 export default function SecurityScreen() {
+  const { logOut } = useContext(AuthContext);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
@@ -14,35 +17,66 @@ export default function SecurityScreen() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showPasswordForEmail, setShowPasswordForEmail] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUpdatePassword = async () => {
+    setErrorMessage("");
+    setSuccessMessage("");
+    setIsLoading(true);
     try {
       await UserService.updatePassword(oldPassword, newPassword);
-      Alert.alert("Success", "Password updated successfully");
-      setShowPasswordForm(false);
+      setSuccessMessage(
+        "Password updated successfully. You will be logged out.",
+      );
+      setTimeout(() => {
+        setShowPasswordForm(false);
+        setIsLoading(false);
+        logOut();
+      }, 2000);
     } catch (error: any) {
-      Alert.alert("Error", error.message);
+      setErrorMessage(error.message || "Failed to update password.");
     }
   };
 
   const handleUpdateEmail = async () => {
+    setErrorMessage("");
+    setSuccessMessage("");
+    setIsLoading(true);
     try {
       await UserService.updateEmail(newEmail, passwordForEmail);
-      Alert.alert("Success", "Email updated successfully");
-      setShowEmailForm(false);
+      setSuccessMessage("Email updated successfully. You will be logged out.");
+      setTimeout(() => {
+        setShowEmailForm(false);
+        setIsLoading(false);
+        logOut();
+      }, 2000);
     } catch (error: any) {
-      Alert.alert("Error", error.message);
+      setErrorMessage(error.message || "Failed to update email.");
     }
   };
 
   const togglePasswordForm = () => {
     setShowPasswordForm(!showPasswordForm);
-    if (showEmailForm) setShowEmailForm(false);
+    if (showEmailForm) {
+      setShowEmailForm(false);
+      setNewEmail("");
+      setPasswordForEmail("");
+      setErrorMessage("");
+      setSuccessMessage("");
+    }
   };
 
   const toggleEmailForm = () => {
     setShowEmailForm(!showEmailForm);
-    if (showPasswordForm) setShowPasswordForm(false);
+    if (showPasswordForm) {
+      setShowPasswordForm(false);
+      setOldPassword("");
+      setNewPassword("");
+      setErrorMessage("");
+      setSuccessMessage("");
+    }
   };
 
   return (
@@ -142,11 +176,38 @@ export default function SecurityScreen() {
                 />
               </TouchableOpacity>
             </View>
-            <Button
-              title="Save"
-              onPress={handleUpdatePassword}
-              disabled={!oldPassword || !newPassword}
-            />
+            {/* Display error or success message for password */}
+            {errorMessage && (
+              <AppText
+                size="small"
+                center
+                bold
+                color="danger"
+                className="text-red-500 mb-4"
+              >
+                {errorMessage}
+              </AppText>
+            )}
+            {successMessage && (
+              <AppText
+                size="small"
+                center
+                bold
+                color="success"
+                className="text-green-500 mb-4"
+              >
+                {successMessage}
+              </AppText>
+            )}
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#0853A9" />
+            ) : (
+              <Button
+                title="Save"
+                onPress={handleUpdatePassword}
+                disabled={!oldPassword || !newPassword || isLoading}
+              />
+            )}
           </View>
         )}
 
@@ -209,11 +270,38 @@ export default function SecurityScreen() {
                 />
               </TouchableOpacity>
             </View>
-            <Button
-              title="Save"
-              onPress={handleUpdateEmail}
-              disabled={!newEmail || !passwordForEmail}
-            />
+            {/* Display error or success message for password */}
+            {errorMessage && (
+              <AppText
+                size="small"
+                center
+                bold
+                color="danger"
+                className="text-red-500 mb-4"
+              >
+                {errorMessage}
+              </AppText>
+            )}
+            {successMessage && (
+              <AppText
+                size="small"
+                center
+                bold
+                color="success"
+                className="text-green-500 mb-4"
+              >
+                {successMessage}
+              </AppText>
+            )}
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#0853A9" />
+            ) : (
+              <Button
+                title="Save"
+                onPress={handleUpdateEmail}
+                disabled={!newEmail || !passwordForEmail}
+              />
+            )}
           </View>
         )}
       </View>
