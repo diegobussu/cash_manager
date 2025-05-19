@@ -12,7 +12,7 @@ import {
 import { Link, useRouter } from "expo-router";
 import Utils from "@/utils/Utils";
 import { User } from "@/models/User";
-import { Ionicons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AuthService from "@/services/authService";
 
 export default function RegisterScreen() {
@@ -90,7 +90,7 @@ export default function RegisterScreen() {
       setErrorMessage("");
       setSuccessMessage("Registering...");
 
-      const response = await AuthService.register({
+      await AuthService.register({
         first_name,
         last_name,
         email,
@@ -128,7 +128,7 @@ export default function RegisterScreen() {
         }}
         keyboardShouldPersistTaps="handled"
       >
-        <AppText size="extraHeading" center bold>
+        <AppText size="extraHeading" center bold className="mb-4">
           Sign Up
         </AppText>
         <TextInput
@@ -178,23 +178,22 @@ export default function RegisterScreen() {
           className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
         />
         <View className="relative mb-4">
-          <TextInput
-            placeholder="Password"
-            value={formData.password}
-            onChangeText={(value) => handleInputChange("password", value)}
-            secureTextEntry={!showPassword}
-            className="border border-gray-300 rounded-md px-4 py-3 bg-white"
-          />
-          <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-3"
-          >
-            <Ionicons
-              name={showPassword ? "eye-off" : "eye"}
-              size={24}
-              color="#000000"
+          <View className="flex-row items-center border border-gray-300 rounded-md bg-white px-4 py-3">
+            <TextInput
+              placeholder="Password"
+              value={formData.password}
+              onChangeText={(value) => handleInputChange("password", value)}
+              secureTextEntry={!showPassword}
+              style={{ flex: 1 }}
             />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <MaterialCommunityIcons
+                name={showPassword ? "eye-off" : "eye"}
+                size={24}
+                color="#9CA3AF"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <View className="relative mb-4">
           <TextInput

@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 import { Link } from "expo-router";
 import Utils from "@/utils/Utils";
-import { Ionicons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AuthService from "@/services/authService";
 
 export default function LoginScreen() {
@@ -52,7 +52,7 @@ export default function LoginScreen() {
 
   return (
     <View className="flex-1 justify-center p-4">
-      <AppText size="extraHeading" center bold>
+      <AppText size="extraHeading" center bold className="mb-4">
         Login
       </AppText>
       <TextInput
@@ -64,31 +64,36 @@ export default function LoginScreen() {
         className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
       />
       <View className="relative mb-4">
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!showPassword}
-          className="border border-gray-300 rounded-md px-4 py-3 mb-2 bg-white"
-        />
-        <TouchableOpacity
-          onPress={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-3"
-        >
-          <Ionicons
-            name={showPassword ? "eye-off" : "eye"}
-            size={24}
-            color="#000000"
+        <View className="flex-row items-center border border-gray-300 rounded-md bg-white px-4 py-3">
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+            style={{ flex: 1 }}
           />
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <MaterialCommunityIcons
+              name={showPassword ? "eye-off" : "eye"}
+              size={24}
+              color="#9CA3AF"
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       {errorMessage ? (
-        <AppText size="small" center className="text-red-500 mb-4">
+        <AppText
+          size="small"
+          center
+          bold
+          color="danger"
+          className="text-red-500 mb-4"
+        >
           {errorMessage}
         </AppText>
       ) : null}
       {successMessage ? (
-        <AppText size="small" center className="text-green-500 mb-4">
+        <AppText size="small" center bold color="success" className="mb-4">
           {successMessage}
         </AppText>
       ) : null}
