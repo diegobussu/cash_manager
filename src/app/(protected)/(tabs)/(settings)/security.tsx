@@ -4,6 +4,7 @@ import { AppText } from "@/components/AppText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UserService from "@/services/userService";
 import { AuthContext } from "@/utils/authContext";
+import { ActivityIndicator } from "react-native";
 
 export default function SecurityScreen() {
   const { logOut } = useContext(AuthContext);
@@ -16,21 +17,24 @@ export default function SecurityScreen() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showPasswordForEmail, setShowPasswordForEmail] = useState(false);
-
-  // States for error and success messages
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUpdatePassword = async () => {
     setErrorMessage("");
     setSuccessMessage("");
+    setIsLoading(true);
     try {
       await UserService.updatePassword(oldPassword, newPassword);
       setSuccessMessage(
         "Password updated successfully. You will be logged out.",
       );
-      setShowPasswordForm(false);
-      logOut();
+      setTimeout(() => {
+        setShowPasswordForm(false);
+        setIsLoading(false);
+        logOut();
+      }, 2000);
     } catch (error: any) {
       setErrorMessage(error.message || "Failed to update password.");
     }
@@ -39,11 +43,15 @@ export default function SecurityScreen() {
   const handleUpdateEmail = async () => {
     setErrorMessage("");
     setSuccessMessage("");
+    setIsLoading(true);
     try {
       await UserService.updateEmail(newEmail, passwordForEmail);
       setSuccessMessage("Email updated successfully. You will be logged out.");
-      setShowEmailForm(false);
-      logOut();
+      setTimeout(() => {
+        setShowEmailForm(false);
+        setIsLoading(false);
+        logOut();
+      }, 2000);
     } catch (error: any) {
       setErrorMessage(error.message || "Failed to update email.");
     }
@@ -191,11 +199,15 @@ export default function SecurityScreen() {
                 {successMessage}
               </AppText>
             )}
-            <Button
-              title="Save"
-              onPress={handleUpdatePassword}
-              disabled={!oldPassword || !newPassword}
-            />
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#0853A9" />
+            ) : (
+              <Button
+                title="Save"
+                onPress={handleUpdatePassword}
+                disabled={!oldPassword || !newPassword || isLoading}
+              />
+            )}
           </View>
         )}
 
@@ -281,11 +293,15 @@ export default function SecurityScreen() {
                 {successMessage}
               </AppText>
             )}
-            <Button
-              title="Save"
-              onPress={handleUpdateEmail}
-              disabled={!newEmail || !passwordForEmail}
-            />
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#0853A9" />
+            ) : (
+              <Button
+                title="Save"
+                onPress={handleUpdateEmail}
+                disabled={!newEmail || !passwordForEmail}
+              />
+            )}
           </View>
         )}
       </View>
