@@ -36,6 +36,7 @@ export default function SecurityScreen() {
         logOut();
       }, 2000);
     } catch (error: any) {
+      setIsLoading(false);
       setErrorMessage(error.message || "Failed to update password.");
     }
   };
@@ -53,6 +54,7 @@ export default function SecurityScreen() {
         logOut();
       }, 2000);
     } catch (error: any) {
+      setIsLoading(false);
       setErrorMessage(error.message || "Failed to update email.");
     }
   };
