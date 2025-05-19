@@ -18,14 +18,11 @@ export default class UserService {
   public static async getUserByID(userId: string): Promise<User> {
     try {
       const token = await AuthService.getAuthToken();
-      const response = await axiosInstance.get(
-        `${AuthService.BASE_URL}/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axiosInstance.get(`/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       return response.data as User;
     } catch (error: any) {
@@ -40,15 +37,11 @@ export default class UserService {
     try {
       const token = await AuthService.getAuthToken();
       const userId = await UserService.getUserIdFromToken();
-      const response = await axiosInstance.put(
-        `${AuthService.BASE_URL}/users/${userId}`,
-        userData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axiosInstance.put(`/users/${userId}`, userData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       return response.data as User;
     } catch (error: any) {
@@ -74,7 +67,7 @@ export default class UserService {
       const userId = await UserService.getUserIdFromToken();
 
       await axiosInstance.put(
-        `${AuthService.BASE_URL}/users/${userId}/update-password`,
+        `/users/${userId}/update-password`,
         {
           oldPassword,
           newPassword,
@@ -115,7 +108,7 @@ export default class UserService {
       const token = await AuthService.getAuthToken();
       const userId = await UserService.getUserIdFromToken();
       await axiosInstance.put(
-        `${AuthService.BASE_URL}/users/${userId}/update-email`,
+        `/users/${userId}/update-email`,
         {
           newEmail,
           password,
@@ -145,14 +138,11 @@ export default class UserService {
       const token = await AuthService.getAuthToken();
       const userId = await UserService.getUserIdFromToken();
 
-      await axiosInstance.delete(
-        `${AuthService.BASE_URL}/users/${userId}/delete-account`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      await axiosInstance.delete(`/users/${userId}/delete-account`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
     } catch (error: any) {
       if (error.response && error.response.data) {
         throw new Error(
