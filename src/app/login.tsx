@@ -83,12 +83,18 @@ export default function LoginScreen() {
         </TouchableOpacity>
       </View>
       {errorMessage ? (
-        <AppText size="small" center className="text-red-500 mb-4">
+        <AppText
+          size="small"
+          center
+          bold
+          color="danger"
+          className="text-red-500 mb-4"
+        >
           {errorMessage}
         </AppText>
       ) : null}
       {successMessage ? (
-        <AppText size="small" center color="success" className="mb-4">
+        <AppText size="small" center bold color="success" className="mb-4">
           {successMessage}
         </AppText>
       ) : null}
