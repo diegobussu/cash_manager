@@ -1,0 +1,21 @@
+name: Dependent Workflow
+
+on:
+  workflow_run:
+    workflows:
+      - Lint
+      - Test
+    types:
+      - completed
+
+jobs:
+  dependent_job:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run dependent tasks
+        run: echo "All required workflows have passed. Running dependent tasks..."
