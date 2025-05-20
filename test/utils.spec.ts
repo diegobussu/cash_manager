@@ -34,4 +34,17 @@ describe("Utils", () => {
       expect(typeof Utils.getImageSize(base64)).toBe("number");
     });
   });
+
+  describe("getLast4Digits", () => {
+    it("should return the last 4 digits of a card number", () => {
+      expect(Utils.getLast4Digits("1234567890123456")).toBe("3456");
+      expect(Utils.getLast4Digits("1234-5678-9012-3456")).toBe("3456");
+      expect(Utils.getLast4Digits("1234 5678 9012 3456")).toBe("3456");
+    });
+
+    it("should return an empty string for invalid input", () => {
+      expect(Utils.getLast4Digits("")).toBe("");
+      expect(Utils.getLast4Digits("abcd")).toBe("");
+    });
+  });
 });

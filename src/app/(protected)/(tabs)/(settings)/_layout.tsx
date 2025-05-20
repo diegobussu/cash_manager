@@ -24,9 +24,9 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="payment-cards"
+        name="credit-cards"
         options={{
-          title: "Payment Cards",
+          title: "Credit Card Manager",
         }}
       />
       <Stack.Screen

@@ -20,4 +20,10 @@ export default class Utils {
     // Convert bytes to kilobytes
     return sizeInBytes / Constants.MAX_SIZE_KB;
   }
+
+  public static getLast4Digits(cardNumber: string): string {
+    // Remove non-digit characters and return last 4 digits
+    const digits = cardNumber.replace(/\D/g, "");
+    return digits.slice(-4);
+  }
 }

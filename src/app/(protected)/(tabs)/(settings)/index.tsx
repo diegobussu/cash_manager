@@ -67,7 +67,7 @@ export default function IndexScreen() {
               icon: "credit-card-outline",
               label: "Manage Payment Cards",
               onPress: () =>
-                router.push("/(protected)/(tabs)/(settings)/payment-cards"),
+                router.push("/(protected)/(tabs)/(settings)/credit-cards"),
             },
             {
               icon: "bell-outline",
