@@ -1,4 +1,4 @@
-export interface BankCard {
+export interface CreditCard {
   id: number;
   user_id: number;
   card_number: string; // Will store last 4 digits only for security
