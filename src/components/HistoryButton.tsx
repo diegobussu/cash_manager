@@ -6,7 +6,11 @@ export default function HistoryButton() {
   const router = useRouter();
 
   return (
-    <TouchableOpacity onPress={() => router.navigate("/history")}>
+    <TouchableOpacity
+      onPress={() => router.navigate("history")}
+      style={{ marginRight: 0, paddingRight: 0 }}
+      hitSlop={10}
+    >
       <MaterialCommunityIcons name="history" size={22} color="#0853A9" />
     </TouchableOpacity>
   );

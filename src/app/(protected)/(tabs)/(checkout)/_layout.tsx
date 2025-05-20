@@ -6,7 +6,10 @@ export default function Layout() {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ title: "Checkout", headerRight: () => <HistoryButton /> }}
+        options={{
+          title: "Checkout",
+          headerRight: () => <HistoryButton />,
+        }}
       />
       <Stack.Screen name="history" options={{ title: "History" }} />
     </Stack>
