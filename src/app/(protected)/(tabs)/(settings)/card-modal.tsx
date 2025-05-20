@@ -10,14 +10,18 @@ import { AppText } from "@/components/AppText";
 import BankCardService from "@/services/bankCardService";
 import { useRouter } from "expo-router";
 
-const CARD_TYPES = ["Visa", "Mastercard", "Amex"];
+const CARD_TYPES = [
+  { label: "Visa", color: "#8e44ad" },
+  { label: "Mastercard", color: "#f39c12" },
+  { label: "Amex", color: "#e74c3c" },
+];
 
 export default function CardModal() {
   const router = useRouter();
   const [cardNumber, setCardNumber] = useState("");
   const [cardHolder, setCardHolder] = useState("");
   const [expiry, setExpiry] = useState("");
-  const [cardType, setCardType] = useState(CARD_TYPES[0]);
+  const [cardType, setCardType] = useState(CARD_TYPES[0].label);
   const [loading, setLoading] = useState(false);
 
   const handleAdd = async () => {
@@ -110,18 +114,18 @@ export default function CardModal() {
       <View style={{ flexDirection: "row", marginBottom: 24 }}>
         {CARD_TYPES.map((type) => (
           <TouchableOpacity
-            key={type}
-            onPress={() => setCardType(type)}
+            key={type.label}
+            onPress={() => setCardType(type.label)}
             style={{
-              backgroundColor: cardType === type ? "#3498db" : "#e5e7eb",
+              backgroundColor: cardType === type.label ? type.color : "#e5e7eb",
               borderRadius: 20,
               paddingVertical: 8,
               paddingHorizontal: 16,
               marginRight: 8,
             }}
           >
-            <AppText color={cardType === type ? "white" : "primary"}>
-              {type}
+            <AppText color={cardType === type.label ? "white" : "primary"}>
+              {type.label}
             </AppText>
           </TouchableOpacity>
         ))}
