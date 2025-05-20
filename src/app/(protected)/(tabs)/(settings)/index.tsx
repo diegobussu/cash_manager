@@ -64,21 +64,22 @@ export default function IndexScreen() {
                 router.push("/(protected)/(tabs)/(settings)/security"),
             },
             {
+              icon: "credit-card-outline",
+              label: "Manage Payment Cards",
+              onPress: () =>
+                router.push("/(protected)/(tabs)/(settings)/credit-cards"),
+            },
+            {
               icon: "bell-outline",
               label: "Notifications",
               onPress: () =>
                 router.push("/(protected)/(tabs)/(settings)/notifications"),
             },
             {
-              icon: "account-multiple-plus-outline",
-              label: "Invite Friends",
+              icon: "translate",
+              label: "Languages",
               onPress: () =>
-                router.push("/(protected)/(tabs)/(settings)/invite-friends"),
-            },
-            {
-              icon: "help-circle-outline",
-              label: "FAQ",
-              onPress: () => router.push("/(protected)/(tabs)/(settings)/faq"),
+                router.push("/(protected)/(tabs)/(settings)/languages"),
             },
             {
               icon: "information-outline",

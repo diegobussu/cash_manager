@@ -19,7 +19,7 @@ export default function ProductScreen() {
   };
 
   return (
-    <ScrollView className="bg-gray-100">
+    <ScrollView className="bg-gray-100" showsVerticalScrollIndicator={false}>
       <View className="h-60 items-center justify-center bg-white">
         {productData.image_url ? (
           <Image

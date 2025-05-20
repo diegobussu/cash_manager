@@ -24,21 +24,25 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
+        name="credit-cards"
+        options={{
+          title: "Credit Card Manager",
+        }}
+      />
+      <Stack.Screen
+        name="card-modal"
+        options={{ presentation: "modal", title: "Add a credit card" }}
+      />
+      <Stack.Screen
         name="notifications"
         options={{
           title: "Notifications",
         }}
       />
       <Stack.Screen
-        name="invite-friends"
+        name="languages"
         options={{
-          title: "Invite Friends",
-        }}
-      />
-      <Stack.Screen
-        name="faq"
-        options={{
-          title: "FAQ",
+          title: "Languages",
         }}
       />
       <Stack.Screen
