@@ -16,7 +16,6 @@ export default function BottomTabsLayout() {
         options={{
           title: "Home",
           headerShown: false,
-          tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="home-outline"
@@ -30,7 +29,6 @@ export default function BottomTabsLayout() {
         name="(products)"
         options={{
           title: "Products",
-          tabBarLabel: "Products",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -45,7 +43,6 @@ export default function BottomTabsLayout() {
         name="scanner"
         options={{
           title: "Scan",
-          tabBarLabel: "Scan",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -61,7 +58,6 @@ export default function BottomTabsLayout() {
         options={{
           title: "Checkout",
           headerShown: false,
-          tabBarLabel: "Checkout",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="cart-outline"
