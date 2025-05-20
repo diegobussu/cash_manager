@@ -23,6 +23,7 @@ export default function CreditCardsScreen() {
   const [deleteErrors, setDeleteErrors] = useState<{ [key: number]: string }>(
     {},
   );
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCards();
@@ -88,6 +89,8 @@ export default function CreditCardsScreen() {
               delete newErrors[id];
               return newErrors;
             });
+            setSuccessMessage("Card deleted successfully.");
+            setTimeout(() => setSuccessMessage(null), 2500);
           } catch (err: any) {
             setDeleteErrors((prev) => ({
               ...prev,
@@ -214,6 +217,11 @@ export default function CreditCardsScreen() {
             refreshing={loading}
             onRefresh={fetchCards}
           />
+        )}
+        {successMessage && (
+          <AppText size="small" center bold color="success" className="mb-4">
+            {successMessage}
+          </AppText>
         )}
         <TouchableOpacity
           className="absolute bottom-4 right-4 w-14 h-14 rounded-full bg-blue-500 flex items-center justify-center shadow-lg"
