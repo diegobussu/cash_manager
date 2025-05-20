@@ -23,6 +23,7 @@ export default function CardModal() {
   const [expiry, setExpiry] = useState("");
   const [cardType, setCardType] = useState(CARD_TYPES[0].label);
   const [loading, setLoading] = useState(false);
+  const [cvv, setCvv] = useState("");
 
   const handleAdd = async () => {
     if (!cardNumber || !cardHolder || !expiry || !cardType) {
@@ -96,20 +97,41 @@ export default function CardModal() {
         }}
       />
       <AppText className="mb-2">Expiry Date</AppText>
-      <TextInput
-        value={expiry}
-        onChangeText={handleExpiryChange}
-        placeholder="MM/YY"
-        maxLength={5}
-        style={{
-          backgroundColor: "#fff",
-          borderRadius: 8,
-          padding: 12,
-          marginBottom: 16,
-          borderWidth: 1,
-          borderColor: "#d1d5db",
-        }}
-      />
+      <View style={{ flexDirection: "row", marginBottom: 16 }}>
+        <TextInput
+          value={expiry}
+          onChangeText={handleExpiryChange}
+          placeholder="MM/YY"
+          maxLength={5}
+          style={{
+            flex: 1,
+            backgroundColor: "#fff",
+            borderRadius: 8,
+            padding: 12,
+            borderWidth: 1,
+            borderColor: "#d1d5db",
+            marginRight: 8,
+          }}
+        />
+        <TextInput
+          value={cvv}
+          onChangeText={(text) =>
+            setCvv(text.replace(/[^0-9]/g, "").slice(0, 3))
+          }
+          placeholder="CVV"
+          keyboardType="number-pad"
+          maxLength={3}
+          secureTextEntry
+          style={{
+            width: 70,
+            backgroundColor: "#fff",
+            borderRadius: 8,
+            padding: 12,
+            borderWidth: 1,
+            borderColor: "#d1d5db",
+          }}
+        />
+      </View>
       <AppText className="mb-2">Card Type</AppText>
       <View style={{ flexDirection: "row", marginBottom: 24 }}>
         {CARD_TYPES.map((type) => (
