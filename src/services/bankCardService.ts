@@ -37,6 +37,8 @@ export default class BankCardService {
     } catch (error: any) {
       if (error.response?.status === 400) {
         throw new Error("Missing required fields for adding a bank card");
+      } else if (error.response?.status === 401) {
+        throw new Error("Invalid card number format");
       } else if (error.response?.status === 409) {
         throw new Error("This card is already registered for this user");
       } else if (error.response && error.response.data) {
