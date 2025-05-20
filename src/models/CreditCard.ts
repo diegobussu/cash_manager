@@ -1,4 +1,4 @@
-export interface BankCard {
+export interface CreditCard {
   id: number;
   user_id: number;
   card_number: string; // Will store last 4 digits only for security
@@ -6,6 +6,6 @@ export interface BankCard {
   expiry_date: string; // Format: MM/YY
   card_type: string; // Visa, Mastercard, etc.
   is_default: boolean;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }

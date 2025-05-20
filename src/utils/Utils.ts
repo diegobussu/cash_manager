@@ -26,4 +26,21 @@ export default class Utils {
     const digits = cardNumber.replace(/\D/g, "");
     return digits.slice(-4);
   }
+
+  public static formatDate(date: Date | string): string {
+    if (!date) return "N/A";
+    try {
+      const dateObj = new Date(date);
+      if (isNaN(dateObj.getTime())) return "N/A";
+      return dateObj.toLocaleString(undefined, {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch (e) {
+      return "N/A";
+    }
+  }
 }

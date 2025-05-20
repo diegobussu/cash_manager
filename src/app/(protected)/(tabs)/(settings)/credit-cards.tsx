@@ -10,7 +10,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import BankCardService from "@/services/bankCardService";
+import CreditCardService from "@/services/creditCardService";
 import Utils from "@/utils/Utils";
 import { AppText } from "@/components/AppText";
 import { useRouter } from "expo-router";
@@ -33,7 +33,7 @@ export default function CreditCardsScreen() {
     try {
       setLoading(true);
       setError(null);
-      const fetchedCards = await BankCardService.getCardsByUserID();
+      const fetchedCards = await CreditCardService.getCardsByUserID();
 
       const formattedCards = fetchedCards.map((card) => ({
         id: card.id,
@@ -81,7 +81,7 @@ export default function CreditCardsScreen() {
           try {
             setLoading(true);
             setDeleteErrors((prev) => ({ ...prev, [id]: "" }));
-            await BankCardService.deleteBankCard(id);
+            await CreditCardService.deleteBankCard(id);
             setCards(cards.filter((card) => card.id !== id));
 
             setDeleteErrors((prev) => {

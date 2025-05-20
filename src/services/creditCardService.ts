@@ -1,10 +1,10 @@
-import { BankCard } from "@/models/BankCard";
+import { CreditCard } from "@/models/CreditCard";
 import axiosInstance from "./axiosInstance";
 import UserService from "./userService";
 import AuthService from "./authService";
 
-export default class BankCardService {
-  public static async getCardsByUserID(): Promise<BankCard[]> {
+export default class CreditCardService {
+  public static async getCardsByUserID(): Promise<CreditCard[]> {
     try {
       const userId = await UserService.getUserIdFromToken();
       const token = await AuthService.getAuthToken();
@@ -26,7 +26,9 @@ export default class BankCardService {
     }
   }
 
-  public static async addBankCard(cardData: Partial<BankCard>): Promise<void> {
+  public static async addBankCard(
+    cardData: Partial<CreditCard>,
+  ): Promise<void> {
     try {
       const userId = await UserService.getUserIdFromToken();
       const token = await AuthService.getAuthToken();

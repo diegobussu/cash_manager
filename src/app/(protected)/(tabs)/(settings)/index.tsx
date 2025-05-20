@@ -97,7 +97,9 @@ export default function IndexScreen() {
               icon: "file-document-outline",
               label: "Privacy Policy",
               onPress: () =>
-                router.navigate("/(protected)/(tabs)/(settings)/privacy-policy"),
+                router.navigate(
+                  "/(protected)/(tabs)/(settings)/privacy-policy",
+                ),
             },
           ] as {
             icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];

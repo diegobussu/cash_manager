@@ -3,20 +3,11 @@ import { View, ScrollView, Image } from "react-native";
 import { Product } from "@/models/Product";
 import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Utils from "@/utils/Utils";
 
 export default function ProductScreen() {
   const { product } = useLocalSearchParams();
   const productData: Product = JSON.parse(product as string);
-
-  const formatDate = (date: Date | string) => {
-    if (!date) return "N/A";
-    try {
-      const dateObj = new Date(date);
-      return dateObj.toLocaleDateString();
-    } catch (e) {
-      return "N/A";
-    }
-  };
 
   return (
     <ScrollView className="bg-gray-100" showsVerticalScrollIndicator={false}>
@@ -78,6 +69,15 @@ export default function ProductScreen() {
             </AppText>
             <AppText size="small" bold className="w-2/3">
               {productData.quantity || "N/A"}
+            </AppText>
+          </View>
+
+          <View className="flex-row justify-between py-2 border-t border-gray-100">
+            <AppText size="small" color="secondary" className="w-1/3">
+              Price
+            </AppText>
+            <AppText size="small" bold className="w-2/3">
+              {productData.price ? `${productData.price} €` : "N/A"}
             </AppText>
           </View>
         </View>
@@ -213,10 +213,10 @@ export default function ProductScreen() {
             Product ID: {productData.id}
           </AppText>
           <AppText size="small" color="tertiary">
-            Created: {formatDate(productData.created_at)}
+            Created: {Utils.formatDate(productData.createdAt)}
           </AppText>
           <AppText size="small" color="tertiary">
-            Last updated: {formatDate(productData.updated_at)}
+            Last updated: {Utils.formatDate(productData.updatedAt)}
           </AppText>
         </View>
       </View>

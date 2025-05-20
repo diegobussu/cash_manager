@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { AppText } from "@/components/AppText";
-import BankCardService from "@/services/bankCardService";
+import CreditCardService from "@/services/creditCardService";
 import { useRouter } from "expo-router";
 
 const CARD_TYPES = [
@@ -32,7 +32,7 @@ export default function CardModal() {
     }
     setLoading(true);
     try {
-      await BankCardService.addBankCard({
+      await CreditCardService.addBankCard({
         card_number: cardNumber,
         card_holder: cardHolder,
         expiry_date: expiry,

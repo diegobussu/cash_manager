@@ -47,4 +47,28 @@ describe("Utils", () => {
       expect(Utils.getLast4Digits("abcd")).toBe("");
     });
   });
+
+  describe("formatDate", () => {
+    it("should format a Date object to string", () => {
+      const date = new Date("2024-05-20T15:30:00Z");
+      const formatted = Utils.formatDate(date);
+      expect(typeof formatted).toBe("string");
+      expect(formatted).toContain("2024");
+      expect(formatted).toMatch(/\d{2}\/\d{2}\/\d{4}/); // format jour/mois/année
+    });
+
+    it("should format an ISO string to string", () => {
+      const formatted = Utils.formatDate("2024-05-20T15:30:00Z");
+      expect(typeof formatted).toBe("string");
+      expect(formatted).toContain("2024");
+      expect(formatted).toMatch(/\d{2}\/\d{2}\/\d{4}/);
+    });
+
+    it("should return 'N/A' for invalid date", () => {
+      expect(Utils.formatDate("not-a-date")).toBe("N/A");
+      expect(Utils.formatDate(undefined as any)).toBe("N/A");
+      expect(Utils.formatDate(null as any)).toBe("N/A");
+      expect(Utils.formatDate("")).toBe("N/A");
+    });
+  });
 });

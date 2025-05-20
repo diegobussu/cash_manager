@@ -1,9 +1,10 @@
 export interface Invoice {
   id: number;
   user_id: number;
+  card_number: string;
   total_price: number;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
   items: InvoiceItem[];
 }
 

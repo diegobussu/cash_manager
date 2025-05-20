@@ -3,6 +3,7 @@ export interface Product {
   bar_code: string;
   name: string;
   brand: string;
+  price: number;
   ingredients?: string;
   energy?: number;
   fat?: number;
@@ -17,6 +18,6 @@ export interface Product {
   additives?: string;
   image_url?: string;
   quantity?: number;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
