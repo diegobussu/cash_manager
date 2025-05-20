@@ -3,7 +3,7 @@ import axiosInstance from "./axiosInstance";
 import UserService from "./userService";
 import AuthService from "./authService";
 
-export default class BankCardService {
+export default class CreditCardService {
   public static async getCardsByUserID(): Promise<BankCard[]> {
     try {
       const userId = await UserService.getUserIdFromToken();
