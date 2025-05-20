@@ -17,6 +17,6 @@ export interface Product {
   additives?: string;
   image_url?: string;
   quantity?: number;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
