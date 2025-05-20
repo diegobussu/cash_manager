@@ -61,43 +61,43 @@ export default function IndexScreen() {
               icon: "shield-lock-outline",
               label: "Security",
               onPress: () =>
-                router.push("/(protected)/(tabs)/(settings)/security"),
+                router.navigate("/(protected)/(tabs)/(settings)/security"),
             },
             {
               icon: "credit-card-outline",
               label: "Manage Payment Cards",
               onPress: () =>
-                router.push("/(protected)/(tabs)/(settings)/credit-cards"),
+                router.navigate("/(protected)/(tabs)/(settings)/credit-cards"),
             },
             {
               icon: "bell-outline",
               label: "Notifications",
               onPress: () =>
-                router.push("/(protected)/(tabs)/(settings)/notifications"),
+                router.navigate("/(protected)/(tabs)/(settings)/notifications"),
             },
             {
               icon: "translate",
               label: "Languages",
               onPress: () =>
-                router.push("/(protected)/(tabs)/(settings)/languages"),
+                router.navigate("/(protected)/(tabs)/(settings)/languages"),
             },
             {
               icon: "information-outline",
               label: "About Us",
               onPress: () =>
-                router.push("/(protected)/(tabs)/(settings)/about-us"),
+                router.navigate("/(protected)/(tabs)/(settings)/about-us"),
             },
             {
               icon: "star-outline",
               label: "Rate Us",
               onPress: () =>
-                router.push("/(protected)/(tabs)/(settings)/rate-us"),
+                router.navigate("/(protected)/(tabs)/(settings)/rate-us"),
             },
             {
               icon: "file-document-outline",
               label: "Privacy Policy",
               onPress: () =>
-                router.push("/(protected)/(tabs)/(settings)/privacy-policy"),
+                router.navigate("/(protected)/(tabs)/(settings)/privacy-policy"),
             },
           ] as {
             icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];

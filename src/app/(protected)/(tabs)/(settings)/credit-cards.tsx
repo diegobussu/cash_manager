@@ -68,7 +68,7 @@ export default function CreditCardsScreen() {
   };
 
   const handleAddCard = () => {
-    router.push("/(protected)/(tabs)/(settings)/card-modal");
+    router.navigate("/(protected)/(tabs)/(settings)/card-modal");
   };
 
   const handleDeleteCard = (id: number) => {
