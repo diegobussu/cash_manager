@@ -103,7 +103,7 @@ export default function RegisterScreen() {
 
       setSuccessMessage("Registration successful ! Redirecting to login...");
       setTimeout(() => {
-        router.push("/login");
+        router.navigate("/login");
       }, 1000);
     } catch (error: any) {
       if (error.response?.status === 400) {
