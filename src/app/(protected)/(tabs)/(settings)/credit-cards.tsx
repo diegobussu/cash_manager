@@ -12,11 +12,15 @@ import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeabl
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BankCardService from "@/services/bankCardService";
 import Utils from "@/utils/Utils";
+import { AppText } from "@/components/AppText";
 
 export default function CreditCardsScreen() {
   const [cards, setCards] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleteErrors, setDeleteErrors] = useState<{ [key: number]: string }>(
+    {},
+  );
 
   useEffect(() => {
     fetchCards();
@@ -28,7 +32,6 @@ export default function CreditCardsScreen() {
       setError(null);
       const fetchedCards = await BankCardService.getCardsByUserID();
 
-      // Transform API cards to UI format
       const formattedCards = fetchedCards.map((card) => ({
         id: card.id,
         number: Utils.getLast4Digits(card.card_number),
@@ -48,7 +51,6 @@ export default function CreditCardsScreen() {
     }
   };
 
-  // Helper function to assign colors based on card type
   const getCardColor = (cardType: string): string => {
     switch (cardType.toLowerCase()) {
       case "visa":
@@ -64,7 +66,7 @@ export default function CreditCardsScreen() {
 
   const handleAddCard = () => {
     const newCard = {
-      id: Date.now(), // Temporary ID until saved to backend
+      id: Date.now(),
       balance: "$0.00",
       number: "0000",
       holder: "New Card",
@@ -73,7 +75,6 @@ export default function CreditCardsScreen() {
       cardType: "default",
     };
     setCards([...cards, newCard]);
-    // In a real implementation, you would call BankCardService.addBankCard here
   };
 
   const handleDeleteCard = (id: number) => {
@@ -85,11 +86,20 @@ export default function CreditCardsScreen() {
         onPress: async () => {
           try {
             setLoading(true);
+            setDeleteErrors((prev) => ({ ...prev, [id]: "" }));
             await BankCardService.deleteBankCard(id);
             setCards(cards.filter((card) => card.id !== id));
-            Alert.alert("Success", "Card deleted successfully");
+
+            setDeleteErrors((prev) => {
+              const newErrors = { ...prev };
+              delete newErrors[id];
+              return newErrors;
+            });
           } catch (err: any) {
-            Alert.alert("Error", err.message || "Failed to delete card");
+            setDeleteErrors((prev) => ({
+              ...prev,
+              [id]: err.message || "Failed to delete card",
+            }));
           } finally {
             setLoading(false);
           }
@@ -107,8 +117,8 @@ export default function CreditCardsScreen() {
         borderBottomRightRadius: 8,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 4, // Match the card's bottom margin
-        height: "100%", // Fill the entire height
+        marginBottom: 4,
+        height: "100%",
       }}
     >
       <TouchableOpacity
@@ -129,43 +139,57 @@ export default function CreditCardsScreen() {
   );
 
   const renderCard = ({ item }: { item: any }) => (
-    <ReanimatedSwipeable
-      renderRightActions={() => renderRightActions(item.id)}
-      overshootRight={false}
-      rightThreshold={40}
-    >
-      <View
-        className="rounded-lg p-4 mb-4 shadow-md"
-        style={{ backgroundColor: item.color }}
+    <View>
+      <ReanimatedSwipeable
+        renderRightActions={() => renderRightActions(item.id)}
+        overshootRight={false}
+        rightThreshold={40}
       >
-        {/* Balance display removed as requested */}
-        <Text className="text-lg text-white mb-2">
-          **** **** **** {item.number}
-        </Text>
-        <Text className="text-sm text-white mb-1">{item.holder}</Text>
-        <Text className="text-sm text-white">Expiry: {item.expiry}</Text>
-
-        {/* Display card type */}
-        <View className="absolute bottom-2 right-2 bg-white/20 rounded-md px-2 py-1">
-          <Text className="text-xs font-bold text-white uppercase">
-            {item.cardType || "Card"}
-          </Text>
-        </View>
-
-        {item.isDefault && (
-          <View className="absolute top-2 right-2 bg-white rounded-full px-2 py-1">
-            <Text className="text-xs font-bold text-blue-500">Default</Text>
+        <View
+          className="rounded-lg p-4 mb-4 shadow-md"
+          style={{ backgroundColor: item.color }}
+        >
+          <View className="flex-row items-center justify-between mb-4">
+            <AppText bold size="heading" color="white">
+              **** **** **** {item.number}
+            </AppText>
+            {item.isDefault && (
+              <View className="bg-white rounded-full px-2 py-1 ml-2">
+                <AppText size="medium" bold color="primary">
+                  Default
+                </AppText>
+              </View>
+            )}
           </View>
-        )}
-      </View>
-    </ReanimatedSwipeable>
+          <AppText size="medium" color="white" className="mt-4 mb-1">
+            {item.holder}
+          </AppText>
+          <AppText size="medium" color="white">
+            Expiry: {item.expiry}
+          </AppText>
+          <View className="absolute bottom-2 right-2 bg-white/20 rounded-md px-2 py-1">
+            <AppText size="medium" bold color="white" className="uppercase">
+              {item.cardType || "Card"}
+            </AppText>
+          </View>
+        </View>
+      </ReanimatedSwipeable>
+
+      {deleteErrors[item.id] && (
+        <AppText color="danger" className="mb-4 ml-2">
+          {deleteErrors[item.id]}
+        </AppText>
+      )}
+    </View>
   );
 
   if (loading && cards.length === 0) {
     return (
       <View className="flex-1 justify-center items-center bg-blue-50">
         <ActivityIndicator size="large" color="#3498db" />
-        <Text className="mt-4 text-gray-600">Loading cards...</Text>
+        <AppText color="secondary" className="mt-4">
+          Loading cards...
+        </AppText>
       </View>
     );
   }
@@ -175,12 +199,16 @@ export default function CreditCardsScreen() {
       <View className="flex-1 bg-blue-50 p-4">
         {error && cards.length === 0 ? (
           <View className="flex-1 justify-center items-center">
-            <Text className="text-red-500 mb-4">{error}</Text>
+            <AppText color="danger" className="mb-4">
+              {error}
+            </AppText>
             <TouchableOpacity
               className="bg-blue-500 px-4 py-2 rounded-lg"
               onPress={fetchCards}
             >
-              <Text className="text-white font-bold">Retry</Text>
+              <AppText color="white" bold>
+                Retry
+              </AppText>
             </TouchableOpacity>
           </View>
         ) : (
