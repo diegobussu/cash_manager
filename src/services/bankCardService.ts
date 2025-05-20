@@ -28,12 +28,17 @@ export default class BankCardService {
 
   public static async addBankCard(cardData: Partial<BankCard>): Promise<void> {
     try {
+      const userId = await UserService.getUserIdFromToken();
       const token = await AuthService.getAuthToken();
-      await axiosInstance.post(`/cards`, cardData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      await axiosInstance.post(
+        `/cards`,
+        { ...cardData, user_id: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
     } catch (error: any) {
       if (error.response?.status === 400) {
         throw new Error("Missing required fields for adding a bank card");
