@@ -13,8 +13,10 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BankCardService from "@/services/bankCardService";
 import Utils from "@/utils/Utils";
 import { AppText } from "@/components/AppText";
+import { useRouter } from "expo-router";
 
 export default function CreditCardsScreen() {
+  const router = useRouter();
   const [cards, setCards] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -65,16 +67,7 @@ export default function CreditCardsScreen() {
   };
 
   const handleAddCard = () => {
-    const newCard = {
-      id: Date.now(),
-      balance: "$0.00",
-      number: "0000",
-      holder: "New Card",
-      expiry: "MM/YY",
-      color: "#3498db",
-      cardType: "default",
-    };
-    setCards([...cards, newCard]);
+    router.push("/(protected)/(tabs)/(settings)/card-modal");
   };
 
   const handleDeleteCard = (id: number) => {

@@ -30,6 +30,10 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
+        name="card-modal"
+        options={{ presentation: "modal", title: "Add a credit card" }}
+      />
+      <Stack.Screen
         name="notifications"
         options={{
           title: "Notifications",
