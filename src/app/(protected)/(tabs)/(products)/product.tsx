@@ -71,6 +71,15 @@ export default function ProductScreen() {
               {productData.quantity || "N/A"}
             </AppText>
           </View>
+
+          <View className="flex-row justify-between py-2 border-t border-gray-100">
+            <AppText size="small" color="secondary" className="w-1/3">
+              Price
+            </AppText>
+            <AppText size="small" bold className="w-2/3">
+              {productData.price ? `${productData.price} €` : "N/A"}
+            </AppText>
+          </View>
         </View>
 
         {/* Nutrition Section */}

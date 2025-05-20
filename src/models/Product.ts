@@ -3,6 +3,7 @@ export interface Product {
   bar_code: string;
   name: string;
   brand: string;
+  price: number;
   ingredients?: string;
   energy?: number;
   fat?: number;
