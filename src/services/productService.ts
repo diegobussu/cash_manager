@@ -46,4 +46,29 @@ export default class ProductService {
       throw new Error("An unexpected error occurred");
     }
   }
+
+  public static async updateProductQuantity(
+    barcode: string,
+    quantity: number,
+  ): Promise<void> {
+    try {
+      const token = await AuthService.getAuthToken();
+      await axiosInstance.put(
+        `/products/${barcode}/quantity`,
+        { quantity },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        throw new Error(
+          error.response.data.message || "Failed to update product quantity",
+        );
+      }
+      throw new Error("An unexpected error occurred");
+    }
+  }
 }

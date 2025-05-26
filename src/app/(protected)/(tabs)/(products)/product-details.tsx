@@ -15,9 +15,14 @@ export default function ProductDetailsScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <CartButton product={product as string} />,
+      headerRight: () => (
+        <CartButton
+          product={product as string}
+          disabled={productData.quantity === 0}
+        />
+      ),
     });
-  }, [navigation, product]);
+  }, [navigation, product, productData.quantity]);
 
   const handleAddToCart = () => {
     router.navigate(
@@ -51,19 +56,32 @@ export default function ProductDetailsScreen() {
         </AppText>
 
         <View className="mb-4">
-          <TouchableOpacity
-            className="flex-row items-center justify-center rounded-xl py-3"
-            style={{
-              backgroundColor: "#0853A9",
-            }}
-            activeOpacity={0.8}
-            onPress={handleAddToCart}
-          >
-            <MaterialCommunityIcons name="cart-plus" size={24} color="#fff" />
-            <AppText color="white" bold className="ml-2">
-              Add to cart
-            </AppText>
-          </TouchableOpacity>
+          {productData.quantity === 0 ? (
+            <View className="flex-row items-center justify-center rounded-xl py-3 bg-red-100">
+              <MaterialCommunityIcons
+                name="alert-circle"
+                size={24}
+                color="#e11d48"
+              />
+              <AppText color="danger" bold className="ml-2">
+                Out of stock
+              </AppText>
+            </View>
+          ) : (
+            <TouchableOpacity
+              className="flex-row items-center justify-center rounded-xl py-3"
+              style={{
+                backgroundColor: "#0853A9",
+              }}
+              activeOpacity={0.8}
+              onPress={handleAddToCart}
+            >
+              <MaterialCommunityIcons name="cart-plus" size={24} color="#fff" />
+              <AppText color="white" bold className="ml-2">
+                Add to cart
+              </AppText>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Basic Info Section */}

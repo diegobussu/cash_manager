@@ -76,6 +76,18 @@ export default function IndexScreen() {
         <AppText bold color="primary">
           {item.price ? `${item.price} €` : "N/A"}
         </AppText>
+        {item.quantity === 0 && (
+          <View className="flex-row items-center mt-2">
+            <MaterialCommunityIcons
+              name="alert-circle"
+              size={18}
+              color="#e11d48"
+            />
+            <AppText color="danger" bold className="ml-2">
+              Out of stock
+            </AppText>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
