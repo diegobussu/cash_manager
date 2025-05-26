@@ -1,13 +1,43 @@
-import React from "react";
-import { View, ScrollView } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { useLocalSearchParams, router } from "expo-router";
 import { AppText } from "@/components/AppText";
 import { Invoice, InvoiceItem } from "@/models/Invoice";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import ProductService from "@/services/productService";
+import { Product } from "@/models/Product";
 
 export default function InvoiceDetailsScreen() {
   const { invoice } = useLocalSearchParams();
   const invoiceData: Invoice = JSON.parse(invoice as string);
+
+  // State to store loaded products by barcode
+  const [products, setProducts] = useState<{
+    [barcode: string]: Product | null;
+  }>({});
+  const [loadingBarcodes, setLoadingBarcodes] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Fetch product details for all items if not already loaded
+    invoiceData.items.forEach(async (item: InvoiceItem) => {
+      if (!item.bar_code || products[item.bar_code]) return;
+      setLoadingBarcodes((prev) => [...prev, item.bar_code]);
+      try {
+        const product = await ProductService.getProductByID(item.bar_code);
+        setProducts((prev) => ({ ...prev, [item.bar_code]: product }));
+      } catch {
+        setProducts((prev) => ({ ...prev, [item.bar_code]: null }));
+      } finally {
+        setLoadingBarcodes((prev) => prev.filter((b) => b !== item.bar_code));
+      }
+    });
+  }, [invoiceData.items]);
 
   const formatDate = (dateString: string | Date) => {
     const date = new Date(dateString);
@@ -42,8 +72,11 @@ export default function InvoiceDetailsScreen() {
               </AppText>
             </View>
           </View>
+
+          {/* Divider */}
           <View className="h-[1px] bg-gray-100 my-2" />
 
+          {/* Invoice Items */}
           <View className="flex-row justify-between mb-2">
             <AppText color="secondary" size="small">
               Transaction ID
@@ -96,26 +129,77 @@ export default function InvoiceDetailsScreen() {
               Items
             </AppText>
           </View>
-          {invoiceData.items.map((item: InvoiceItem, index: number) => (
-            <View
-              key={item.id}
-              className={`flex-row justify-between py-3 ${
-                index !== invoiceData.items.length - 1
-                  ? "border-b border-gray-100"
-                  : ""
-              }`}
-            >
-              <View className="flex-1">
-                <AppText className="mb-4">{item.product_name}</AppText>
-                <AppText color="secondary" size="small">
-                  Quantity : {item.quantity}
-                </AppText>
-                <AppText color="secondary" size="small">
-                  Barcode : {item.bar_code}
-                </AppText>
-              </View>
-            </View>
-          ))}
+          {invoiceData.items.map((item: InvoiceItem, index: number) => {
+            const product = products[item.bar_code];
+            const isLoading = loadingBarcodes.includes(item.bar_code);
+
+            return (
+              <TouchableOpacity
+                key={item.id}
+                className={`flex-row items-center py-3 ${
+                  index !== invoiceData.items.length - 1
+                    ? "border-b border-gray-100"
+                    : ""
+                }`}
+                activeOpacity={0.7}
+                onPress={() => {
+                  if (product) {
+                    router.navigate({
+                      pathname:
+                        "/(protected)/(tabs)/(products)/product-details",
+                      params: { product: JSON.stringify(product) },
+                    });
+                  }
+                }}
+                disabled={!product}
+              >
+                {/* Product Image */}
+                {isLoading ? (
+                  <View className="w-14 h-14 rounded-lg mr-4 bg-gray-100 items-center justify-center">
+                    <ActivityIndicator size="small" color="#3498db" />
+                  </View>
+                ) : product && product.image_url ? (
+                  <Image
+                    source={{ uri: product.image_url }}
+                    className="w-14 h-14 rounded-lg mr-4 bg-gray-100"
+                  />
+                ) : (
+                  <View className="w-14 h-14 rounded-lg mr-4 bg-gray-100 items-center justify-center">
+                    <MaterialCommunityIcons
+                      name="food"
+                      size={32}
+                      color="#ccc"
+                    />
+                  </View>
+                )}
+                <View className="flex-1">
+                  <AppText bold>
+                    {product ? product.name : item.product_name}
+                  </AppText>
+                  <AppText color="secondary" size="small">
+                    Quantity : {item.quantity}
+                  </AppText>
+                  <AppText color="secondary" size="small">
+                    Barcode : {item.bar_code}
+                  </AppText>
+                  <AppText color="primary" bold>
+                    {product && product.price
+                      ? `${product.price} € / unit`
+                      : ""}
+                  </AppText>
+                </View>
+                {/* Eye icon to indicate details */}
+                {product && (
+                  <MaterialCommunityIcons
+                    name="eye"
+                    size={22}
+                    color="#3498db"
+                    style={{ marginLeft: 8 }}
+                  />
+                )}
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </ScrollView>
     </View>
