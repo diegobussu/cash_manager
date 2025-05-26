@@ -54,6 +54,18 @@ export default function IndexScreen() {
   }, [items.length]);
 
   const handleQuantityChange = (item: CartItem, newQuantity: number) => {
+    // Check if the product has a quantity limit and if the new quantity exceeds it
+    if (
+      typeof item.product.quantity === "number" &&
+      newQuantity > item.product.quantity
+    ) {
+      Alert.alert(
+        "Quantity Limit Reached",
+        `You cannot add more than ${item.product.quantity} of this product to your cart.`,
+        [{ text: "OK" }],
+      );
+      return;
+    }
     updateQuantity(item.product.id, newQuantity);
   };
 
