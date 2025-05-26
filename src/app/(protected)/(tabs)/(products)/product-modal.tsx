@@ -12,8 +12,13 @@ export default function ProductModal() {
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useContext(CartContext);
   const [successMessage, setSuccessMessage] = useState("");
+  const maxQuantity = productData?.quantity;
 
   const handleAddToCart = () => {
+    if (quantity > maxQuantity) {
+      setSuccessMessage(`Stock limited to ${maxQuantity}`);
+      return;
+    }
     addItem(productData, quantity);
     setSuccessMessage("Product added to cart !");
     setTimeout(() => {
@@ -88,11 +93,16 @@ export default function ProductModal() {
           </AppText>
           <TouchableOpacity
             className="p-3 bg-gray-200 rounded-full"
-            onPress={() => setQuantity((q) => q + 1)}
+            onPress={() => setQuantity((q) => Math.min(maxQuantity, q + 1))}
+            disabled={quantity >= maxQuantity}
           >
             <MaterialCommunityIcons name="plus" size={24} color="#333" />
           </TouchableOpacity>
         </View>
+        {/* Show available stock just below the selector */}
+        <AppText color="secondary" size="small" className="italic mb-6" bold>
+          Available stock : {maxQuantity}
+        </AppText>
 
         {/* Price & Info */}
         <View className="flex-row justify-between items-center mb-4">
