@@ -121,10 +121,8 @@ export default function IndexScreen() {
     setIsProcessingPayment(true);
 
     try {
-      // Appel réel à l'API pour créer la facture
       if (!selectedCard) throw new Error("No payment card selected");
 
-      // Prépare les items pour l'API
       const invoiceItems = items.map((item) => ({
         bar_code: item.product.bar_code,
         product_name: item.product.name,
@@ -134,17 +132,7 @@ export default function IndexScreen() {
       await InvoiceService.addInvoice(selectedCard.card_number, invoiceItems);
 
       clearCart();
-      Alert.alert(
-        "Payment Successful",
-        "Your order has been processed successfully!",
-        [
-          {
-            text: "OK",
-            onPress: () =>
-              router.replace("/(protected)/(tabs)/(checkout)/history"),
-          },
-        ],
-      );
+      router.replace("/(protected)/(tabs)/(checkout)/history");
     } catch (error: any) {
       Alert.alert(
         "Payment Failed",
