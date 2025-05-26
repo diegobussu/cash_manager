@@ -165,6 +165,10 @@ export default function IndexScreen() {
           <AppText size="small" color="secondary">
             {item.product.brand}
           </AppText>
+          {/* Show max stock */}
+          <AppText size="small" color="secondary" className="italic mt-2">
+            Available stock : {item.product.quantity}
+          </AppText>
           <AppText bold color="primary" className="mt-1">
             {item.product.price
               ? `${(item.product.price * item.quantity).toFixed(2)} €`
