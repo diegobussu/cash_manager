@@ -10,7 +10,6 @@ import {
   Platform,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CreditCardService from "@/services/creditCardService";
 import Utils from "@/utils/Utils";
@@ -73,7 +72,7 @@ export default function CreditCardsScreen() {
   };
 
   const handleDeleteCard = (id: number) => {
-    Alert.alert("Delete Card", "Are you sure you want to delete this card?", [
+    Alert.alert("Delete Card", "Are you sure you want to delete this card ?", [
       { text: "Cancel", style: "destructive" },
       {
         text: "Delete",
@@ -138,13 +137,15 @@ export default function CreditCardsScreen() {
     if (Platform.OS === "ios") {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: ["Cancel", "Set as Default"],
-          destructiveButtonIndex: -1,
+          options: ["Cancel", "Set as Default", "Delete"],
+          destructiveButtonIndex: 2,
           cancelButtonIndex: 0,
         },
         (buttonIndex) => {
           if (buttonIndex === 1) {
             handleSetDefault(item.id);
+          } else if (buttonIndex === 2) {
+            handleDeleteCard(item.id);
           }
         },
       );
@@ -158,84 +159,53 @@ export default function CreditCardsScreen() {
             text: "Set as Default",
             onPress: () => handleSetDefault(item.id),
           },
+          {
+            text: "Delete",
+            style: "destructive",
+            onPress: () => handleDeleteCard(item.id),
+          },
         ],
         { cancelable: true },
       );
     }
   };
 
-  const renderRightActions = (id: number) => (
-    <View
-      style={{
-        width: 80,
-        backgroundColor: "#e74c3c",
-        borderTopRightRadius: 8,
-        borderBottomRightRadius: 8,
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 4,
-        height: "100%",
-      }}
-    >
-      <TouchableOpacity
-        onPress={() => handleDeleteCard(id)}
-        style={{
-          width: "100%",
-          height: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <MaterialCommunityIcons name="delete" size={28} color="#fff" />
-        <Text style={{ color: "#fff", fontWeight: "bold", marginTop: 4 }}>
-          Delete
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   const renderCard = ({ item }: { item: any }) => (
     <View>
-      <ReanimatedSwipeable
-        renderRightActions={() => renderRightActions(item.id)}
-        overshootRight={false}
-        rightThreshold={40}
+      <TouchableOpacity
+        activeOpacity={0.85}
+        onLongPress={() => handleCardLongPress(item)}
+        delayLongPress={300}
       >
-        <TouchableOpacity
-          activeOpacity={0.85}
-          onLongPress={() => handleCardLongPress(item)}
-          delayLongPress={300}
+        <View
+          className="rounded-lg p-4 mb-4 shadow-md"
+          style={{ backgroundColor: item.color }}
         >
-          <View
-            className="rounded-lg p-4 mb-4 shadow-md"
-            style={{ backgroundColor: item.color }}
-          >
-            <View className="flex-row items-center justify-between mb-4">
-              <AppText bold size="heading" color="white">
-                **** **** **** {item.number}
-              </AppText>
-              {item.isDefault && (
-                <View className="bg-white rounded-full px-2 py-1 ml-2">
-                  <AppText size="medium" bold color="primary">
-                    Default
-                  </AppText>
-                </View>
-              )}
-            </View>
-            <AppText size="medium" color="white" className="mt-4 mb-1">
-              {item.holder}
+          <View className="flex-row items-center justify-between mb-4">
+            <AppText bold size="heading" color="white">
+              **** **** **** {item.number}
             </AppText>
-            <AppText size="medium" color="white">
-              Expiry: {item.expiry}
-            </AppText>
-            <View className="absolute bottom-2 right-2 bg-white/20 rounded-md px-2 py-1">
-              <AppText size="medium" bold color="white" className="uppercase">
-                {item.cardType || "Card"}
-              </AppText>
-            </View>
+            {item.isDefault && (
+              <View className="bg-white rounded-full px-2 py-1 ml-2">
+                <AppText size="medium" bold color="primary">
+                  Default
+                </AppText>
+              </View>
+            )}
           </View>
-        </TouchableOpacity>
-      </ReanimatedSwipeable>
+          <AppText size="medium" color="white" className="mt-4 mb-1">
+            {item.holder}
+          </AppText>
+          <AppText size="medium" color="white">
+            Expiry: {item.expiry}
+          </AppText>
+          <View className="absolute bottom-2 right-2 bg-white/20 rounded-md px-2 py-1">
+            <AppText size="medium" bold color="white" className="uppercase">
+              {item.cardType || "Card"}
+            </AppText>
+          </View>
+        </View>
+      </TouchableOpacity>
 
       {deleteErrors[item.id] && (
         <AppText color="danger" className="mb-4 ml-2">
