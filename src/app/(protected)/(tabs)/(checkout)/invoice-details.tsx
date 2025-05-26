@@ -3,7 +3,7 @@ import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { AppText } from "@/components/AppText";
 import { Invoice, InvoiceItem } from "@/models/Invoice";
-import { Ionicons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 export default function InvoiceDetailsScreen() {
   const { invoice } = useLocalSearchParams();
@@ -23,8 +23,27 @@ export default function InvoiceDetailsScreen() {
   return (
     <View className="flex-1 bg-gray-50">
       <ScrollView className="flex-1">
-        {/* Invoice Header Info */}
-        <View className="bg-white m-4 p-5 rounded-xl shadow-sm">
+        {/* Header */}
+        <View className="bg-white m-4 p-5 rounded-xl shadow-lg">
+          <View className="flex-row items-center mb-4">
+            <View className="w-12 h-12 rounded-full bg-blue-100 justify-center items-center mr-3">
+              <MaterialCommunityIcons
+                name="cash-multiple"
+                size={28}
+                color="#3498db"
+              />
+            </View>
+            <View>
+              <AppText bold size="heading" className="mb-1">
+                {invoiceData.total_price.toFixed(2)} €
+              </AppText>
+              <AppText color="secondary" size="small">
+                Total Amount
+              </AppText>
+            </View>
+          </View>
+          <View className="h-[1px] bg-gray-100 my-2" />
+
           <View className="flex-row justify-between mb-2">
             <AppText color="secondary" size="small">
               Transaction ID
@@ -49,18 +68,34 @@ export default function InvoiceDetailsScreen() {
             <AppText color="secondary" size="small">
               Payment Method
             </AppText>
-            <AppText>
-              Card ending in {invoiceData.card_number.slice(-4)}
-            </AppText>
+            <View className="flex-row items-center">
+              <MaterialCommunityIcons
+                name="credit-card-outline"
+                size={18}
+                color="#64748b"
+                style={{ marginRight: 4 }}
+              />
+              <AppText>Card •••• {invoiceData.card_number.slice(-4)}</AppText>
+            </View>
           </View>
         </View>
 
+        {/* Divider */}
+        <View className="mx-4 h-[1px] bg-gray-200 my-2" />
+
         {/* Invoice Items */}
         <View className="bg-white m-4 p-5 rounded-xl shadow-sm">
-          <AppText bold className="mb-3">
-            Items
-          </AppText>
-
+          <View className="flex-row items-center mb-3">
+            <MaterialCommunityIcons
+              name="format-list-bulleted"
+              size={20}
+              color="#3498db"
+              style={{ marginRight: 6 }}
+            />
+            <AppText bold color="primary">
+              Items
+            </AppText>
+          </View>
           {invoiceData.items.map((item: InvoiceItem, index: number) => (
             <View
               key={item.id}
@@ -78,16 +113,6 @@ export default function InvoiceDetailsScreen() {
               </View>
             </View>
           ))}
-        </View>
-
-        {/* Total */}
-        <View className="bg-white m-4 p-5 rounded-xl shadow-sm">
-          <View className="flex-row justify-between">
-            <AppText bold>Total Amount</AppText>
-            <AppText bold color="primary" size="heading">
-              {invoiceData.total_price.toFixed(2)} €
-            </AppText>
-          </View>
         </View>
       </ScrollView>
     </View>

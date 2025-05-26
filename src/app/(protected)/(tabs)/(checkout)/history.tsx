@@ -96,7 +96,10 @@ export default function HistoryScreen() {
         <View className="flex-row justify-between items-center mt-2">
           <View>
             <AppText size="small" color="secondary" className="mb-1">
-              {item.items.length} item{item.items.length > 1 ? "s" : ""}
+              {item.items.reduce((sum, i) => sum + i.quantity, 0)} item
+              {item.items.reduce((sum, i) => sum + i.quantity, 0) > 1
+                ? "s"
+                : ""}
             </AppText>
           </View>
           <View>
