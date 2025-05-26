@@ -22,4 +22,28 @@ export default class ProductService {
       throw new Error("An unexpected error occurred");
     }
   }
+
+  public static async getProductByQuery(
+    query: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<Product[]> {
+    try {
+      const token = await AuthService.getAuthToken();
+      const response = await axiosInstance.get("/products", {
+        params: { query, page, limit },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        throw new Error(
+          error.response.data.message || "Failed to fetch products",
+        );
+      }
+      throw new Error("An unexpected error occurred");
+    }
+  }
 }
