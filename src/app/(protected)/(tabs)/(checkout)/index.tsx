@@ -142,7 +142,7 @@ export default function IndexScreen() {
       );
 
       clearCart();
-      router.replace("/(protected)/(tabs)/(checkout)/history");
+      router.navigate("/(protected)/(tabs)/(checkout)/history");
     } catch (error: any) {
       Alert.alert(
         "Payment Failed",
