@@ -106,9 +106,12 @@ export default function InvoiceDetailsScreen() {
               }`}
             >
               <View className="flex-1">
-                <AppText>{item.product_name}</AppText>
+                <AppText className="mb-4">{item.product_name}</AppText>
                 <AppText color="secondary" size="small">
-                  Qty: {item.quantity} × Barcode: {item.bar_code}
+                  Quantity : {item.quantity}
+                </AppText>
+                <AppText color="secondary" size="small">
+                  Barcode : {item.bar_code}
                 </AppText>
               </View>
             </View>
