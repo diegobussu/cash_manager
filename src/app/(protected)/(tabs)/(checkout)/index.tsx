@@ -15,6 +15,7 @@ import CreditCardService from "@/services/creditCardService";
 import { CreditCard } from "@/models/CreditCard";
 import Utils from "@/utils/Utils";
 import InvoiceService from "@/services/invoiceService";
+import ProductService from "@/services/productService";
 
 export default function IndexScreen() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } =
@@ -130,6 +131,15 @@ export default function IndexScreen() {
       }));
 
       await InvoiceService.addInvoice(selectedCard.card_number, invoiceItems);
+
+      await Promise.all(
+        items.map((item) =>
+          ProductService.updateProductQuantity(
+            item.product.bar_code,
+            Math.max(0, (item.product.quantity ?? 0) - item.quantity),
+          ),
+        ),
+      );
 
       clearCart();
       router.replace("/(protected)/(tabs)/(checkout)/history");
