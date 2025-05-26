@@ -10,10 +10,22 @@ export default function ProductModal() {
   const router = useRouter();
   const productData = product ? JSON.parse(product as string) : null;
   const [quantity, setQuantity] = useState(1);
-  const { addItem } = useContext(CartContext);
+  const { addItem, items } = useContext(CartContext);
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const maxQuantity = productData?.quantity;
 
   const handleAddToCart = () => {
+    const alreadyInCart =
+      items.find((i) => i.product.id === productData.id)?.quantity || 0;
+
+    if (alreadyInCart + quantity > maxQuantity) {
+      setErrorMessage(
+        `Stock limited to ${maxQuantity} (already in cart: ${alreadyInCart})`,
+      );
+      return;
+    }
+
     addItem(productData, quantity);
     setSuccessMessage("Product added to cart !");
     setTimeout(() => {
@@ -88,11 +100,16 @@ export default function ProductModal() {
           </AppText>
           <TouchableOpacity
             className="p-3 bg-gray-200 rounded-full"
-            onPress={() => setQuantity((q) => q + 1)}
+            onPress={() => setQuantity((q) => Math.min(maxQuantity, q + 1))}
+            disabled={quantity >= maxQuantity}
           >
             <MaterialCommunityIcons name="plus" size={24} color="#333" />
           </TouchableOpacity>
         </View>
+        {/* Show available stock just below the selector */}
+        <AppText color="secondary" size="small" className="italic mb-6" bold>
+          Available stock : {maxQuantity}
+        </AppText>
 
         {/* Price & Info */}
         <View className="flex-row justify-between items-center mb-4">
@@ -129,6 +146,11 @@ export default function ProductModal() {
             </AppText>
           </TouchableOpacity>
         </View>
+        {errorMessage ? (
+          <AppText size="small" center bold color="danger" className="mt-4">
+            {errorMessage}
+          </AppText>
+        ) : null}
         {successMessage ? (
           <AppText size="small" center bold color="success" className="mt-4">
             {successMessage}

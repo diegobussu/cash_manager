@@ -54,6 +54,18 @@ export default function IndexScreen() {
   }, [items.length]);
 
   const handleQuantityChange = (item: CartItem, newQuantity: number) => {
+    // Check if the product has a quantity limit and if the new quantity exceeds it
+    if (
+      typeof item.product.quantity === "number" &&
+      newQuantity > item.product.quantity
+    ) {
+      Alert.alert(
+        "Quantity Limit Reached",
+        `You cannot add more than ${item.product.quantity} of this product to your cart.`,
+        [{ text: "OK" }],
+      );
+      return;
+    }
     updateQuantity(item.product.id, newQuantity);
   };
 
@@ -153,6 +165,10 @@ export default function IndexScreen() {
           <AppText size="small" color="secondary">
             {item.product.brand}
           </AppText>
+          {/* Show max stock */}
+          <AppText size="small" color="secondary" className="italic mt-2">
+            Available stock : {item.product.quantity}
+          </AppText>
           <AppText bold color="primary" className="mt-1">
             {item.product.price
               ? `${(item.product.price * item.quantity).toFixed(2)} €`
@@ -221,6 +237,16 @@ export default function IndexScreen() {
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="#3498db" />
         <AppText className="mt-4">Processing your payment...</AppText>
+      </View>
+    );
+  }
+
+  // Show loading spinner while fetching payment cards
+  if (isLoadingCards) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#3498db" />
+        <AppText className="mt-4">Loading payment methods...</AppText>
       </View>
     );
   }
