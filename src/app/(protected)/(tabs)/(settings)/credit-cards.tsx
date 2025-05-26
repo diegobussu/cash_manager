@@ -74,7 +74,7 @@ export default function CreditCardsScreen() {
 
   const handleDeleteCard = (id: number) => {
     Alert.alert("Delete Card", "Are you sure you want to delete this card?", [
-      { text: "Cancel", style: "cancel" },
+      { text: "Cancel", style: "destructive" },
       {
         text: "Delete",
         style: "destructive",
@@ -110,7 +110,7 @@ export default function CreditCardsScreen() {
       "Set as Default",
       "Do you want to set this card as your default card?",
       [
-        { text: "Cancel", style: "cancel" },
+        { text: "Cancel", style: "destructive" },
         {
           text: "Set as Default",
           style: "default",
@@ -153,7 +153,7 @@ export default function CreditCardsScreen() {
         "Card Options",
         undefined,
         [
-          { text: "Cancel", style: "cancel" },
+          { text: "Cancel", style: "destructive" },
           {
             text: "Set as Default",
             onPress: () => handleSetDefault(item.id),

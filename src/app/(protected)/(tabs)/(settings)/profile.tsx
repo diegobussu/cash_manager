@@ -217,7 +217,7 @@ export default function ProfileScreen() {
                   "Confirm Deletion",
                   "Are you sure you want to remove your profile picture ?",
                   [
-                    { text: "Cancel", style: "cancel" },
+                    { text: "Cancel", style: "destructive" },
                     {
                       text: "Delete",
                       style: "destructive",
