@@ -71,4 +71,27 @@ describe("Utils", () => {
       expect(Utils.formatDate("")).toBe("N/A");
     });
   });
+
+  describe("detectCardType", () => {
+    it("should detect Visa cards", () => {
+      expect(Utils.detectCardType("4111111111111111")).toBe("Visa");
+      expect(Utils.detectCardType("4000 1234 5678 9010")).toBe("Visa");
+    });
+
+    it("should detect Mastercard cards", () => {
+      expect(Utils.detectCardType("5105105105105100")).toBe("Mastercard");
+      expect(Utils.detectCardType("5500 0000 0000 0004")).toBe("Mastercard");
+    });
+
+    it("should detect Amex cards", () => {
+      expect(Utils.detectCardType("340000000000009")).toBe("Amex");
+      expect(Utils.detectCardType("370000000000002")).toBe("Amex");
+    });
+
+    it("should default to Visa for unknown card types", () => {
+      expect(Utils.detectCardType("6011000990139424")).toBe("Visa"); // Discover
+      expect(Utils.detectCardType("")).toBe("Visa");
+      expect(Utils.detectCardType("abcd")).toBe("Visa");
+    });
+  });
 });
