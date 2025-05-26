@@ -50,7 +50,7 @@ export default function IndexScreen() {
       style={{ elevation: 3 }}
       onPress={() =>
         router.navigate({
-          pathname: "/(protected)/(tabs)/(products)/product",
+          pathname: "/(protected)/(tabs)/(products)/product-details",
           params: { product: JSON.stringify(item) },
         })
       }

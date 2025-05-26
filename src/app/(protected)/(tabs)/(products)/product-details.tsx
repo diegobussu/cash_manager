@@ -1,14 +1,23 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { View, ScrollView, Image, TouchableOpacity } from "react-native";
 import { Product } from "@/models/Product";
 import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Utils from "@/utils/Utils";
+import CartButton from "@/components/CartButton";
+import { useEffect } from "react";
 
 export default function ProductDetailsScreen() {
   const { product } = useLocalSearchParams();
   const router = useRouter();
+  const navigation = useNavigation();
   const productData: Product = JSON.parse(product as string);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <CartButton product={product as string} />,
+    });
+  }, [navigation, product]);
 
   const handleAddToCart = () => {
     router.navigate(
