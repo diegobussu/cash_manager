@@ -10,6 +10,7 @@ import { AppText } from "@/components/AppText";
 import CreditCardService from "@/services/creditCardService";
 import { useRouter } from "expo-router";
 import Utils from "@/utils/Utils";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const CARD_TYPES = [
   { label: "Visa", color: "#8e44ad" },
@@ -69,36 +70,82 @@ export default function CardModal() {
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
       <AppText className="mb-2">Card Number</AppText>
-      <TextInput
-        value={cardNumber}
-        onChangeText={handleCardNumberChange}
-        placeholder="1234 5678 9012 3456"
-        keyboardType="number-pad"
-        maxLength={19}
-        style={{
-          backgroundColor: "#fff",
-          borderRadius: 8,
-          padding: 12,
-          marginBottom: 16,
-          borderWidth: 1,
-          borderColor: "#d1d5db",
-        }}
-      />
+      <View style={{ position: "relative", marginBottom: 16 }}>
+        <TextInput
+          value={cardNumber}
+          onChangeText={handleCardNumberChange}
+          placeholder="1234 5678 9012 3456"
+          keyboardType="number-pad"
+          maxLength={19}
+          style={{
+            backgroundColor: "#fff",
+            borderRadius: 8,
+            padding: 12,
+            borderWidth: 1,
+            borderColor: "#d1d5db",
+            paddingRight: 40,
+          }}
+        />
+        {cardNumber.length > 0 && (
+          <TouchableOpacity
+            onPress={() => setCardNumber("")}
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 0,
+              bottom: 0,
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              width: 32,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="close-circle"
+              size={22}
+              color="#94a3b8"
+            />
+          </TouchableOpacity>
+        )}
+      </View>
       <AppText className="mb-2">Card Holder</AppText>
-      <TextInput
-        value={cardHolder}
-        onChangeText={setCardHolder}
-        placeholder="Name on card"
-        autoCapitalize="words"
-        style={{
-          backgroundColor: "#fff",
-          borderRadius: 8,
-          padding: 12,
-          marginBottom: 16,
-          borderWidth: 1,
-          borderColor: "#d1d5db",
-        }}
-      />
+      <View style={{ position: "relative", marginBottom: 16 }}>
+        <TextInput
+          value={cardHolder}
+          onChangeText={setCardHolder}
+          placeholder="Name on card"
+          autoCapitalize="words"
+          style={{
+            backgroundColor: "#fff",
+            borderRadius: 8,
+            padding: 12,
+            borderWidth: 1,
+            borderColor: "#d1d5db",
+            paddingRight: 40,
+          }}
+        />
+        {cardHolder.length > 0 && (
+          <TouchableOpacity
+            onPress={() => setCardHolder("")}
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 0,
+              bottom: 0,
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              width: 32,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="close-circle"
+              size={22}
+              color="#94a3b8"
+            />
+          </TouchableOpacity>
+        )}
+      </View>
       <AppText className="mb-2">Expiry Date</AppText>
       <View style={{ flexDirection: "row", marginBottom: 16 }}>
         <TextInput
