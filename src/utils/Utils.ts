@@ -43,4 +43,12 @@ export default class Utils {
       return "N/A";
     }
   }
+
+  public static detectCardType(cardNumber: string): string {
+    const digits = cardNumber.replace(/\D/g, "");
+    if (/^4/.test(digits)) return "Visa";
+    if (/^5[1-5]/.test(digits)) return "Mastercard";
+    if (/^3[47]/.test(digits)) return "Amex";
+    return "Visa";
+  }
 }

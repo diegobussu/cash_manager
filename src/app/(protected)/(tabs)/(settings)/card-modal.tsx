@@ -9,6 +9,7 @@ import {
 import { AppText } from "@/components/AppText";
 import CreditCardService from "@/services/creditCardService";
 import { useRouter } from "expo-router";
+import Utils from "@/utils/Utils";
 
 const CARD_TYPES = [
   { label: "Visa", color: "#8e44ad" },
@@ -52,7 +53,9 @@ export default function CardModal() {
   };
 
   const handleCardNumberChange = (text: string) => {
-    setCardNumber(formatCardNumber(text));
+    const formatted = formatCardNumber(text);
+    setCardNumber(formatted);
+    setCardType(Utils.detectCardType(formatted));
   };
 
   const handleExpiryChange = (text: string) => {
@@ -138,6 +141,7 @@ export default function CardModal() {
           <TouchableOpacity
             key={type.label}
             onPress={() => setCardType(type.label)}
+            disabled={cardType !== type.label}
             style={{
               backgroundColor: cardType === type.label ? type.color : "#e5e7eb",
               borderRadius: 20,
