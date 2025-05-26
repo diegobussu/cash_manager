@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  ActionSheetIOS,
+  Platform,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
@@ -103,6 +105,65 @@ export default function CreditCardsScreen() {
     ]);
   };
 
+  const handleSetDefault = (id: number) => {
+    Alert.alert(
+      "Set as Default",
+      "Do you want to set this card as your default card?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Set as Default",
+          style: "default",
+          onPress: async () => {
+            try {
+              setLoading(true);
+              await CreditCardService.setDefaultBankCard(id);
+              fetchCards();
+              setSuccessMessage("Default card updated.");
+              setTimeout(() => setSuccessMessage(null), 2000);
+            } catch (err: any) {
+              Alert.alert("Error", err.message || "Failed to set default card");
+            } finally {
+              setLoading(false);
+            }
+          },
+        },
+      ],
+    );
+  };
+
+  // Show action sheet on long press (only for non-default cards)
+  const handleCardLongPress = (item: any) => {
+    if (item.isDefault) return;
+    if (Platform.OS === "ios") {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ["Cancel", "Set as Default"],
+          destructiveButtonIndex: -1,
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 1) {
+            handleSetDefault(item.id);
+          }
+        },
+      );
+    } else {
+      Alert.alert(
+        "Card Options",
+        undefined,
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Set as Default",
+            onPress: () => handleSetDefault(item.id),
+          },
+        ],
+        { cancelable: true },
+      );
+    }
+  };
+
   const renderRightActions = (id: number) => (
     <View
       style={{
@@ -140,34 +201,40 @@ export default function CreditCardsScreen() {
         overshootRight={false}
         rightThreshold={40}
       >
-        <View
-          className="rounded-lg p-4 mb-4 shadow-md"
-          style={{ backgroundColor: item.color }}
+        <TouchableOpacity
+          activeOpacity={0.85}
+          onLongPress={() => handleCardLongPress(item)}
+          delayLongPress={300}
         >
-          <View className="flex-row items-center justify-between mb-4">
-            <AppText bold size="heading" color="white">
-              **** **** **** {item.number}
+          <View
+            className="rounded-lg p-4 mb-4 shadow-md"
+            style={{ backgroundColor: item.color }}
+          >
+            <View className="flex-row items-center justify-between mb-4">
+              <AppText bold size="heading" color="white">
+                **** **** **** {item.number}
+              </AppText>
+              {item.isDefault && (
+                <View className="bg-white rounded-full px-2 py-1 ml-2">
+                  <AppText size="medium" bold color="primary">
+                    Default
+                  </AppText>
+                </View>
+              )}
+            </View>
+            <AppText size="medium" color="white" className="mt-4 mb-1">
+              {item.holder}
             </AppText>
-            {item.isDefault && (
-              <View className="bg-white rounded-full px-2 py-1 ml-2">
-                <AppText size="medium" bold color="primary">
-                  Default
-                </AppText>
-              </View>
-            )}
-          </View>
-          <AppText size="medium" color="white" className="mt-4 mb-1">
-            {item.holder}
-          </AppText>
-          <AppText size="medium" color="white">
-            Expiry: {item.expiry}
-          </AppText>
-          <View className="absolute bottom-2 right-2 bg-white/20 rounded-md px-2 py-1">
-            <AppText size="medium" bold color="white" className="uppercase">
-              {item.cardType || "Card"}
+            <AppText size="medium" color="white">
+              Expiry: {item.expiry}
             </AppText>
+            <View className="absolute bottom-2 right-2 bg-white/20 rounded-md px-2 py-1">
+              <AppText size="medium" bold color="white" className="uppercase">
+                {item.cardType || "Card"}
+              </AppText>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </ReanimatedSwipeable>
 
       {deleteErrors[item.id] && (

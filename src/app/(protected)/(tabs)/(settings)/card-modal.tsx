@@ -210,7 +210,8 @@ export default function CardModal() {
           !cardNumber.trim() ||
           !cardHolder.trim() ||
           !expiry.trim() ||
-          !cardType.trim()
+          !cardType.trim() ||
+          !cvv.trim()
         }
         style={{
           backgroundColor:
@@ -218,9 +219,10 @@ export default function CardModal() {
             !cardNumber.trim() ||
             !cardHolder.trim() ||
             !expiry.trim() ||
-            !cardType.trim()
+            !cardType.trim() ||
+            !cvv.trim()
               ? "#93c5fd"
-              : "#3498db",
+              : "#0853A9",
           borderRadius: 8,
           paddingVertical: 14,
           alignItems: "center",
