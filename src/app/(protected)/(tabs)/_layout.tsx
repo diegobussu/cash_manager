@@ -1,8 +1,13 @@
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { useContext } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { CartContext } from "@/utils/cartContext";
+import { View } from "react-native";
+import { AppText } from "@/components/AppText";
 
 export default function BottomTabsLayout() {
+  const { totalItems } = useContext(CartContext);
+
   return (
     <Tabs
       screenOptions={{
@@ -59,11 +64,37 @@ export default function BottomTabsLayout() {
           title: "Checkout",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="cart-outline"
-              size={size}
-              color={color}
-            />
+            <React.Fragment>
+              <MaterialCommunityIcons
+                name="cart-outline"
+                size={size}
+                color={color}
+              />
+
+              {totalItems > 0 && (
+                <View
+                  style={{
+                    position: "absolute",
+                    top: 2,
+                    right: 2,
+                    backgroundColor: "#EF4444",
+                    borderRadius: 8,
+                    width: 12,
+                    height: 12,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  pointerEvents="none"
+                >
+                  <AppText
+                    color="white"
+                    className="text-[9px] font-bold leading-[10px] text-center"
+                  >
+                    {totalItems}
+                  </AppText>
+                </View>
+              )}
+            </React.Fragment>
           ),
         }}
       />
