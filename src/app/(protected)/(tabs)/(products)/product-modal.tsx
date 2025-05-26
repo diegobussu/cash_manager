@@ -10,15 +10,22 @@ export default function ProductModal() {
   const router = useRouter();
   const productData = product ? JSON.parse(product as string) : null;
   const [quantity, setQuantity] = useState(1);
-  const { addItem } = useContext(CartContext);
+  const { addItem, items } = useContext(CartContext);
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const maxQuantity = productData?.quantity;
 
   const handleAddToCart = () => {
-    if (quantity > maxQuantity) {
-      setSuccessMessage(`Stock limited to ${maxQuantity}`);
+    const alreadyInCart =
+      items.find((i) => i.product.id === productData.id)?.quantity || 0;
+
+    if (alreadyInCart + quantity > maxQuantity) {
+      setErrorMessage(
+        `Stock limited to ${maxQuantity} (already in cart: ${alreadyInCart})`,
+      );
       return;
     }
+
     addItem(productData, quantity);
     setSuccessMessage("Product added to cart !");
     setTimeout(() => {
@@ -139,6 +146,11 @@ export default function ProductModal() {
             </AppText>
           </TouchableOpacity>
         </View>
+        {errorMessage ? (
+          <AppText size="small" center bold color="danger" className="mt-4">
+            {errorMessage}
+          </AppText>
+        ) : null}
         {successMessage ? (
           <AppText size="small" center bold color="success" className="mt-4">
             {successMessage}
