@@ -88,9 +88,9 @@ export default function BottomTabsLayout() {
                 >
                   <AppText
                     color="white"
-                    className="text-[9px] font-bold leading-[10px] text-center"
+                    className="text-[9px] font-bold leading-[12px] text-center items-center justify-center h-[12px] w-[12px] p-0 m-0"
                   >
-                    {totalItems}
+                    {totalItems > 9 ? "!" : totalItems}
                   </AppText>
                 </View>
               )}
