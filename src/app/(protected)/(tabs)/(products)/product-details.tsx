@@ -1,13 +1,31 @@
-import { useLocalSearchParams } from "expo-router";
-import { View, ScrollView, Image } from "react-native";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
+import { View, ScrollView, Image, TouchableOpacity } from "react-native";
 import { Product } from "@/models/Product";
 import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Utils from "@/utils/Utils";
+import CartButton from "@/components/CartButton";
+import { useEffect } from "react";
 
-export default function ProductScreen() {
+export default function ProductDetailsScreen() {
   const { product } = useLocalSearchParams();
+  const router = useRouter();
+  const navigation = useNavigation();
   const productData: Product = JSON.parse(product as string);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <CartButton product={product as string} />,
+    });
+  }, [navigation, product]);
+
+  const handleAddToCart = () => {
+    router.navigate(
+      `/(protected)/(tabs)/(products)/product-modal?product=${encodeURIComponent(
+        JSON.stringify(productData),
+      )}`,
+    );
+  };
 
   return (
     <ScrollView className="bg-gray-100" showsVerticalScrollIndicator={false}>
@@ -31,6 +49,22 @@ export default function ProductScreen() {
         <AppText size="medium" color="secondary" center className="mb-6">
           {productData.brand}
         </AppText>
+
+        <View className="mb-4">
+          <TouchableOpacity
+            className="flex-row items-center justify-center rounded-xl py-3"
+            style={{
+              backgroundColor: "#0853A9",
+            }}
+            activeOpacity={0.8}
+            onPress={handleAddToCart}
+          >
+            <MaterialCommunityIcons name="cart-plus" size={24} color="#fff" />
+            <AppText color="white" bold className="ml-2">
+              Add to cart
+            </AppText>
+          </TouchableOpacity>
+        </View>
 
         {/* Basic Info Section */}
         <View className="mb-6 bg-white rounded-lg p-4 shadow">

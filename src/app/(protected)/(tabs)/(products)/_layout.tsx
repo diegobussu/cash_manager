@@ -1,3 +1,4 @@
+import CartButton from "@/components/CartButton";
 import { Stack } from "expo-router";
 
 export default function Layout() {
@@ -10,10 +11,15 @@ export default function Layout() {
         }}
       />
       <Stack.Screen
-        name="product"
+        name="product-details"
         options={{
           title: "Product details",
+          headerRight: () => <CartButton />,
         }}
+      />
+      <Stack.Screen
+        name="product-modal"
+        options={{ presentation: "modal", title: "Add a product" }}
       />
     </Stack>
   );
