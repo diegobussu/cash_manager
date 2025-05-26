@@ -192,14 +192,14 @@ export default function CreditCardsScreen() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View className="flex-1 bg-blue-50 p-4">
+      <View className="flex-1 p-4">
         {error && cards.length === 0 ? (
           <View className="flex-1 justify-center items-center">
             <AppText color="danger" className="mb-4">
               {error}
             </AppText>
             <TouchableOpacity
-              className="bg-blue-500 px-4 py-2 rounded-lg"
+              className="px-4 py-2 rounded-lg"
               onPress={fetchCards}
             >
               <AppText color="white" bold>
