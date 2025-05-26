@@ -5,12 +5,12 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Alert,
-  Image,
 } from "react-native";
 import InvoiceService from "@/services/invoiceService";
 import { Invoice } from "@/models/Invoice";
 import { AppText } from "@/components/AppText";
-import { Ionicons } from "@expo/vector-icons"; // Make sure to install expo vector icons if not already
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { router } from "expo-router";
 
 export default function HistoryScreen() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -60,14 +60,21 @@ export default function HistoryScreen() {
         className="rounded-xl p-5 mb-4 shadow-lg bg-white border border-gray-100"
         style={{ elevation: 3 }}
         onPress={() => {
-          // Navigate to detail if needed
+          router.navigate({
+            pathname: "/(protected)/(tabs)/(checkout)/invoice-details",
+            params: { invoice: JSON.stringify(item) },
+          });
         }}
         activeOpacity={0.7}
       >
         <View className="flex-row justify-between items-center mb-3">
           <View className="flex-row items-center">
             <View className="w-10 h-10 rounded-full bg-blue-100 justify-center items-center mr-3">
-              <Ionicons name="receipt-outline" size={20} color="#3498db" />
+              <MaterialCommunityIcons
+                name="file-document-outline"
+                size={20}
+                color="#3498db"
+              />
             </View>
             <AppText bold size="heading">
               {transactionRef}
@@ -104,7 +111,11 @@ export default function HistoryScreen() {
 
   const renderEmptyList = () => (
     <View className="flex-1 justify-center items-center py-10">
-      <Ionicons name="document-text-outline" size={70} color="#cbd5e1" />
+      <MaterialCommunityIcons
+        name="file-document-outline"
+        size={70}
+        color="#cbd5e1"
+      />
       <AppText color="secondary" className="mt-4 text-center">
         No invoices found
       </AppText>
@@ -143,7 +154,11 @@ export default function HistoryScreen() {
 
       {error && invoices.length === 0 ? (
         <View className="flex-1 justify-center items-center p-4">
-          <Ionicons name="alert-circle-outline" size={50} color="#f87171" />
+          <MaterialCommunityIcons
+            name="alert-circle-outline"
+            size={50}
+            color="#f87171"
+          />
           <AppText color="danger" className="mb-2 mt-4 text-center">
             {error}
           </AppText>
