@@ -182,7 +182,6 @@ export default function HistoryScreen() {
           contentContainerStyle={{
             padding: 16,
             paddingBottom: 80,
-            backgroundColor: "#f4f6fb",
           }}
           showsVerticalScrollIndicator={false}
           refreshing={loading}

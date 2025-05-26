@@ -100,9 +100,6 @@ export default function IndexScreen() {
   return (
     <View className="flex-1 bg-gray-50">
       <View className="px-4 pt-6 pb-4">
-        <AppText bold size="heading">
-          Products
-        </AppText>
         <AppText color="secondary" size="small" className="mt-1">
           Search and browse your products
         </AppText>
@@ -166,7 +163,6 @@ export default function IndexScreen() {
           contentContainerStyle={{
             padding: 16,
             paddingBottom: 80,
-            backgroundColor: "#f4f6fb",
           }}
           showsVerticalScrollIndicator={false}
           refreshing={loading}
