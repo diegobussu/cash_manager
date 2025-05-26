@@ -46,4 +46,37 @@ export default class InvoiceService {
       throw new Error("An unexpected error occurred while fetching invoice");
     }
   }
+
+  public static async addInvoice(
+    card_number: string,
+    items: { bar_code: string; product_name: string; quantity: number }[],
+  ): Promise<Invoice> {
+    try {
+      const user_id = await UserService.getUserIdFromToken();
+      const token = await AuthService.getAuthToken();
+      const response = await axiosInstance.post(
+        "/invoices",
+        {
+          user_id,
+          card_number,
+          items,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.status === 400) {
+        throw new Error(
+          error.response.data.message || "Missing required fields",
+        );
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response.data.message || "Failed to add invoice");
+      }
+      throw new Error("An unexpected error occurred while adding invoice");
+    }
+  }
 }

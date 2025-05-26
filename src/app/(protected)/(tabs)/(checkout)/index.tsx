@@ -14,6 +14,7 @@ import { useRouter } from "expo-router";
 import CreditCardService from "@/services/creditCardService";
 import { CreditCard } from "@/models/CreditCard";
 import Utils from "@/utils/Utils";
+import InvoiceService from "@/services/invoiceService";
 
 export default function IndexScreen() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } =
@@ -74,7 +75,7 @@ export default function IndexScreen() {
       "Remove Item",
       "Are you sure you want to remove this item from your cart?",
       [
-        { text: "Cancel", style: "cancel" },
+        { text: "Cancel", style: "destructive" },
         {
           text: "Remove",
           style: "destructive",
@@ -95,7 +96,7 @@ export default function IndexScreen() {
         "No Payment Method",
         "Please add a payment method in your profile settings",
         [
-          { text: "Cancel", style: "cancel" },
+          { text: "Cancel", style: "destructive" },
           {
             text: "Add Card",
             onPress: () =>
@@ -110,32 +111,44 @@ export default function IndexScreen() {
       "Confirm Purchase",
       `Total: ${totalPrice.toFixed(2)} €\nPay with card ending in ${Utils.getLast4Digits(selectedCard.card_number)}?`,
       [
-        { text: "Cancel", style: "cancel" },
+        { text: "Cancel", style: "destructive" },
         { text: "Pay Now", onPress: processPayment },
       ],
     );
   };
 
   const processPayment = async () => {
-    // Here you would typically call your payment API
-    // For now, we'll just simulate a payment process
     setIsProcessingPayment(true);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Appel réel à l'API pour créer la facture
+      if (!selectedCard) throw new Error("No payment card selected");
 
-      // Success - clear cart and show confirmation
+      // Prépare les items pour l'API
+      const invoiceItems = items.map((item) => ({
+        bar_code: item.product.bar_code,
+        product_name: item.product.name,
+        quantity: item.quantity,
+      }));
+
+      await InvoiceService.addInvoice(selectedCard.card_number, invoiceItems);
+
       clearCart();
       Alert.alert(
         "Payment Successful",
         "Your order has been processed successfully!",
-        [{ text: "OK" }],
+        [
+          {
+            text: "OK",
+            onPress: () =>
+              router.replace("/(protected)/(tabs)/(checkout)/history"),
+          },
+        ],
       );
-    } catch (error) {
+    } catch (error: any) {
       Alert.alert(
         "Payment Failed",
-        "There was an error processing your payment.",
+        error?.message || "There was an error processing your payment.",
       );
     } finally {
       setIsProcessingPayment(false);

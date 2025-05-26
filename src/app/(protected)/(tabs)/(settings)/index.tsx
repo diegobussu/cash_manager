@@ -14,7 +14,7 @@ export default function IndexScreen() {
       "Delete Account",
       "Are you sure you want to delete your account? This action cannot be undone.",
       [
-        { text: "Cancel", style: "cancel" },
+        { text: "Cancel", style: "destructive" },
         {
           text: "Delete",
           style: "destructive",

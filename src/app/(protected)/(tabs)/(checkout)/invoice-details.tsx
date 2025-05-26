@@ -1,6 +1,6 @@
 import React from "react";
-import { View, ScrollView, TouchableOpacity } from "react-native";
-import { useLocalSearchParams, router } from "expo-router";
+import { View, ScrollView } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import { AppText } from "@/components/AppText";
 import { Invoice, InvoiceItem } from "@/models/Invoice";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
