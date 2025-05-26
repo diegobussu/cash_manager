@@ -1,18 +1,25 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, TouchableOpacity, Image } from "react-native";
 import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { CartContext } from "@/utils/cartContext";
 
 export default function ProductModal() {
   const { product } = useLocalSearchParams();
   const router = useRouter();
   const productData = product ? JSON.parse(product as string) : null;
   const [quantity, setQuantity] = useState(1);
+  const { addItem } = useContext(CartContext);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleAddToCart = () => {
-    // TODO: Add logic to add productData and quantity to cart
-    router.back();
+    addItem(productData, quantity);
+    setSuccessMessage("Product added to cart !");
+    setTimeout(() => {
+      setSuccessMessage("");
+      router.back();
+    }, 1000);
   };
 
   if (!productData) {
@@ -122,6 +129,11 @@ export default function ProductModal() {
             </AppText>
           </TouchableOpacity>
         </View>
+        {successMessage ? (
+          <AppText size="small" center bold color="success" className="mt-4">
+            {successMessage}
+          </AppText>
+        ) : null}
       </View>
     </View>
   );
