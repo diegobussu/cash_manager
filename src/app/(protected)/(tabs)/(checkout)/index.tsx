@@ -225,6 +225,16 @@ export default function IndexScreen() {
     );
   }
 
+  // Show loading spinner while fetching payment cards
+  if (isLoadingCards) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#3498db" />
+        <AppText className="mt-4">Loading payment methods...</AppText>
+      </View>
+    );
+  }
+
   return (
     <View className="flex-1 bg-gray-50">
       <View className="px-4 pt-6 pb-2">
