@@ -48,7 +48,6 @@ export default function CreditCardsScreen() {
       setCards(formattedCards);
     } catch (err: any) {
       setError(err.message || "Failed to load cards");
-      Alert.alert("Error", err.message || "Failed to load cards");
     } finally {
       setLoading(false);
     }
@@ -193,7 +192,30 @@ export default function CreditCardsScreen() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View className="flex-1 p-4">
-        {error && cards.length === 0 ? (
+        {/* No cards UI */}
+        {!loading && cards.length === 0 ? (
+          <View className="flex-1 justify-center items-center p-8">
+            <MaterialCommunityIcons
+              name="credit-card-off-outline"
+              size={72}
+              color="#cbd5e1"
+            />
+            <AppText bold size="large" className="mt-6 mb-2 text-center">
+              No cards added yet
+            </AppText>
+            <AppText color="secondary" center className="mb-6">
+              Add a credit or debit card to make payments easily and securely.
+            </AppText>
+            <TouchableOpacity
+              className="bg-blue-500 py-3 px-6 rounded-lg"
+              onPress={handleAddCard}
+            >
+              <AppText color="white" bold>
+                Add Card
+              </AppText>
+            </TouchableOpacity>
+          </View>
+        ) : error && cards.length === 0 ? (
           <View className="flex-1 justify-center items-center">
             <AppText color="danger" className="mb-4">
               {error}
@@ -202,7 +224,7 @@ export default function CreditCardsScreen() {
               className="px-4 py-2 rounded-lg"
               onPress={fetchCards}
             >
-              <AppText color="white" bold>
+              <AppText color="primary" bold>
                 Retry
               </AppText>
             </TouchableOpacity>
