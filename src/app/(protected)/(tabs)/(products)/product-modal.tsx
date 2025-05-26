@@ -11,11 +11,11 @@ export default function ProductModal() {
   const productData = product ? JSON.parse(product as string) : null;
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useContext(CartContext);
-  const [successMessage, setSuccessMessage] = useState(""); // Ajout
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleAddToCart = () => {
     addItem(productData, quantity);
-    setSuccessMessage("Produit ajouté au panier !");
+    setSuccessMessage("Product added to cart !");
     setTimeout(() => {
       setSuccessMessage("");
       router.back();
@@ -44,7 +44,74 @@ export default function ProductModal() {
   return (
     <View className="flex-1 justify-center items-center bg-black/40">
       <View className="bg-white rounded-2xl p-6 w-11/12 max-w-md shadow-lg">
-        {/* ...existing code... */}
+        {/* Header */}
+        <View className="flex-row items-center mb-4">
+          <View className="w-12 h-12 rounded-xl bg-gray-100 justify-center items-center mr-4">
+            {productData.image_url ? (
+              <View className="w-12 h-12 rounded-xl overflow-hidden">
+                <Image
+                  src={productData.image_url}
+                  alt={productData.name}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </View>
+            ) : (
+              <MaterialCommunityIcons name="food" size={32} color="#ccc" />
+            )}
+          </View>
+          <View className="flex-1">
+            <AppText bold size="heading">
+              {productData.name}
+            </AppText>
+            <AppText color="secondary" size="small">
+              {productData.brand}
+            </AppText>
+          </View>
+        </View>
+
+        {/* Divider */}
+        <View className="h-[1px] bg-gray-100 my-2" />
+
+        {/* Quantity Selector */}
+        <AppText className="mb-2" color="secondary">
+          Choose quantity
+        </AppText>
+        <View className="flex-row items-center justify-center mb-6">
+          <TouchableOpacity
+            className="p-3 bg-gray-200 rounded-full"
+            onPress={() => setQuantity((q) => Math.max(1, q - 1))}
+          >
+            <MaterialCommunityIcons name="minus" size={24} color="#333" />
+          </TouchableOpacity>
+          <AppText size="large" bold className="mx-6">
+            {quantity}
+          </AppText>
+          <TouchableOpacity
+            className="p-3 bg-gray-200 rounded-full"
+            onPress={() => setQuantity((q) => q + 1)}
+          >
+            <MaterialCommunityIcons name="plus" size={24} color="#333" />
+          </TouchableOpacity>
+        </View>
+
+        {/* Price & Info */}
+        <View className="flex-row justify-between items-center mb-4">
+          <AppText color="secondary" size="small">
+            Price
+          </AppText>
+          <AppText bold size="heading" color="primary">
+            {productData.price
+              ? `${(productData.price * quantity).toFixed(2)} €`
+              : "N/A"}
+          </AppText>
+        </View>
+        <View className="flex-row justify-between items-center mb-6">
+          <AppText color="secondary" size="small">
+            Barcode
+          </AppText>
+          <AppText size="small">{productData.bar_code || "N/A"}</AppText>
+        </View>
+
         {/* Actions */}
         <View className="flex-row space-x-4">
           <TouchableOpacity
