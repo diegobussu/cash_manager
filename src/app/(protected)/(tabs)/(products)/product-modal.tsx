@@ -4,6 +4,7 @@ import { View, TouchableOpacity, Image } from "react-native";
 import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { CartContext } from "@/utils/cartContext";
+import { useLocalization } from "@/utils/i18n";
 
 export default function ProductModal() {
   const { product } = useLocalSearchParams();
@@ -14,6 +15,7 @@ export default function ProductModal() {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const maxQuantity = productData?.quantity;
+  const { t } = useLocalization();
 
   const handleAddToCart = () => {
     const alreadyInCart =
@@ -21,13 +23,13 @@ export default function ProductModal() {
 
     if (alreadyInCart + quantity > maxQuantity) {
       setErrorMessage(
-        `Stock limited to ${maxQuantity} (already in cart: ${alreadyInCart})`,
+        t("stockLimitedMessage", { max: maxQuantity, current: alreadyInCart }),
       );
       return;
     }
 
     addItem(productData, quantity);
-    setSuccessMessage("Product added to cart !");
+    setSuccessMessage(t("productAddedToCart"));
     setTimeout(() => {
       setSuccessMessage("");
       router.back();
@@ -39,14 +41,14 @@ export default function ProductModal() {
       <View className="flex-1 justify-center items-center bg-white">
         <MaterialCommunityIcons name="cart-off" size={60} color="#cbd5e1" />
         <AppText color="secondary" className="mt-4 mb-2">
-          No product data.
+          {t("noProductData")}
         </AppText>
         <TouchableOpacity
           className="mt-2 px-5 py-2 bg-blue-500 rounded-lg"
           onPress={() => router.back()}
         >
           <AppText color="white" bold>
-            Close
+            {t("close")}
           </AppText>
         </TouchableOpacity>
       </View>
@@ -86,7 +88,7 @@ export default function ProductModal() {
 
         {/* Quantity Selector */}
         <AppText className="mb-2" color="secondary">
-          Choose quantity
+          {t("chooseQuantity")}
         </AppText>
         <View className="flex-row items-center justify-center mb-6">
           <TouchableOpacity
@@ -108,25 +110,25 @@ export default function ProductModal() {
         </View>
         {/* Show available stock just below the selector */}
         <AppText color="secondary" size="small" className="italic mb-6" bold>
-          Available stock : {maxQuantity}
+          {t("availableStock", { count: maxQuantity })}
         </AppText>
 
         {/* Price & Info */}
         <View className="flex-row justify-between items-center mb-4">
           <AppText color="secondary" size="small">
-            Price
+            {t("price")}
           </AppText>
           <AppText bold size="heading" color="primary">
             {productData.price
               ? `${(productData.price * quantity).toFixed(2)} €`
-              : "N/A"}
+              : t("na")}
           </AppText>
         </View>
         <View className="flex-row justify-between items-center mb-6">
           <AppText color="secondary" size="small">
-            Barcode
+            {t("barcode")}
           </AppText>
-          <AppText size="small">{productData.bar_code || "N/A"}</AppText>
+          <AppText size="small">{productData.bar_code || t("na")}</AppText>
         </View>
 
         {/* Actions */}
@@ -135,14 +137,14 @@ export default function ProductModal() {
             className="flex-1 bg-gray-200 py-3 rounded-lg items-center"
             onPress={() => router.back()}
           >
-            <AppText bold>Cancel</AppText>
+            <AppText bold>{t("cancel")}</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             className="flex-1 bg-blue-600 py-3 rounded-lg items-center ml-4"
             onPress={handleAddToCart}
           >
             <AppText color="white" bold>
-              Add to cart
+              {t("addToCart")}
             </AppText>
           </TouchableOpacity>
         </View>
