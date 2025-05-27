@@ -82,5 +82,9 @@
   "grantPermission": "Autoriser l'accès",
   "scanError": "Erreur",
   "productFetchError": "Échec de récupération du produit. Veuillez réessayer.",
-  "ok": "OK"
+  "ok": "OK",
+
+  "checkout": "Panier",
+  "history": "Historique",
+  "invoiceDetails": "Détails de la facture"
 }

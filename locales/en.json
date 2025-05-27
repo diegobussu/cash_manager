@@ -82,5 +82,9 @@
   "grantPermission": "Grant permission",
   "scanError": "Error",
   "productFetchError": "Failed to fetch product. Please try again.",
-  "ok": "OK"
+  "ok": "OK",
+
+  "checkout": "Checkout",
+  "history": "History",
+  "invoiceDetails": "Invoice Details"
 }
