@@ -204,5 +204,16 @@
   "loadingCards": "Loading cards...",
   "noCardsYet": "No cards added yet",
   "addCardDescription": "Add a credit or debit card to make payments easily and securely.",
-  "failedToLoadCards": "Failed to load cards"
+  "failedToLoadCards": "Failed to load cards",
+
+  "cardNumber": "Card Number",
+  "cardNumberPlaceholder": "1234 5678 9012 3456",
+  "cardHolder": "Card Holder",
+  "cardHolderPlaceholder": "Name on card",
+  "expiryDate": "Expiry Date",
+  "expiryDatePlaceholder": "MM/YY",
+  "cvv": "CVV",
+  "cardType": "Card Type",
+  "loading": "Loading...",
+  "failedToAddCard": "Failed to add card"
 }

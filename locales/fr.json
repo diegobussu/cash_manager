@@ -204,5 +204,16 @@
   "loadingCards": "Chargement des cartes...",
   "noCardsYet": "Aucune carte ajoutée",
   "addCardDescription": "Ajoutez une carte de crédit ou de débit pour effectuer des paiements facilement et en toute sécurité.",
-  "failedToLoadCards": "Échec du chargement des cartes"
+  "failedToLoadCards": "Échec du chargement des cartes",
+
+  "cardNumber": "Numéro de carte",
+  "cardNumberPlaceholder": "1234 5678 9012 3456",
+  "cardHolder": "Titulaire de la carte",
+  "cardHolderPlaceholder": "Nom sur la carte",
+  "expiryDate": "Date d'expiration",
+  "expiryDatePlaceholder": "MM/AA",
+  "cvv": "CVV",
+  "cardType": "Type de carte",
+  "loading": "Chargement...",
+  "failedToAddCard": "Échec de l'ajout de la carte"
 }

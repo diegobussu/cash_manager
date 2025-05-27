@@ -11,6 +11,7 @@ import CreditCardService from "@/services/creditCardService";
 import { useRouter } from "expo-router";
 import Utils from "@/utils/Utils";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useLocalization } from "@/utils/i18n";
 
 const CARD_TYPES = [
   { label: "Visa", color: "#8e44ad" },
@@ -20,6 +21,7 @@ const CARD_TYPES = [
 
 export default function CardModal() {
   const router = useRouter();
+  const { t } = useLocalization();
   const [cardNumber, setCardNumber] = useState("");
   const [cardHolder, setCardHolder] = useState("");
   const [expiry, setExpiry] = useState("");
@@ -29,20 +31,20 @@ export default function CardModal() {
 
   const handleAdd = async () => {
     if (!cardNumber || !cardHolder || !expiry || !cardType) {
-      Alert.alert("Error", "Please fill in all fields.");
+      Alert.alert(t("error"), t("pleaseAllFields"));
       return;
     }
     setLoading(true);
     try {
       await CreditCardService.addBankCard({
-        card_number: cardNumber,
+        card_number: cardNumber.replace(/\s/g, ""),
         card_holder: cardHolder,
         expiry_date: expiry,
         card_type: cardType,
       });
       router.back();
     } catch (err: any) {
-      Alert.alert("Error", err.message || "Failed to add card");
+      Alert.alert(t("error"), err.message || t("failedToAddCard"));
     } finally {
       setLoading(false);
     }
@@ -69,12 +71,12 @@ export default function CardModal() {
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
-      <AppText className="mb-2">Card Number</AppText>
+      <AppText className="mb-2">{t("cardNumber")}</AppText>
       <View style={{ position: "relative", marginBottom: 16 }}>
         <TextInput
           value={cardNumber}
           onChangeText={handleCardNumberChange}
-          placeholder="1234 5678 9012 3456"
+          placeholder={t("cardNumberPlaceholder")}
           keyboardType="number-pad"
           maxLength={19}
           style={{
@@ -108,12 +110,12 @@ export default function CardModal() {
           </TouchableOpacity>
         )}
       </View>
-      <AppText className="mb-2">Card Holder</AppText>
+      <AppText className="mb-2">{t("cardHolder")}</AppText>
       <View style={{ position: "relative", marginBottom: 16 }}>
         <TextInput
           value={cardHolder}
           onChangeText={setCardHolder}
-          placeholder="Name on card"
+          placeholder={t("cardHolderPlaceholder")}
           autoCapitalize="words"
           style={{
             backgroundColor: "#fff",
@@ -146,12 +148,12 @@ export default function CardModal() {
           </TouchableOpacity>
         )}
       </View>
-      <AppText className="mb-2">Expiry Date</AppText>
+      <AppText className="mb-2">{t("expiryDate")}</AppText>
       <View style={{ flexDirection: "row", marginBottom: 16 }}>
         <TextInput
           value={expiry}
           onChangeText={handleExpiryChange}
-          placeholder="MM/YY"
+          placeholder={t("expiryDatePlaceholder")}
           maxLength={5}
           style={{
             flex: 1,
@@ -168,7 +170,7 @@ export default function CardModal() {
           onChangeText={(text) =>
             setCvv(text.replace(/[^0-9]/g, "").slice(0, 3))
           }
-          placeholder="CVV"
+          placeholder={t("cvv")}
           keyboardType="number-pad"
           maxLength={3}
           secureTextEntry
@@ -182,7 +184,7 @@ export default function CardModal() {
           }}
         />
       </View>
-      <AppText className="mb-2">Card Type</AppText>
+      <AppText className="mb-2">{t("cardType")}</AppText>
       <View style={{ flexDirection: "row", marginBottom: 24 }}>
         {CARD_TYPES.map((type) => (
           <TouchableOpacity
@@ -229,7 +231,7 @@ export default function CardModal() {
         }}
       >
         <AppText color="white" bold>
-          {loading ? "Loading..." : "Save"}
+          {loading ? t("loading") : t("save")}
         </AppText>
       </TouchableOpacity>
     </ScrollView>
