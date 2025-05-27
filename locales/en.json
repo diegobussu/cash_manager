@@ -76,5 +76,11 @@
   "chooseQuantity": "Choose quantity",
   "availableStock": "Available stock: %{count}",
   "productAddedToCart": "Product added to cart!",
-  "stockLimitedMessage": "Stock limited to %{max} (already in cart: %{current})"
+  "stockLimitedMessage": "Stock limited to %{max} (already in cart: %{current})",
+  
+  "cameraPermissionNeeded": "We need your permission to show the camera",
+  "grantPermission": "Grant permission",
+  "scanError": "Error",
+  "productFetchError": "Failed to fetch product. Please try again.",
+  "ok": "OK"
 }

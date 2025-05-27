@@ -76,5 +76,11 @@
   "chooseQuantity": "Choisir la quantité",
   "availableStock": "Stock disponible : %{count}",
   "productAddedToCart": "Produit ajouté au panier !",
-  "stockLimitedMessage": "Stock limité à %{max} (déjà dans le panier : %{current})"
+  "stockLimitedMessage": "Stock limité à %{max} (déjà dans le panier : %{current})",
+  
+  "cameraPermissionNeeded": "Nous avons besoin de votre autorisation pour afficher la caméra",
+  "grantPermission": "Autoriser l'accès",
+  "scanError": "Erreur",
+  "productFetchError": "Échec de récupération du produit. Veuillez réessayer.",
+  "ok": "OK"
 }
