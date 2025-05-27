@@ -7,9 +7,12 @@ import { Link } from "expo-router";
 import Utils from "@/utils/Utils";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AuthService from "@/services/authService";
+import { useLocalization } from "@/utils/i18n";
 
 export default function LoginScreen() {
   const authContext = useContext(AuthContext);
+  const { t } = useLocalization();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -18,19 +21,17 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      setErrorMessage("Please fill in all fields");
+      setErrorMessage(t("pleaseAllFields"));
       return;
     }
 
     if (!Utils.isValidEmail(email)) {
-      setErrorMessage("Please enter a valid email address");
+      setErrorMessage(t("enterValidEmail"));
       return;
     }
 
     if (!Utils.isValidPassword(password)) {
-      setErrorMessage(
-        "Password must be at least 8 characters long and include letters, numbers, and special characters",
-      );
+      setErrorMessage(t("passwordRequirements"));
       return;
     }
 
@@ -38,25 +39,23 @@ export default function LoginScreen() {
       await AuthService.login(email, password);
 
       setErrorMessage("");
-      setSuccessMessage("Login successful ! Redirecting...");
+      setSuccessMessage(t("loginSuccessful"));
 
       setTimeout(() => {
         authContext.logIn();
       }, 1000);
     } catch (error: any) {
-      setErrorMessage(
-        error.response?.data?.message || "An error occurred during login",
-      );
+      setErrorMessage(error.response?.data?.message || t("loginError"));
     }
   };
 
   return (
     <View className="flex-1 justify-center p-4">
       <AppText size="extraHeading" center bold className="mb-4">
-        Login
+        {t("login")}
       </AppText>
       <TextInput
-        placeholder="Email"
+        placeholder={t("email")}
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
@@ -66,7 +65,7 @@ export default function LoginScreen() {
       <View className="relative mb-4">
         <View className="flex-row items-center border border-gray-300 rounded-md bg-white px-4 py-3">
           <TextInput
-            placeholder="Password"
+            placeholder={t("password")}
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
@@ -98,12 +97,12 @@ export default function LoginScreen() {
         </AppText>
       ) : null}
       <Button
-        title="Log in"
+        title={t("logIn")}
         onPress={handleLogin}
         disabled={!email || !password}
       />
       <Link href="/register" asChild>
-        <Button title="Don't have an account ? Sign Up" theme="tertiary" />
+        <Button title={t("dontHaveAccount")} theme="tertiary" />
       </Link>
     </View>
   );

@@ -164,5 +164,22 @@
   "subtotal": "Sous-total",
   "cardEnding": "Carte •••• %{digits}",
   "selectCard": "Sélectionner une carte",
-  "proceedToCheckout": "Procéder au paiement"
+  "proceedToCheckout": "Procéder au paiement",
+
+  "password": "Mot de passe",
+  "pleaseAllFields": "Veuillez remplir tous les champs",
+  "enterValidEmail": "Veuillez saisir une adresse email valide",
+  "passwordRequirements": "Le mot de passe doit comporter au moins 8 caractères et inclure des lettres, des chiffres et des caractères spéciaux",
+  "loginSuccessful": "Connexion réussie ! Redirection...",
+  "loginError": "Une erreur s'est produite lors de la connexion",
+  "logIn": "Se connecter",
+  "dontHaveAccount": "Vous n'avez pas de compte ? Inscrivez-vous",
+
+  "confirmPassword": "Confirmer le mot de passe",
+  "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+  "registering": "Inscription en cours...",
+  "registrationSuccessful": "Inscription réussie ! Redirection vers la page de connexion...",
+  "emailAlreadyExists": "Cet email existe déjà",
+  "registrationFailed": "L'inscription a échoué",
+  "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous"
 }

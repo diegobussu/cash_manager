@@ -14,9 +14,11 @@ import Utils from "@/utils/Utils";
 import { User } from "@/models/User";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AuthService from "@/services/authService";
+import { useLocalization } from "@/utils/i18n";
 
 export default function RegisterScreen() {
   const router = useRouter();
+  const { t } = useLocalization();
   const [formData, setFormData] = useState<User>({
     first_name: "",
     last_name: "",
@@ -65,30 +67,28 @@ export default function RegisterScreen() {
     } = formData;
 
     if (!first_name || !last_name || !email || !password) {
-      setErrorMessage("Please fill in all fields");
+      setErrorMessage(t("pleaseAllFields"));
       return;
     }
 
     if (!Utils.isValidEmail(email)) {
-      setErrorMessage("Please enter a valid email address");
+      setErrorMessage(t("enterValidEmail"));
       return;
     }
 
     if (!Utils.isValidPassword(password)) {
-      setErrorMessage(
-        "Password must be at least 8 characters long and include letters, numbers, and special characters",
-      );
+      setErrorMessage(t("passwordRequirements"));
       return;
     }
 
     if (password !== confirmPassword) {
-      setErrorMessage("Passwords do not match");
+      setErrorMessage(t("passwordsDoNotMatch"));
       return;
     }
 
     try {
       setErrorMessage("");
-      setSuccessMessage("Registering...");
+      setSuccessMessage(t("registering"));
 
       await AuthService.register({
         first_name,
@@ -101,15 +101,15 @@ export default function RegisterScreen() {
         password,
       });
 
-      setSuccessMessage("Registration successful ! Redirecting to login...");
+      setSuccessMessage(t("registrationSuccessful"));
       setTimeout(() => {
         router.navigate("/login");
       }, 1000);
     } catch (error: any) {
       if (error.response?.status === 400) {
-        setErrorMessage("Email already exists");
+        setErrorMessage(t("emailAlreadyExists"));
       } else {
-        setErrorMessage(error.message || "Registration failed");
+        setErrorMessage(error.message || t("registrationFailed"));
       }
       setSuccessMessage("");
     }
@@ -129,22 +129,22 @@ export default function RegisterScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <AppText size="extraHeading" center bold className="mb-4">
-          Sign Up
+          {t("signup")}
         </AppText>
         <TextInput
-          placeholder="First Name"
+          placeholder={t("firstName")}
           value={formData.first_name}
           onChangeText={(value) => handleInputChange("first_name", value)}
           className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
         />
         <TextInput
-          placeholder="Last Name"
+          placeholder={t("lastName")}
           value={formData.last_name}
           onChangeText={(value) => handleInputChange("last_name", value)}
           className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
         />
         <TextInput
-          placeholder="Email"
+          placeholder={t("email")}
           value={formData.email}
           onChangeText={(value) => handleInputChange("email", value)}
           autoCapitalize="none"
@@ -152,27 +152,27 @@ export default function RegisterScreen() {
           className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
         />
         <TextInput
-          placeholder="Phone Number"
+          placeholder={t("phoneNumber")}
           value={formData.phone_number?.toString()}
           onChangeText={(value) => handleInputChange("phone_number", value)}
           keyboardType="phone-pad"
           className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
         />
         <TextInput
-          placeholder="Address"
+          placeholder={t("address")}
           value={formData.address}
           onChangeText={(value) => handleInputChange("address", value)}
           className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
         />
         <TextInput
-          placeholder="Zip Code"
+          placeholder={t("zipCode")}
           value={formData.zip_code?.toString()}
           onChangeText={(value) => handleInputChange("zip_code", value)}
           keyboardType="numeric"
           className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
         />
         <TextInput
-          placeholder="Country"
+          placeholder={t("country")}
           value={formData.country}
           onChangeText={(value) => handleInputChange("country", value)}
           className="border border-gray-300 rounded-md px-4 py-3 mb-4 bg-white"
@@ -180,7 +180,7 @@ export default function RegisterScreen() {
         <View className="relative mb-4">
           <View className="flex-row items-center border border-gray-300 rounded-md bg-white px-4 py-3">
             <TextInput
-              placeholder="Password"
+              placeholder={t("password")}
               value={formData.password}
               onChangeText={(value) => handleInputChange("password", value)}
               secureTextEntry={!showPassword}
@@ -197,7 +197,7 @@ export default function RegisterScreen() {
         </View>
         <View className="relative mb-4">
           <TextInput
-            placeholder="Confirm Password"
+            placeholder={t("confirmPassword")}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry={!showPassword}
@@ -215,7 +215,7 @@ export default function RegisterScreen() {
           </AppText>
         ) : null}
         <Button
-          title="Sign Up"
+          title={t("signup")}
           onPress={handleRegister}
           disabled={
             !formData.first_name ||
@@ -226,7 +226,7 @@ export default function RegisterScreen() {
           }
         />
         <Link href="/login" push asChild>
-          <Button title="Already have an account ? Log In" theme="tertiary" />
+          <Button title={t("alreadyHaveAccount")} theme="tertiary" />
         </Link>
       </ScrollView>
     </KeyboardAvoidingView>
