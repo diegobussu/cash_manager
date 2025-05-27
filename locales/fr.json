@@ -1,5 +1,6 @@
 {
   "welcome": "Bienvenue sur Cash Manager",
+  "home": "Accueil",
   "login": "Connexion",
   "signup": "S'inscrire",
   "settings": "Paramètres",
@@ -8,6 +9,37 @@
   "languageDescription": "Choisissez votre langue préférée pour l'application",
   "english": "Anglais",
   "french": "Français",
-  "spanish": "Espagnol",
-    "changeLanguageNote": "You can change the language at any time from settings"
+  "changeLanguageNote": "Vous pouvez changer la langue à tout moment depuis les paramètres",
+  
+  "profile": "Profil",
+  "security": "Sécurité",
+  "managePaymentCards": "Gérer les cartes de paiement",
+  "creditCardManager": "Gestionnaire de cartes bancaires",
+  "addCreditCard": "Ajouter une carte bancaire",
+  "notifications": "Notifications",
+  "languages": "Langues",
+  "aboutUs": "À propos de nous",
+  "rateUs": "Évaluez-nous",
+  "privacyPolicy": "Politique de confidentialité",
+  "logout": "Déconnexion",
+  "deleteAccount": "Supprimer le compte",
+  "deleteAccountConfirmation": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action ne peut pas être annulée.",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "error": "Erreur",
+  "deleteAccountError": "Échec de la suppression du compte. Veuillez réessayer.",
+  "copyright": "© %{year} %{name}",
+  
+  "products": "Produits",
+  "productDetails": "Détails du produit",
+  "addProduct": "Ajouter un produit",
+  
+  "searchAndBrowseProducts": "Recherchez et parcourez vos produits",
+  "searchProducts": "Rechercher des produits...",
+  "loadingProducts": "Chargement des produits...",
+  "noProductsFound": "Aucun produit trouvé",
+  "refresh": "Actualiser",
+  "retry": "Réessayer",
+  "outOfStock": "Rupture de stock",
+  "failedToLoadProducts": "Échec du chargement des produits"
 }

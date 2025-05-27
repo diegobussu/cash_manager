@@ -5,33 +5,28 @@ import { AuthContext } from "@/utils/authContext";
 import { AppText } from "@/components/AppText";
 import UserService from "@/services/userService";
 import { router } from "expo-router";
+import { useLocalization } from "@/utils/i18n";
 
 export default function IndexScreen() {
   const authState = useContext(AuthContext);
+  const { t } = useLocalization();
 
   const handleDeleteAccount = async () => {
-    Alert.alert(
-      "Delete Account",
-      "Are you sure you want to delete your account? This action cannot be undone.",
-      [
-        { text: "Cancel", style: "destructive" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await UserService.deleteAccount();
-              authState.logOut();
-            } catch (error) {
-              Alert.alert(
-                "Error",
-                "Failed to delete account. Please try again.",
-              );
-            }
-          },
+    Alert.alert(t("deleteAccount"), t("deleteAccountConfirmation"), [
+      { text: t("cancel"), style: "destructive" },
+      {
+        text: t("delete"),
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await UserService.deleteAccount();
+            authState.logOut();
+          } catch (error) {
+            Alert.alert(t("error"), t("deleteAccountError"));
+          }
         },
-      ],
-    );
+      },
+    ]);
   };
 
   return (
@@ -59,43 +54,43 @@ export default function IndexScreen() {
           [
             {
               icon: "shield-lock-outline",
-              label: "Security",
+              label: t("security"),
               onPress: () =>
                 router.navigate("/(protected)/(tabs)/(settings)/security"),
             },
             {
               icon: "credit-card-outline",
-              label: "Manage Payment Cards",
+              label: t("managePaymentCards"),
               onPress: () =>
                 router.navigate("/(protected)/(tabs)/(settings)/credit-cards"),
             },
             {
               icon: "bell-outline",
-              label: "Notifications",
+              label: t("notifications"),
               onPress: () =>
                 router.navigate("/(protected)/(tabs)/(settings)/notifications"),
             },
             {
               icon: "translate",
-              label: "Languages",
+              label: t("languages"),
               onPress: () =>
                 router.navigate("/(protected)/(tabs)/(settings)/languages"),
             },
             {
               icon: "information-outline",
-              label: "About Us",
+              label: t("aboutUs"),
               onPress: () =>
                 router.navigate("/(protected)/(tabs)/(settings)/about-us"),
             },
             {
               icon: "star-outline",
-              label: "Rate Us",
+              label: t("rateUs"),
               onPress: () =>
                 router.navigate("/(protected)/(tabs)/(settings)/rate-us"),
             },
             {
               icon: "file-document-outline",
-              label: "Privacy Policy",
+              label: t("privacyPolicy"),
               onPress: () =>
                 router.navigate(
                   "/(protected)/(tabs)/(settings)/privacy-policy",
@@ -149,7 +144,7 @@ export default function IndexScreen() {
       >
         <MaterialCommunityIcons name="logout" size={24} color="#0853A9" />
         <AppText size="medium" className="ml-4">
-          Logout
+          {t("logout")}
         </AppText>
       </TouchableOpacity>
 
@@ -176,14 +171,14 @@ export default function IndexScreen() {
           color="#FF3B30"
         />
         <AppText size="medium" bold className="ml-4" color="danger">
-          Delete Account
+          {t("deleteAccount")}
         </AppText>
       </TouchableOpacity>
 
       {/* Copyright */}
       <View style={{ marginTop: 32, alignItems: "center" }}>
         <AppText size="small" color="tertiary" center>
-          *© 2025 Diego BUSSU*
+          {t("copyright", { year: "2025", name: "Diego BUSSU" })}
         </AppText>
       </View>
     </ScrollView>

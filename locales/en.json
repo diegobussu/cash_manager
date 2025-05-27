@@ -1,5 +1,6 @@
 {
   "welcome": "Welcome to Cash Manager",
+  "home": "Home",
   "login": "Login",
   "signup": "Sign Up",
   "settings": "Settings",
@@ -8,6 +9,37 @@
   "languageDescription": "Choose your preferred language for the app",
   "english": "English",
   "french": "French",
-  "spanish": "Spanish",
-    "changeLanguageNote": "Vous pouvez changer la langue à tout moment depuis les paramètres"
+  "changeLanguageNote": "You can change the language at any time from settings",
+  
+  "profile": "Profile",
+  "security": "Security",
+  "managePaymentCards": "Manage Payment Cards",
+  "creditCardManager": "Credit Card Manager",
+  "addCreditCard": "Add a credit card",
+  "notifications": "Notifications",
+  "languages": "Languages",
+  "aboutUs": "About Us",
+  "rateUs": "Rate Us",
+  "privacyPolicy": "Privacy Policy",
+  "logout": "Logout",
+  "deleteAccount": "Delete Account",
+  "deleteAccountConfirmation": "Are you sure you want to delete your account? This action cannot be undone.",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "error": "Error",
+  "deleteAccountError": "Failed to delete account. Please try again.",
+  "copyright": "© %{year} %{name}",
+  
+  "products": "Products",
+  "productDetails": "Product details",
+  "addProduct": "Add a product",
+  
+  "searchAndBrowseProducts": "Search and browse your products",
+  "searchProducts": "Search products...",
+  "loadingProducts": "Loading products...",
+  "noProductsFound": "No products found",
+  "refresh": "Refresh",
+  "retry": "Retry",
+  "outOfStock": "Out of stock",
+  "failedToLoadProducts": "Failed to load products"
 }
