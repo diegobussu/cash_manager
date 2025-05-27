@@ -17,7 +17,7 @@ export default function HistoryScreen() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { t } = useLocalization();
+  const { t, locale } = useLocalization();
 
   useEffect(() => {
     fetchInvoices();
@@ -50,7 +50,8 @@ export default function HistoryScreen() {
       month: "short",
       year: "numeric",
     };
-    return date.toLocaleDateString("en-US", options);
+    const localeToUse = locale === "fr" ? "fr-FR" : "en-US";
+    return date.toLocaleDateString(localeToUse, options);
   };
 
   const renderInvoice = ({ item }: { item: Invoice }) => {

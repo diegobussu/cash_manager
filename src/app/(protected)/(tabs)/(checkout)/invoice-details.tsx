@@ -17,7 +17,7 @@ import { useLocalization } from "@/utils/i18n";
 export default function InvoiceDetailsScreen() {
   const { invoice } = useLocalSearchParams();
   const invoiceData: Invoice = JSON.parse(invoice as string);
-  const { t } = useLocalization();
+  const { t, locale } = useLocalization();
 
   // State to store loaded products by barcode
   const [products, setProducts] = useState<{
@@ -43,7 +43,8 @@ export default function InvoiceDetailsScreen() {
 
   const formatDate = (dateString: string | Date) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    const localeToUse = locale === "fr" ? "fr-FR" : "en-US";
+    return date.toLocaleDateString(localeToUse, {
       day: "2-digit",
       month: "short",
       year: "numeric",
