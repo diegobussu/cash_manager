@@ -5,9 +5,11 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import UserService from "@/services/userService";
 import { AuthContext } from "@/utils/authContext";
 import { ActivityIndicator } from "react-native";
+import { useLocalization } from "@/utils/i18n";
 
 export default function SecurityScreen() {
   const { logOut } = useContext(AuthContext);
+  const { t } = useLocalization();
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
@@ -27,9 +29,7 @@ export default function SecurityScreen() {
     setIsLoading(true);
     try {
       await UserService.updatePassword(oldPassword, newPassword);
-      setSuccessMessage(
-        "Password updated successfully. You will be logged out.",
-      );
+      setSuccessMessage(t("passwordUpdatedSuccess"));
       setTimeout(() => {
         setShowPasswordForm(false);
         setIsLoading(false);
@@ -37,7 +37,7 @@ export default function SecurityScreen() {
       }, 2000);
     } catch (error: any) {
       setIsLoading(false);
-      setErrorMessage(error.message || "Failed to update password.");
+      setErrorMessage(error.message || t("failedToUpdatePassword"));
     }
   };
 
@@ -47,7 +47,7 @@ export default function SecurityScreen() {
     setIsLoading(true);
     try {
       await UserService.updateEmail(newEmail, passwordForEmail);
-      setSuccessMessage("Email updated successfully. You will be logged out.");
+      setSuccessMessage(t("emailUpdatedSuccess"));
       setTimeout(() => {
         setShowEmailForm(false);
         setIsLoading(false);
@@ -55,7 +55,7 @@ export default function SecurityScreen() {
       }, 2000);
     } catch (error: any) {
       setIsLoading(false);
-      setErrorMessage(error.message || "Failed to update email.");
+      setErrorMessage(error.message || t("failedToUpdateEmail"));
     }
   };
 
@@ -115,7 +115,7 @@ export default function SecurityScreen() {
         >
           <MaterialCommunityIcons name="lock-reset" size={24} color="#0853A9" />
           <AppText size="medium" className="ml-4">
-            Update Password
+            {t("updatePassword")}
           </AppText>
         </TouchableOpacity>
         {showPasswordForm && (
@@ -133,7 +133,7 @@ export default function SecurityScreen() {
               }}
             >
               <TextInput
-                placeholder="Current Password"
+                placeholder={t("currentPassword")}
                 secureTextEntry={!showOldPassword}
                 style={{ flex: 1, paddingVertical: 8 }}
                 value={oldPassword}
@@ -162,7 +162,7 @@ export default function SecurityScreen() {
               }}
             >
               <TextInput
-                placeholder="New Password"
+                placeholder={t("newPassword")}
                 secureTextEntry={!showNewPassword}
                 style={{ flex: 1, paddingVertical: 8 }}
                 value={newPassword}
@@ -205,7 +205,7 @@ export default function SecurityScreen() {
               <ActivityIndicator size="small" color="#0853A9" />
             ) : (
               <Button
-                title="Save"
+                title={t("save")}
                 onPress={handleUpdatePassword}
                 disabled={!oldPassword || !newPassword || isLoading}
               />
@@ -226,13 +226,13 @@ export default function SecurityScreen() {
         >
           <MaterialCommunityIcons name="email-edit" size={24} color="#0853A9" />
           <AppText size="medium" className="ml-4">
-            Update Email
+            {t("updateEmail")}
           </AppText>
         </TouchableOpacity>
         {showEmailForm && (
           <View style={{ marginTop: 16 }}>
             <TextInput
-              placeholder="New Email"
+              placeholder={t("newEmail")}
               style={{
                 borderWidth: 1,
                 borderColor: "#e5e7eb",
@@ -256,7 +256,7 @@ export default function SecurityScreen() {
               }}
             >
               <TextInput
-                placeholder="Password"
+                placeholder={t("password")}
                 secureTextEntry={!showPasswordForEmail}
                 style={{ flex: 1, paddingVertical: 8 }}
                 value={passwordForEmail}
@@ -299,7 +299,7 @@ export default function SecurityScreen() {
               <ActivityIndicator size="small" color="#0853A9" />
             ) : (
               <Button
-                title="Save"
+                title={t("save")}
                 onPress={handleUpdateEmail}
                 disabled={!newEmail || !passwordForEmail}
               />

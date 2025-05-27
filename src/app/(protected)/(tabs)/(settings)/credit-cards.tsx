@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   Alert,
@@ -15,9 +14,11 @@ import CreditCardService from "@/services/creditCardService";
 import Utils from "@/utils/Utils";
 import { AppText } from "@/components/AppText";
 import { useRouter } from "expo-router";
+import { useLocalization } from "@/utils/i18n";
 
 export default function CreditCardsScreen() {
   const router = useRouter();
+  const { t } = useLocalization();
   const [cards, setCards] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +49,7 @@ export default function CreditCardsScreen() {
 
       setCards(formattedCards);
     } catch (err: any) {
-      setError(err.message || "Failed to load cards");
+      setError(err.message || t("failedToLoadCards"));
     } finally {
       setLoading(false);
     }
@@ -72,10 +73,10 @@ export default function CreditCardsScreen() {
   };
 
   const handleDeleteCard = (id: number) => {
-    Alert.alert("Delete Card", "Are you sure you want to delete this card ?", [
-      { text: "Cancel", style: "destructive" },
+    Alert.alert(t("deleteCard"), t("deleteCardConfirmation"), [
+      { text: t("cancel"), style: "destructive" },
       {
-        text: "Delete",
+        text: t("delete"),
         style: "destructive",
         onPress: async () => {
           try {
@@ -89,12 +90,12 @@ export default function CreditCardsScreen() {
               delete newErrors[id];
               return newErrors;
             });
-            setSuccessMessage("Card deleted successfully.");
+            setSuccessMessage(t("cardDeletedSuccessfully"));
             setTimeout(() => setSuccessMessage(null), 2500);
           } catch (err: any) {
             setDeleteErrors((prev) => ({
               ...prev,
-              [id]: err.message || "Failed to delete card",
+              [id]: err.message || t("failedToDeleteCard"),
             }));
           } finally {
             setLoading(false);
@@ -105,30 +106,26 @@ export default function CreditCardsScreen() {
   };
 
   const handleSetDefault = (id: number) => {
-    Alert.alert(
-      "Set as Default",
-      "Do you want to set this card as your default card?",
-      [
-        { text: "Cancel", style: "destructive" },
-        {
-          text: "Set as Default",
-          style: "default",
-          onPress: async () => {
-            try {
-              setLoading(true);
-              await CreditCardService.setDefaultBankCard(id);
-              fetchCards();
-              setSuccessMessage("Default card updated.");
-              setTimeout(() => setSuccessMessage(null), 2000);
-            } catch (err: any) {
-              Alert.alert("Error", err.message || "Failed to set default card");
-            } finally {
-              setLoading(false);
-            }
-          },
+    Alert.alert(t("setAsDefault"), t("setDefaultCardConfirmation"), [
+      { text: t("cancel"), style: "destructive" },
+      {
+        text: t("setAsDefault"),
+        style: "default",
+        onPress: async () => {
+          try {
+            setLoading(true);
+            await CreditCardService.setDefaultBankCard(id);
+            fetchCards();
+            setSuccessMessage(t("defaultCardUpdated"));
+            setTimeout(() => setSuccessMessage(null), 2000);
+          } catch (err: any) {
+            Alert.alert(t("error"), err.message || t("failedToSetDefaultCard"));
+          } finally {
+            setLoading(false);
+          }
         },
-      ],
-    );
+      },
+    ]);
   };
 
   // Show action sheet on long press (only for non-default cards)
@@ -137,7 +134,7 @@ export default function CreditCardsScreen() {
     if (Platform.OS === "ios") {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: ["Cancel", "Set as Default", "Delete"],
+          options: [t("cancel"), t("setAsDefault"), t("delete")],
           destructiveButtonIndex: 2,
           cancelButtonIndex: 0,
         },
@@ -151,16 +148,16 @@ export default function CreditCardsScreen() {
       );
     } else {
       Alert.alert(
-        "Card Options",
+        t("cardOptions"),
         undefined,
         [
-          { text: "Cancel", style: "destructive" },
+          { text: t("cancel"), style: "destructive" },
           {
-            text: "Set as Default",
+            text: t("setAsDefault"),
             onPress: () => handleSetDefault(item.id),
           },
           {
-            text: "Delete",
+            text: t("delete"),
             style: "destructive",
             onPress: () => handleDeleteCard(item.id),
           },
@@ -188,7 +185,7 @@ export default function CreditCardsScreen() {
             {item.isDefault && (
               <View className="bg-white rounded-full px-2 py-1 ml-2">
                 <AppText size="medium" bold color="primary">
-                  Default
+                  {t("default")}
                 </AppText>
               </View>
             )}
@@ -197,11 +194,11 @@ export default function CreditCardsScreen() {
             {item.holder}
           </AppText>
           <AppText size="medium" color="white">
-            Expiry: {item.expiry}
+            {t("expiry")}: {item.expiry}
           </AppText>
           <View className="absolute bottom-2 right-2 bg-white/20 rounded-md px-2 py-1">
             <AppText size="medium" bold color="white" className="uppercase">
-              {item.cardType || "Card"}
+              {item.cardType || t("card")}
             </AppText>
           </View>
         </View>
@@ -220,7 +217,7 @@ export default function CreditCardsScreen() {
       <View className="flex-1 justify-center items-center bg-blue-50">
         <ActivityIndicator size="large" color="#3498db" />
         <AppText color="secondary" className="mt-4">
-          Loading cards...
+          {t("loadingCards")}
         </AppText>
       </View>
     );
@@ -238,17 +235,17 @@ export default function CreditCardsScreen() {
               color="#cbd5e1"
             />
             <AppText bold size="large" className="mt-6 mb-2 text-center">
-              No cards added yet
+              {t("noCardsYet")}
             </AppText>
             <AppText color="secondary" center className="mb-6">
-              Add a credit or debit card to make payments easily and securely.
+              {t("addCardDescription")}
             </AppText>
             <TouchableOpacity
               className="bg-blue-500 py-3 px-6 rounded-lg"
               onPress={handleAddCard}
             >
               <AppText color="white" bold>
-                Add Card
+                {t("addCard")}
               </AppText>
             </TouchableOpacity>
           </View>
@@ -262,7 +259,7 @@ export default function CreditCardsScreen() {
               onPress={fetchCards}
             >
               <AppText color="primary" bold>
-                Retry
+                {t("retry")}
               </AppText>
             </TouchableOpacity>
           </View>

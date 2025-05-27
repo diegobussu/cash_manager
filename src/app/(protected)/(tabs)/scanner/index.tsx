@@ -17,6 +17,7 @@ import ProductService from "@/services/productService";
 import { router } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
 import { AppText } from "@/components/AppText";
+import { useLocalization } from "@/utils/i18n";
 
 export default function IndexScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -27,6 +28,7 @@ export default function IndexScreen() {
   const [cameraIconOutline, setCameraIconOutline] = useState(false);
   const isFetchingRef = useRef(false);
   const timeoutRef = useRef<number | null>(null);
+  const { t } = useLocalization();
 
   useEffect(() => {
     return () => {
@@ -53,9 +55,9 @@ export default function IndexScreen() {
     return (
       <View style={{ flex: 1, justifyContent: "center" }}>
         <AppText className="text-center pb-4">
-          We need your permission to show the camera
+          {t("cameraPermissionNeeded")}
         </AppText>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Button onPress={requestPermission} title={t("grantPermission")} />
       </View>
     );
   }
@@ -96,20 +98,16 @@ export default function IndexScreen() {
         isFetchingRef.current = false;
       }, 5000);
     } catch (error: any) {
-      Alert.alert(
-        "Error",
-        error.message || "Failed to fetch product. Please try again.",
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              setScanned(false);
-              setBarcodeData(null);
-              isFetchingRef.current = false;
-            },
+      Alert.alert(t("scanError"), error.message || t("productFetchError"), [
+        {
+          text: t("ok"),
+          onPress: () => {
+            setScanned(false);
+            setBarcodeData(null);
+            isFetchingRef.current = false;
           },
-        ],
-      );
+        },
+      ]);
     }
   };
 

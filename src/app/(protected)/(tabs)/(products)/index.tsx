@@ -13,8 +13,10 @@ import { Product } from "@/models/Product";
 import { AppText } from "@/components/AppText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
+import { useLocalization } from "@/utils/i18n";
 
 export default function IndexScreen() {
+  const { t } = useLocalization();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,8 +30,8 @@ export default function IndexScreen() {
       const data = await ProductService.getProductByQuery(searchQuery, 1, 20);
       setProducts(data);
     } catch (err: any) {
-      setError(err.message || "Failed to load products");
-      Alert.alert("Error", err.message || "Failed to load products");
+      setError(err.message || t("failedToLoadProducts"));
+      Alert.alert(t("error"), err.message || t("failedToLoadProducts"));
     } finally {
       setLoading(false);
     }
@@ -84,7 +86,7 @@ export default function IndexScreen() {
               color="#e11d48"
             />
             <AppText color="danger" bold className="ml-2">
-              Out of stock
+              {t("outOfStock")}
             </AppText>
           </View>
         )}
@@ -96,14 +98,14 @@ export default function IndexScreen() {
     <View className="flex-1 justify-center items-center py-10">
       <MaterialCommunityIcons name="food-off" size={70} color="#cbd5e1" />
       <AppText color="secondary" className="mt-4 text-center">
-        No products found
+        {t("noProductsFound")}
       </AppText>
       <TouchableOpacity
         className="mt-4 px-5 py-2 bg-blue-500 rounded-lg"
         onPress={handleSearch}
       >
         <AppText color="white" bold>
-          Refresh
+          {t("refresh")}
         </AppText>
       </TouchableOpacity>
     </View>
@@ -112,14 +114,14 @@ export default function IndexScreen() {
   return (
     <View className="flex-1 bg-gray-50">
       <View className="px-4 pt-6 pb-4">
-        <AppText color="secondary" size="small" className="mt-1">
-          Search and browse your products
+        <AppText color="primary" size="small" bold className="mt-1">
+          {t("searchAndBrowseProducts")}
         </AppText>
         <View className="flex-row items-center mt-4 bg-white rounded-lg px-3 py-2 shadow">
           <MaterialCommunityIcons name="magnify" size={24} color="#888" />
           <TextInput
             className="flex-1 ml-2"
-            placeholder="Search products..."
+            placeholder={t("searchProducts")}
             value={query}
             onChangeText={setQuery}
             onSubmitEditing={handleSearch}
@@ -145,7 +147,7 @@ export default function IndexScreen() {
         <View className="flex-1 justify-center items-center bg-gray-50">
           <ActivityIndicator size="large" color="#3498db" />
           <AppText color="secondary" className="mt-4">
-            Loading products...
+            {t("loadingProducts")}
           </AppText>
         </View>
       ) : error && products.length === 0 ? (
@@ -163,7 +165,7 @@ export default function IndexScreen() {
             onPress={handleSearch}
           >
             <AppText color="white" bold>
-              Retry
+              {t("retry")}
             </AppText>
           </TouchableOpacity>
         </View>

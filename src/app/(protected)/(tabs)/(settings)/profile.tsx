@@ -15,6 +15,7 @@ import UserService from "@/services/userService";
 import * as ImagePicker from "expo-image-picker";
 import Utils from "@/utils/Utils";
 import Constants from "@/utils/Constants";
+import { useLocalization } from "@/utils/i18n";
 
 export default function ProfileScreen() {
   const [user, setUser] = useState<User | null>(null);
@@ -22,6 +23,7 @@ export default function ProfileScreen() {
   const [error, setError] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<Partial<User>>({});
+  const { t } = useLocalization();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -32,7 +34,7 @@ export default function ProfileScreen() {
         setUser(userData);
         setFormData(userData);
       } catch (err: any) {
-        setError(err.message || "Failed to load user data");
+        setError(err.message || t("failedToLoadUserData"));
       } finally {
         setLoading(false);
       }
@@ -46,10 +48,7 @@ export default function ProfileScreen() {
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permissionResult.granted) {
-      Alert.alert(
-        "Permission Denied",
-        "You need to allow access to your photos to update your profile picture.",
-      );
+      Alert.alert(t("permissionDenied"), t("photoAccessNeeded"));
       return;
     }
 
@@ -65,51 +64,44 @@ export default function ProfileScreen() {
       const newImage = result.assets[0].base64;
 
       if (!newImage) {
-        Alert.alert("Error", "Failed to process the selected image.");
+        Alert.alert(t("error"), t("failedToProcessImage"));
         return;
       }
 
       const imgSize = Utils.getImageSize(newImage);
       if (imgSize > Constants.MAX_IMAGE_SIZE) {
         Alert.alert(
-          "Image Too Large",
-          `The selected image exceeds the ${Constants.MAX_IMAGE_SIZE} KB size limit. Please choose a smaller image.`,
+          t("imageTooLarge"),
+          t("imageSizeLimit", { size: Constants.MAX_IMAGE_SIZE }),
         );
         return;
       }
 
-      Alert.alert(
-        "Confirm Update",
-        "Do you want to update your profile picture?",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Yes",
-            onPress: async () => {
-              try {
-                if (user) {
-                  await UserService.updateUser({ image: newImage || "" });
-                  const userId = await UserService.getUserIdFromToken();
-                  const updatedUser = await UserService.getUserByID(userId);
-                  setUser(updatedUser);
-                  Alert.alert(
-                    "Success",
-                    "Profile picture updated successfully!",
-                  );
-                }
-              } catch (error: any) {
-                Alert.alert(
-                  "Error",
-                  error.message || "Failed to update profile picture.",
-                );
+      Alert.alert(t("confirmUpdate"), t("updateProfilePictureQuestion"), [
+        {
+          text: t("cancel"),
+          style: "cancel",
+        },
+        {
+          text: t("yes"),
+          onPress: async () => {
+            try {
+              if (user) {
+                await UserService.updateUser({ image: newImage || "" });
+                const userId = await UserService.getUserIdFromToken();
+                const updatedUser = await UserService.getUserByID(userId);
+                setUser(updatedUser);
+                Alert.alert(t("success"), t("profilePictureUpdated"));
               }
-            },
+            } catch (error: any) {
+              Alert.alert(
+                t("error"),
+                error.message || t("failedToUpdateProfilePicture"),
+              );
+            }
           },
-        ],
-      );
+        },
+      ]);
     }
   };
 
@@ -124,9 +116,9 @@ export default function ProfileScreen() {
       setUser(updatedUser);
       setFormData(updatedUser);
       setIsEditing(false);
-      Alert.alert("Success", "Profile updated successfully!");
+      Alert.alert(t("success"), t("profileUpdated"));
     } catch (error: any) {
-      Alert.alert("Error", error.message || "Failed to update profile.");
+      Alert.alert(t("error"), error.message || t("failedToUpdateProfile"));
     }
   };
 
@@ -214,12 +206,12 @@ export default function ProfileScreen() {
             <TouchableOpacity
               onPress={() => {
                 Alert.alert(
-                  "Confirm Deletion",
-                  "Are you sure you want to remove your profile picture ?",
+                  t("confirmDeletion"),
+                  t("removeProfilePictureQuestion"),
                   [
-                    { text: "Cancel", style: "destructive" },
+                    { text: t("cancel"), style: "destructive" },
                     {
-                      text: "Delete",
+                      text: t("delete"),
                       style: "destructive",
                       onPress: async () => {
                         try {
@@ -228,15 +220,11 @@ export default function ProfileScreen() {
                           const updatedUser =
                             await UserService.getUserByID(userId);
                           setUser(updatedUser);
-                          Alert.alert(
-                            "Success",
-                            "Profile picture removed successfully!",
-                          );
+                          Alert.alert(t("success"), t("profilePictureRemoved"));
                         } catch (error: any) {
                           Alert.alert(
-                            "Error",
-                            error.message ||
-                              "Failed to remove profile picture.",
+                            t("error"),
+                            error.message || t("failedToRemoveProfilePicture"),
                           );
                         }
                       },
@@ -265,7 +253,6 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Champs du formulaire */}
       <View
         style={{
           backgroundColor: "#fff",
@@ -280,7 +267,7 @@ export default function ProfileScreen() {
         }}
       >
         <AppText bold color="primary" className="text-[15px] mb-1.5">
-          First Name
+          {t("firstName")}
         </AppText>
         <TextInput
           value={formData.first_name}
@@ -288,7 +275,7 @@ export default function ProfileScreen() {
             setFormData((prev) => ({ ...prev, first_name: text }))
           }
           editable={isEditing}
-          placeholder="Enter your first name"
+          placeholder={t("enterFirstName")}
           placeholderTextColor="#9ca3af"
           style={{
             borderWidth: 1,
@@ -303,7 +290,7 @@ export default function ProfileScreen() {
         />
 
         <AppText bold color="primary" className="text-[15px] mb-1.5">
-          Last Name
+          {t("lastName")}
         </AppText>
         <TextInput
           value={formData.last_name}
@@ -311,7 +298,7 @@ export default function ProfileScreen() {
             setFormData((prev) => ({ ...prev, last_name: text }))
           }
           editable={isEditing}
-          placeholder="Enter your last name"
+          placeholder={t("enterLastName")}
           placeholderTextColor="#9ca3af"
           style={{
             borderWidth: 1,
@@ -326,7 +313,7 @@ export default function ProfileScreen() {
         />
 
         <AppText bold color="primary" className="text-[15px] mb-1.5">
-          Email
+          {t("email")}
         </AppText>
         <TextInput
           value={formData.email}
@@ -334,7 +321,7 @@ export default function ProfileScreen() {
             setFormData((prev) => ({ ...prev, email: text }))
           }
           editable={isEditing}
-          placeholder="Enter your email"
+          placeholder={t("enterEmail")}
           placeholderTextColor="#9ca3af"
           keyboardType="email-address"
           autoCapitalize="none"
@@ -353,7 +340,7 @@ export default function ProfileScreen() {
         {user?.phone_number !== undefined && (
           <>
             <AppText bold color="primary" className="text-[15px] mb-1.5">
-              Phone Number
+              {t("phoneNumber")}
             </AppText>
             <TextInput
               value={
@@ -368,7 +355,7 @@ export default function ProfileScreen() {
                 }))
               }
               editable={isEditing}
-              placeholder="Enter your phone number"
+              placeholder={t("enterPhoneNumber")}
               placeholderTextColor="#9ca3af"
               keyboardType="phone-pad"
               style={{
@@ -388,7 +375,7 @@ export default function ProfileScreen() {
         {user?.address !== undefined && (
           <>
             <AppText bold color="primary" className="text-[15px] mb-1.5">
-              Address
+              {t("address")}
             </AppText>
             <TextInput
               value={formData.address}
@@ -396,7 +383,7 @@ export default function ProfileScreen() {
                 setFormData((prev) => ({ ...prev, address: text }))
               }
               editable={isEditing}
-              placeholder="Enter your address"
+              placeholder={t("enterAddress")}
               placeholderTextColor="#9ca3af"
               style={{
                 borderWidth: 1,
@@ -415,7 +402,7 @@ export default function ProfileScreen() {
         {user?.zip_code !== undefined && (
           <>
             <AppText bold color="primary" className="text-[15px] mb-1.5">
-              Zip Code
+              {t("zipCode")}
             </AppText>
             <TextInput
               value={
@@ -428,7 +415,7 @@ export default function ProfileScreen() {
                 }))
               }
               editable={isEditing}
-              placeholder="Enter your zip code"
+              placeholder={t("enterZipCode")}
               placeholderTextColor="#9ca3af"
               keyboardType="number-pad"
               style={{
@@ -448,7 +435,7 @@ export default function ProfileScreen() {
         {user?.country !== undefined && (
           <>
             <AppText bold color="primary" className="text-[15px] mb-1.5">
-              Country
+              {t("country")}
             </AppText>
             <TextInput
               value={formData.country}
@@ -456,7 +443,7 @@ export default function ProfileScreen() {
                 setFormData((prev) => ({ ...prev, country: text }))
               }
               editable={isEditing}
-              placeholder="Enter your country"
+              placeholder={t("enterCountry")}
               placeholderTextColor="#9ca3af"
               style={{
                 borderWidth: 1,
@@ -493,7 +480,7 @@ export default function ProfileScreen() {
         }}
       >
         <AppText bold color="white" className="text-[15px]">
-          {isEditing ? "Save" : "Update"}
+          {isEditing ? t("save") : t("update")}
         </AppText>
         <MaterialCommunityIcons
           name={isEditing ? "content-save" : "pencil"}

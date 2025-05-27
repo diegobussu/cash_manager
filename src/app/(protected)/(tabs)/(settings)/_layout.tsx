@@ -1,66 +1,69 @@
 import ProfileButton from "@/components/ProfileButton";
 import { Stack } from "expo-router";
+import { useLocalization } from "@/utils/i18n";
 
 export default function Layout() {
+  const { t } = useLocalization();
+
   return (
     <Stack>
       <Stack.Screen
         name="index"
         options={{
-          title: "Settings",
+          title: t("settings"),
           headerRight: () => <ProfileButton />,
         }}
       />
       <Stack.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: t("profile"),
         }}
       />
       <Stack.Screen
         name="security"
         options={{
-          title: "Security",
+          title: t("security"),
         }}
       />
       <Stack.Screen
         name="credit-cards"
         options={{
-          title: "Credit Card Manager",
+          title: t("creditCardManager"),
         }}
       />
       <Stack.Screen
         name="card-modal"
-        options={{ presentation: "modal", title: "Add a credit card" }}
+        options={{ presentation: "modal", title: t("addCreditCard") }}
       />
       <Stack.Screen
         name="notifications"
         options={{
-          title: "Notifications",
+          title: t("notifications"),
         }}
       />
       <Stack.Screen
         name="languages"
         options={{
-          title: "Languages",
+          title: t("languages"),
         }}
       />
       <Stack.Screen
         name="about-us"
         options={{
-          title: "About Us",
+          title: t("aboutUs"),
         }}
       />
       <Stack.Screen
         name="rate-us"
         options={{
-          title: "Rate Us",
+          title: t("rateUs"),
         }}
       />
       <Stack.Screen
         name="privacy-policy"
         options={{
-          title: "Privacy Policy",
+          title: t("privacyPolicy"),
         }}
       />
     </Stack>

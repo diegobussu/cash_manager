@@ -6,12 +6,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Utils from "@/utils/Utils";
 import CartButton from "@/components/CartButton";
 import { useEffect } from "react";
+import { useLocalization } from "@/utils/i18n";
 
 export default function ProductDetailsScreen() {
   const { product } = useLocalSearchParams();
   const router = useRouter();
   const navigation = useNavigation();
   const productData: Product = JSON.parse(product as string);
+  const { t } = useLocalization();
 
   useEffect(() => {
     navigation.setOptions({
@@ -64,7 +66,7 @@ export default function ProductDetailsScreen() {
                 color="#e11d48"
               />
               <AppText color="danger" bold className="ml-2">
-                Out of stock
+                {t("outOfStock")}
               </AppText>
             </View>
           ) : (
@@ -78,7 +80,7 @@ export default function ProductDetailsScreen() {
             >
               <MaterialCommunityIcons name="cart-plus" size={24} color="#fff" />
               <AppText color="white" bold className="ml-2">
-                Add to cart
+                {t("addToCart")}
               </AppText>
             </TouchableOpacity>
           )}
@@ -93,13 +95,13 @@ export default function ProductDetailsScreen() {
               color="#0853A9"
             />
             <AppText size="large" bold className="ml-2">
-              Basic Information
+              {t("basicInformation")}
             </AppText>
           </View>
 
           <View className="flex-row justify-between py-2 border-b border-gray-100">
             <AppText size="small" color="secondary" className="w-1/3">
-              Barcode
+              {t("barcode")}
             </AppText>
             <AppText size="small" bold className="w-2/3">
               {productData.bar_code}
@@ -108,28 +110,28 @@ export default function ProductDetailsScreen() {
 
           <View className="flex-row justify-between py-2 border-b border-gray-100">
             <AppText size="small" color="secondary" className="w-1/3">
-              Manufacturing
+              {t("manufacturing")}
             </AppText>
             <AppText size="small" bold className="w-2/3">
-              {productData.manufacturing_country || "N/A"}
+              {productData.manufacturing_country || t("na")}
             </AppText>
           </View>
 
           <View className="flex-row justify-between py-2">
             <AppText size="small" color="secondary" className="w-1/3">
-              Quantity
+              {t("quantity")}
             </AppText>
             <AppText size="small" bold className="w-2/3">
-              {productData.quantity || "N/A"}
+              {productData.quantity || t("na")}
             </AppText>
           </View>
 
           <View className="flex-row justify-between py-2 border-t border-gray-100">
             <AppText size="small" color="secondary" className="w-1/3">
-              Price
+              {t("price")}
             </AppText>
             <AppText size="small" bold className="w-2/3">
-              {productData.price ? `${productData.price} €` : "N/A"}
+              {productData.price ? `${productData.price} €` : t("na")}
             </AppText>
           </View>
         </View>
@@ -143,14 +145,14 @@ export default function ProductDetailsScreen() {
               color="#0853A9"
             />
             <AppText size="large" bold className="ml-2">
-              Nutrition Facts
+              {t("nutritionFacts")}
             </AppText>
           </View>
 
           <View className="flex-row flex-wrap justify-between">
             <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
-                Energy
+                {t("energy")}
               </AppText>
               <AppText size="medium" bold>
                 {productData.energy || "0"} kcal
@@ -159,7 +161,7 @@ export default function ProductDetailsScreen() {
 
             <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
-                Fat
+                {t("fat")}
               </AppText>
               <AppText size="medium" bold>
                 {productData.fat || "0"} g
@@ -168,7 +170,7 @@ export default function ProductDetailsScreen() {
 
             <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
-                Saturated Fat
+                {t("saturatedFat")}
               </AppText>
               <AppText size="medium" bold>
                 {productData.saturated_fat || "0"} g
@@ -177,7 +179,7 @@ export default function ProductDetailsScreen() {
 
             <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
-                Carbohydrates
+                {t("carbohydrates")}
               </AppText>
               <AppText size="medium" bold>
                 {productData.carbohydrates || "0"} g
@@ -186,7 +188,7 @@ export default function ProductDetailsScreen() {
 
             <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
-                Sugars
+                {t("sugars")}
               </AppText>
               <AppText size="medium" bold>
                 {productData.sugars || "0"} g
@@ -195,7 +197,7 @@ export default function ProductDetailsScreen() {
 
             <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
-                Proteins
+                {t("proteins")}
               </AppText>
               <AppText size="medium" bold>
                 {productData.proteins || "0"} g
@@ -204,7 +206,7 @@ export default function ProductDetailsScreen() {
 
             <View className="w-[48%] p-3 mb-3 bg-gray-100 rounded-lg">
               <AppText size="small" color="secondary">
-                Salt
+                {t("salt")}
               </AppText>
               <AppText size="medium" bold>
                 {productData.salt || "0"} g
@@ -218,43 +220,43 @@ export default function ProductDetailsScreen() {
           <View className="flex-row pb-3 mb-3 border-b border-gray-200">
             <MaterialCommunityIcons name="flask" size={22} color="#0853A9" />
             <AppText size="large" bold className="ml-2">
-              Composition
+              {t("composition")}
             </AppText>
           </View>
 
           <View className="mb-4 pb-4 border-b border-gray-100">
             <AppText size="medium" bold>
-              Ingredients
+              {t("ingredients")}
             </AppText>
             <AppText size="small" className="mt-1">
-              {productData.ingredients || "No ingredients data available"}
+              {productData.ingredients || t("noIngredientsData")}
             </AppText>
           </View>
 
           <View className="mb-4 pb-4 border-b border-gray-100">
             <AppText size="medium" bold>
-              Allergens
+              {t("allergens")}
             </AppText>
             <AppText size="small" className="mt-1">
-              {productData.allergens || "No allergen data available"}
+              {productData.allergens || t("noAllergenData")}
             </AppText>
           </View>
 
           <View className="mb-4 pb-4 border-b border-gray-100">
             <AppText size="medium" bold>
-              Additives
+              {t("additives")}
             </AppText>
             <AppText size="small" className="mt-1">
-              {productData.additives || "No additives data available"}
+              {productData.additives || t("noAdditivesData")}
             </AppText>
           </View>
 
           <View>
             <AppText size="medium" bold>
-              Labels
+              {t("labels")}
             </AppText>
             <AppText size="small" className="mt-1">
-              {productData.labels || "No labels data available"}
+              {productData.labels || t("noLabelsData")}
             </AppText>
           </View>
         </View>
@@ -262,13 +264,13 @@ export default function ProductDetailsScreen() {
         {/* Footer Info */}
         <View className="mt-2 mb-5 items-center">
           <AppText size="small" color="tertiary">
-            Product ID: {productData.id}
+            {t("productId")} ({productData.id})
           </AppText>
           <AppText size="small" color="tertiary">
-            Created: {Utils.formatDate(productData.createdAt)}
+            {t("created")} {Utils.formatDate(productData.createdAt)}
           </AppText>
           <AppText size="small" color="tertiary">
-            Last updated: {Utils.formatDate(productData.updatedAt)}
+            {t("lastUpdated")} {Utils.formatDate(productData.updatedAt)}
           </AppText>
         </View>
       </View>
