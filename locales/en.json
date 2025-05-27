@@ -1,0 +1,13 @@
+{
+  "welcome": "Welcome to Cash Manager",
+  "login": "Login",
+  "signup": "Sign Up",
+  "settings": "Settings",
+  "language": "Language",
+  "selectLanguage": "Select Language",
+  "languageDescription": "Choose your preferred language for the app",
+  "english": "English",
+  "french": "French",
+  "spanish": "Spanish",
+    "changeLanguageNote": "Vous pouvez changer la langue à tout moment depuis les paramètres"
+}
