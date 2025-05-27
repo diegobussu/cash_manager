@@ -114,7 +114,7 @@ export default function IndexScreen() {
   return (
     <View className="flex-1 bg-gray-50">
       <View className="px-4 pt-6 pb-4">
-        <AppText color="secondary" size="small" className="mt-1">
+        <AppText color="primary" size="small" bold className="mt-1">
           {t("searchAndBrowseProducts")}
         </AppText>
         <View className="flex-row items-center mt-4 bg-white rounded-lg px-3 py-2 shadow">
