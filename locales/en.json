@@ -215,5 +215,15 @@
   "cvv": "CVV",
   "cardType": "Card Type",
   "loading": "Loading...",
-  "failedToAddCard": "Failed to add card"
+  "failedToAddCard": "Failed to add card",
+
+  "updatePassword": "Update Password",
+  "currentPassword": "Current Password",
+  "newPassword": "New Password",
+  "updateEmail": "Update Email",
+  "newEmail": "New Email",
+  "passwordUpdatedSuccess": "Password updated successfully. You will be logged out.",
+  "failedToUpdatePassword": "Failed to update password.",
+  "emailUpdatedSuccess": "Email updated successfully. You will be logged out.",
+  "failedToUpdateEmail": "Failed to update email."
 }

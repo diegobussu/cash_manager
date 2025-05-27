@@ -215,5 +215,15 @@
   "cvv": "CVV",
   "cardType": "Type de carte",
   "loading": "Chargement...",
-  "failedToAddCard": "Échec de l'ajout de la carte"
+  "failedToAddCard": "Échec de l'ajout de la carte",
+
+  "updatePassword": "Mettre à jour le mot de passe",
+  "currentPassword": "Mot de passe actuel",
+  "newPassword": "Nouveau mot de passe",
+  "updateEmail": "Mettre à jour l'email",
+  "newEmail": "Nouvel email",
+  "passwordUpdatedSuccess": "Mot de passe mis à jour avec succès. Vous allez être déconnecté.",
+  "failedToUpdatePassword": "Échec de la mise à jour du mot de passe.",
+  "emailUpdatedSuccess": "Email mis à jour avec succès. Vous allez être déconnecté.",
+  "failedToUpdateEmail": "Échec de la mise à jour de l'email."
 }

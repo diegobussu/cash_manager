@@ -264,13 +264,13 @@ export default function ProductDetailsScreen() {
         {/* Footer Info */}
         <View className="mt-2 mb-5 items-center">
           <AppText size="small" color="tertiary">
-            {t("productId")}: {productData.id}
+            {t("productId")} ({productData.id})
           </AppText>
           <AppText size="small" color="tertiary">
-            {t("created")}: {Utils.formatDate(productData.createdAt)}
+            {t("created")} {Utils.formatDate(productData.createdAt)}
           </AppText>
           <AppText size="small" color="tertiary">
-            {t("lastUpdated")}: {Utils.formatDate(productData.updatedAt)}
+            {t("lastUpdated")} {Utils.formatDate(productData.updatedAt)}
           </AppText>
         </View>
       </View>
