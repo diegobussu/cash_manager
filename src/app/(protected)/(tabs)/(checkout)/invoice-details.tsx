@@ -12,10 +12,12 @@ import { Invoice, InvoiceItem } from "@/models/Invoice";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ProductService from "@/services/productService";
 import { Product } from "@/models/Product";
+import { useLocalization } from "@/utils/i18n";
 
 export default function InvoiceDetailsScreen() {
   const { invoice } = useLocalSearchParams();
   const invoiceData: Invoice = JSON.parse(invoice as string);
+  const { t } = useLocalization();
 
   // State to store loaded products by barcode
   const [products, setProducts] = useState<{
@@ -68,7 +70,7 @@ export default function InvoiceDetailsScreen() {
                 {invoiceData.total_price.toFixed(2)} €
               </AppText>
               <AppText color="secondary" size="small">
-                Total Amount
+                {t("totalAmount")}
               </AppText>
             </View>
           </View>
@@ -79,7 +81,7 @@ export default function InvoiceDetailsScreen() {
           {/* Invoice Items */}
           <View className="flex-row justify-between mb-2">
             <AppText color="secondary" size="small">
-              Transaction ID
+              {t("transactionId")}
             </AppText>
             <AppText bold>
               CM-{new Date(invoiceData.createdAt).getFullYear()}
@@ -92,14 +94,14 @@ export default function InvoiceDetailsScreen() {
 
           <View className="flex-row justify-between mb-2">
             <AppText color="secondary" size="small">
-              Date
+              {t("date")}
             </AppText>
             <AppText>{formatDate(invoiceData.createdAt)}</AppText>
           </View>
 
           <View className="flex-row justify-between mb-2">
             <AppText color="secondary" size="small">
-              Payment Method
+              {t("paymentMethod")}
             </AppText>
             <View className="flex-row items-center">
               <MaterialCommunityIcons
@@ -108,7 +110,9 @@ export default function InvoiceDetailsScreen() {
                 color="#64748b"
                 style={{ marginRight: 4 }}
               />
-              <AppText>Card •••• {invoiceData.card_number.slice(-4)}</AppText>
+              <AppText>
+                {t("card")} •••• {invoiceData.card_number.slice(-4)}
+              </AppText>
             </View>
           </View>
         </View>
@@ -126,7 +130,7 @@ export default function InvoiceDetailsScreen() {
               style={{ marginRight: 6 }}
             />
             <AppText bold color="primary">
-              Items
+              {t("items")}
             </AppText>
           </View>
           {invoiceData.items.map((item: InvoiceItem, index: number) => {
@@ -177,14 +181,14 @@ export default function InvoiceDetailsScreen() {
                     {product ? product.name : item.product_name}
                   </AppText>
                   <AppText color="secondary" size="small">
-                    Quantity : {item.quantity}
+                    {t("quantity")} : {item.quantity}
                   </AppText>
                   <AppText color="secondary" size="small">
-                    Barcode : {item.bar_code}
+                    {t("barcode")} : {item.bar_code}
                   </AppText>
                   <AppText color="primary" bold>
                     {product && product.price
-                      ? `${product.price} € / unit`
+                      ? `${product.price} € ${t("perUnit")}`
                       : ""}
                   </AppText>
                 </View>

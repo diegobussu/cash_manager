@@ -11,11 +11,13 @@ import { Invoice } from "@/models/Invoice";
 import { AppText } from "@/components/AppText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
+import { useLocalization } from "@/utils/i18n";
 
 export default function HistoryScreen() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useLocalization();
 
   useEffect(() => {
     fetchInvoices();
@@ -34,8 +36,8 @@ export default function HistoryScreen() {
         ),
       );
     } catch (err: any) {
-      setError(err.message || "Failed to load invoices");
-      Alert.alert("Error", err.message || "Failed to load invoices");
+      setError(err.message || t("failedToLoadInvoices"));
+      Alert.alert(t("error"), err.message || t("failedToLoadInvoices"));
     } finally {
       setLoading(false);
     }
@@ -96,10 +98,10 @@ export default function HistoryScreen() {
         <View className="flex-row justify-between items-center mt-2">
           <View>
             <AppText size="small" color="secondary" className="mb-1">
-              {item.items.reduce((sum, i) => sum + i.quantity, 0)} item
+              {item.items.reduce((sum, i) => sum + i.quantity, 0)}{" "}
               {item.items.reduce((sum, i) => sum + i.quantity, 0) > 1
-                ? "s"
-                : ""}
+                ? t("itemsPlural")
+                : t("itemSingular")}
             </AppText>
           </View>
           <View>
@@ -120,14 +122,14 @@ export default function HistoryScreen() {
         color="#cbd5e1"
       />
       <AppText color="secondary" className="mt-4 text-center">
-        No invoices found
+        {t("noInvoicesFound")}
       </AppText>
       <TouchableOpacity
         className="mt-4 px-5 py-2 bg-blue-500 rounded-lg"
         onPress={fetchInvoices}
       >
         <AppText color="white" bold>
-          Refresh
+          {t("refresh")}
         </AppText>
       </TouchableOpacity>
     </View>
@@ -138,7 +140,7 @@ export default function HistoryScreen() {
       <View className="flex-1 justify-center items-center bg-gray-50">
         <ActivityIndicator size="large" color="#3498db" />
         <AppText color="secondary" className="mt-4">
-          Loading invoices...
+          {t("loadingInvoices")}
         </AppText>
       </View>
     );
@@ -148,10 +150,10 @@ export default function HistoryScreen() {
     <View className="flex-1 bg-gray-50">
       <View className="px-4 pt-6 pb-4">
         <AppText bold size="heading">
-          Invoice History
+          {t("invoiceHistory")}
         </AppText>
         <AppText color="secondary" size="small" className="mt-1">
-          View and manage your past transactions
+          {t("viewTransactions")}
         </AppText>
       </View>
 
@@ -170,7 +172,7 @@ export default function HistoryScreen() {
             onPress={fetchInvoices}
           >
             <AppText color="white" bold>
-              Retry
+              {t("retry")}
             </AppText>
           </TouchableOpacity>
         </View>

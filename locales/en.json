@@ -86,5 +86,21 @@
 
   "checkout": "Checkout",
   "history": "History",
-  "invoiceDetails": "Invoice Details"
+  "invoiceDetails": "Invoice Details",
+  
+  "totalAmount": "Total Amount",
+  "transactionId": "Transaction ID",
+  "date": "Date",
+  "paymentMethod": "Payment Method",
+  "card": "Card",
+  "items": "Items",
+  "perUnit": "/ unit",
+  
+  "invoiceHistory": "Invoice History",
+  "viewTransactions": "View and manage your past transactions",
+  "itemSingular": "item",
+  "itemsPlural": "items",
+  "noInvoicesFound": "No invoices found",
+  "loadingInvoices": "Loading invoices...",
+  "failedToLoadInvoices": "Failed to load invoices"
 }

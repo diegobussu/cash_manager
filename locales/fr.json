@@ -86,5 +86,21 @@
 
   "checkout": "Panier",
   "history": "Historique",
-  "invoiceDetails": "Détails de la facture"
+  "invoiceDetails": "Détails de la facture",
+  
+  "totalAmount": "Montant total",
+  "transactionId": "Identifiant de transaction",
+  "date": "Date",
+  "paymentMethod": "Moyen de paiement",
+  "card": "Carte",
+  "items": "Articles",
+  "perUnit": "/ unité",
+  
+  "invoiceHistory": "Historique des factures",
+  "viewTransactions": "Consultez et gérez vos transactions passées",
+  "itemSingular": "article",
+  "itemsPlural": "articles",
+  "noInvoicesFound": "Aucune facture trouvée",
+  "loadingInvoices": "Chargement des factures...",
+  "failedToLoadInvoices": "Échec du chargement des factures"
 }
