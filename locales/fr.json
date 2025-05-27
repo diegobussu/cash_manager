@@ -4,6 +4,7 @@
   "login": "Connexion",
   "signup": "S'inscrire",
   "settings": "Paramètres",
+  "scan": "Scanner",
   "language": "Langue",
   "selectLanguage": "Choisir la langue",
   "languageDescription": "Choisissez votre langue préférée pour l'application",
@@ -225,5 +226,13 @@
   "passwordUpdatedSuccess": "Mot de passe mis à jour avec succès. Vous allez être déconnecté.",
   "failedToUpdatePassword": "Échec de la mise à jour du mot de passe.",
   "emailUpdatedSuccess": "Email mis à jour avec succès. Vous allez être déconnecté.",
-  "failedToUpdateEmail": "Échec de la mise à jour de l'email."
+  "failedToUpdateEmail": "Échec de la mise à jour de l'email.",
+
+  "selectPaymentMethod": "Sélectionnez un mode de paiement",
+  "creditCard": "Carte de crédit",
+  "payWithPayPal": "Payer avec PayPal",
+  "paypalConfirmation": "Vous allez payer €{{total}} via PayPal",
+  "failedToCreatePayPalOrder": "Échec de la création de la commande PayPal",
+  "paypalPaymentCaptureFailed": "Échec de la capture du paiement PayPal",
+  "paypalProcessError": "Une erreur s'est produite lors du traitement du paiement PayPal"
 }

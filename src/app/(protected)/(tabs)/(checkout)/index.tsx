@@ -17,6 +17,7 @@ import Utils from "@/utils/Utils";
 import InvoiceService from "@/services/invoiceService";
 import ProductService from "@/services/productService";
 import { useLocalization } from "@/utils/i18n";
+import PayPalService from "@/services/payPalService";
 
 export default function IndexScreen() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } =
@@ -27,6 +28,8 @@ export default function IndexScreen() {
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const { t } = useLocalization();
+  // New state for payment method
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal">("card");
 
   // Load payment cards when needed
   const loadPaymentCards = async () => {
@@ -90,32 +93,47 @@ export default function IndexScreen() {
       return;
     }
 
-    if (!selectedCard) {
-      Alert.alert(t("noPaymentMethod"), t("addPaymentMethodPrompt"), [
-        { text: t("cancel"), style: "destructive" },
-        {
-          text: t("addCard"),
-          onPress: () =>
-            router.navigate("/(protected)/(tabs)/(settings)/credit-cards"),
-        },
-      ]);
-      return;
-    }
+    if (paymentMethod === "card") {
+      if (!selectedCard) {
+        Alert.alert(t("noPaymentMethod"), t("addPaymentMethodPrompt"), [
+          { text: t("cancel"), style: "destructive" },
+          {
+            text: t("addCard"),
+            onPress: () =>
+              router.navigate("/(protected)/(tabs)/(settings)/credit-cards"),
+          },
+        ]);
+        return;
+      }
 
-    Alert.alert(
-      t("confirmPurchase"),
-      t("paymentConfirmation", {
-        total: totalPrice.toFixed(2),
-        cardDigits: Utils.getLast4Digits(selectedCard.card_number),
-      }),
-      [
-        { text: t("cancel"), style: "destructive" },
-        { text: t("payNow"), onPress: processPayment },
-      ],
-    );
+      Alert.alert(
+        t("confirmPurchase"),
+        t("paymentConfirmation", {
+          total: totalPrice.toFixed(2),
+          cardDigits: Utils.getLast4Digits(selectedCard.card_number),
+        }),
+        [
+          { text: t("cancel"), style: "destructive" },
+          { text: t("payNow"), onPress: processCardPayment },
+        ],
+      );
+    } else {
+      // PayPal flow
+      Alert.alert(
+        t("confirmPurchase"),
+        t("paypalConfirmation", {
+          total: totalPrice.toFixed(2),
+        }),
+        [
+          { text: t("cancel"), style: "destructive" },
+          { text: t("payWithPayPal"), onPress: processPayPalPayment },
+        ],
+      );
+    }
   };
 
-  const processPayment = async () => {
+  // Renamed existing function for clarity
+  const processCardPayment = async () => {
     setIsProcessingPayment(true);
 
     try {
@@ -144,6 +162,65 @@ export default function IndexScreen() {
       Alert.alert(
         t("paymentFailed"),
         error?.message || t("paymentProcessError"),
+      );
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
+  // New function for PayPal payment flow
+  const processPayPalPayment = async () => {
+    setIsProcessingPayment(true);
+
+    try {
+      // Step 1: Create a PayPal order
+      const orderResponse = await PayPalService.createOrder(
+        totalPrice,
+        `Cash Manager Purchase - ${items.length} items`,
+      );
+
+      if (!orderResponse.success || !orderResponse.orderId) {
+        throw new Error(t("failedToCreatePayPalOrder"));
+      }
+
+      // Step 2: Capture the payment
+      const captureResponse = await PayPalService.capturePayment(
+        orderResponse.orderId,
+      );
+
+      if (!captureResponse.success) {
+        throw new Error(t("paypalPaymentCaptureFailed"));
+      }
+
+      // Step 3: Process the order in our system
+      const invoiceItems = items.map((item) => ({
+        bar_code: item.product.bar_code,
+        product_name: item.product.name,
+        quantity: item.quantity,
+      }));
+
+      // Using "PAYPAL" as the card_number to identify PayPal payments
+      await InvoiceService.addInvoice(
+        "PAYPAL-" + orderResponse.orderId,
+        invoiceItems,
+      );
+
+      // Update product quantities
+      await Promise.all(
+        items.map((item) =>
+          ProductService.updateProductQuantity(
+            item.product.bar_code,
+            Math.max(0, (item.product.quantity ?? 0) - item.quantity),
+          ),
+        ),
+      );
+
+      clearCart();
+      router.navigate("/(protected)/(tabs)/(checkout)/history");
+    } catch (error: any) {
+      Alert.alert(
+        t("paymentFailed"),
+        error?.message || t("paypalProcessError"),
       );
     } finally {
       setIsProcessingPayment(false);
@@ -289,8 +366,51 @@ export default function IndexScreen() {
               <AppText bold>{totalPrice.toFixed(2)} €</AppText>
             </View>
 
-            {/* Payment Method Selector - Simple version */}
-            {paymentCards.length > 0 && (
+            {/* Payment Method Selection */}
+            <View className="my-3">
+              <AppText bold className="mb-2">
+                {t("selectPaymentMethod")}
+              </AppText>
+
+              <View className="flex-row mb-2">
+                <TouchableOpacity
+                  className={`flex-1 flex-row items-center p-3 rounded-lg mr-2 ${paymentMethod === "card" ? "bg-blue-100 border border-blue-500" : "bg-gray-100"}`}
+                  onPress={() => setPaymentMethod("card")}
+                >
+                  <MaterialCommunityIcons
+                    name="credit-card-outline"
+                    size={20}
+                    color={paymentMethod === "card" ? "#0853A9" : "#64748b"}
+                  />
+                  <AppText
+                    className="ml-2"
+                    color={paymentMethod === "card" ? "primary" : "secondary"}
+                  >
+                    {t("creditCard")}
+                  </AppText>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  className={`flex-1 flex-row items-center p-3 rounded-lg ${paymentMethod === "paypal" ? "bg-blue-100 border border-blue-500" : "bg-gray-100"}`}
+                  onPress={() => setPaymentMethod("paypal")}
+                >
+                  <MaterialCommunityIcons
+                    name="cash-multiple"
+                    size={20}
+                    color={paymentMethod === "paypal" ? "#0853A9" : "#64748b"}
+                  />
+                  <AppText
+                    className="ml-2"
+                    color={paymentMethod === "paypal" ? "primary" : "secondary"}
+                  >
+                    PayPal
+                  </AppText>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Card Selection (only show if card payment method is selected) */}
+            {paymentMethod === "card" && paymentCards.length > 0 && (
               <View className="flex-row justify-between items-center my-2">
                 <AppText>{t("paymentMethod")}</AppText>
                 <View className="flex-row items-center">
@@ -318,7 +438,9 @@ export default function IndexScreen() {
               onPress={handleProceedToPayment}
             >
               <AppText color="white" bold>
-                {t("proceedToCheckout")}
+                {paymentMethod === "card"
+                  ? t("proceedToCheckout")
+                  : t("payWithPayPal")}
               </AppText>
             </TouchableOpacity>
           </View>
