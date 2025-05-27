@@ -16,6 +16,7 @@ import { CreditCard } from "@/models/CreditCard";
 import Utils from "@/utils/Utils";
 import InvoiceService from "@/services/invoiceService";
 import ProductService from "@/services/productService";
+import { useLocalization } from "@/utils/i18n";
 
 export default function IndexScreen() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } =
@@ -25,6 +26,7 @@ export default function IndexScreen() {
   const [selectedCard, setSelectedCard] = useState<CreditCard | null>(null);
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const { t } = useLocalization();
 
   // Load payment cards when needed
   const loadPaymentCards = async () => {
@@ -62,9 +64,9 @@ export default function IndexScreen() {
       newQuantity > item.product.quantity
     ) {
       Alert.alert(
-        "Quantity Limit Reached",
-        `You cannot add more than ${item.product.quantity} of this product to your cart.`,
-        [{ text: "OK" }],
+        t("quantityLimitReached"),
+        t("cannotAddMoreThan", { quantity: item.product.quantity }),
+        [{ text: t("ok") }],
       );
       return;
     }
@@ -72,48 +74,43 @@ export default function IndexScreen() {
   };
 
   const handleRemoveItem = (productId: number) => {
-    Alert.alert(
-      "Remove Item",
-      "Are you sure you want to remove this item from your cart?",
-      [
-        { text: "Cancel", style: "destructive" },
-        {
-          text: "Remove",
-          style: "destructive",
-          onPress: () => removeItem(productId),
-        },
-      ],
-    );
+    Alert.alert(t("removeItem"), t("removeItemConfirmation"), [
+      { text: t("cancel"), style: "destructive" },
+      {
+        text: t("remove"),
+        style: "destructive",
+        onPress: () => removeItem(productId),
+      },
+    ]);
   };
 
   const handleProceedToPayment = () => {
     if (items.length === 0) {
-      Alert.alert("Error", "Your cart is empty");
+      Alert.alert(t("error"), t("cartEmpty"));
       return;
     }
 
     if (!selectedCard) {
-      Alert.alert(
-        "No Payment Method",
-        "Please add a payment method in your profile settings",
-        [
-          { text: "Cancel", style: "destructive" },
-          {
-            text: "Add Card",
-            onPress: () =>
-              router.navigate("/(protected)/(tabs)/(settings)/credit-cards"),
-          },
-        ],
-      );
+      Alert.alert(t("noPaymentMethod"), t("addPaymentMethodPrompt"), [
+        { text: t("cancel"), style: "destructive" },
+        {
+          text: t("addCard"),
+          onPress: () =>
+            router.navigate("/(protected)/(tabs)/(settings)/credit-cards"),
+        },
+      ]);
       return;
     }
 
     Alert.alert(
-      "Confirm Purchase",
-      `Total: ${totalPrice.toFixed(2)} €\nPay with card ending in ${Utils.getLast4Digits(selectedCard.card_number)}?`,
+      t("confirmPurchase"),
+      t("paymentConfirmation", {
+        total: totalPrice.toFixed(2),
+        cardDigits: Utils.getLast4Digits(selectedCard.card_number),
+      }),
       [
-        { text: "Cancel", style: "destructive" },
-        { text: "Pay Now", onPress: processPayment },
+        { text: t("cancel"), style: "destructive" },
+        { text: t("payNow"), onPress: processPayment },
       ],
     );
   };
@@ -122,7 +119,7 @@ export default function IndexScreen() {
     setIsProcessingPayment(true);
 
     try {
-      if (!selectedCard) throw new Error("No payment card selected");
+      if (!selectedCard) throw new Error(t("noCardSelected"));
 
       const invoiceItems = items.map((item) => ({
         bar_code: item.product.bar_code,
@@ -145,8 +142,8 @@ export default function IndexScreen() {
       router.navigate("/(protected)/(tabs)/(checkout)/history");
     } catch (error: any) {
       Alert.alert(
-        "Payment Failed",
-        error?.message || "There was an error processing your payment.",
+        t("paymentFailed"),
+        error?.message || t("paymentProcessError"),
       );
     } finally {
       setIsProcessingPayment(false);
@@ -178,12 +175,12 @@ export default function IndexScreen() {
           </AppText>
           {/* Show max stock */}
           <AppText size="small" color="secondary" className="italic mt-2">
-            Available stock : {item.product.quantity}
+            {t("availableStockColon")} {item.product.quantity}
           </AppText>
           <AppText bold color="primary" className="mt-1">
             {item.product.price
               ? `${(item.product.price * item.quantity).toFixed(2)} €`
-              : "N/A"}
+              : t("na")}
           </AppText>
         </View>
 
@@ -226,17 +223,17 @@ export default function IndexScreen() {
     <View className="flex-1 justify-center items-center p-4">
       <MaterialCommunityIcons name="cart-outline" size={80} color="#d1d5db" />
       <AppText size="large" bold className="mt-4 mb-2">
-        Your cart is empty
+        {t("cartEmpty")}
       </AppText>
       <AppText color="secondary" center className="mb-6">
-        Add products from the catalog or scan items to fill your cart
+        {t("addProductsPrompt")}
       </AppText>
       <TouchableOpacity
         className="bg-blue-500 py-3 px-6 rounded-lg"
         onPress={() => router.navigate("/(protected)/(tabs)/(products)")}
       >
         <AppText color="white" bold>
-          Browse Products
+          {t("browseProducts")}
         </AppText>
       </TouchableOpacity>
     </View>
@@ -247,7 +244,7 @@ export default function IndexScreen() {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="#3498db" />
-        <AppText className="mt-4">Processing your payment...</AppText>
+        <AppText className="mt-4">{t("processingPayment")}</AppText>
       </View>
     );
   }
@@ -257,7 +254,7 @@ export default function IndexScreen() {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="#3498db" />
-        <AppText className="mt-4">Loading payment methods...</AppText>
+        <AppText className="mt-4">{t("loadingPaymentMethods")}</AppText>
       </View>
     );
   }
@@ -266,10 +263,12 @@ export default function IndexScreen() {
     <View className="flex-1 bg-gray-50">
       <View className="px-4 pt-6 pb-2">
         <AppText bold size="heading">
-          Shopping Cart
+          {t("shoppingCart")}
         </AppText>
         <AppText color="secondary" size="small" className="mt-1">
-          {items.length} item{items.length !== 1 ? "s" : ""} in your cart
+          {items.length}{" "}
+          {items.length !== 1 ? t("itemsPlural") : t("itemSingular")}{" "}
+          {t("inYourCart")}
         </AppText>
       </View>
 
@@ -286,14 +285,14 @@ export default function IndexScreen() {
           {/* Cart Summary & Checkout Button */}
           <View className="bg-white p-4 border-t border-gray-200">
             <View className="flex-row justify-between mb-2">
-              <AppText>Subtotal</AppText>
+              <AppText>{t("subtotal")}</AppText>
               <AppText bold>{totalPrice.toFixed(2)} €</AppText>
             </View>
 
             {/* Payment Method Selector - Simple version */}
             {paymentCards.length > 0 && (
               <View className="flex-row justify-between items-center my-2">
-                <AppText>Payment Method</AppText>
+                <AppText>{t("paymentMethod")}</AppText>
                 <View className="flex-row items-center">
                   <MaterialCommunityIcons
                     name="credit-card-outline"
@@ -303,8 +302,12 @@ export default function IndexScreen() {
                   />
                   <AppText>
                     {selectedCard
-                      ? `Card •••• ${Utils.getLast4Digits(selectedCard.card_number)}`
-                      : "Select Card"}
+                      ? t("cardEnding", {
+                          digits: Utils.getLast4Digits(
+                            selectedCard.card_number,
+                          ),
+                        })
+                      : t("selectCard")}
                   </AppText>
                 </View>
               </View>
@@ -315,7 +318,7 @@ export default function IndexScreen() {
               onPress={handleProceedToPayment}
             >
               <AppText color="white" bold>
-                Proceed to Checkout
+                {t("proceedToCheckout")}
               </AppText>
             </TouchableOpacity>
           </View>

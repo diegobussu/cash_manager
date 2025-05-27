@@ -253,7 +253,6 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Champs du formulaire */}
       <View
         style={{
           backgroundColor: "#fff",
