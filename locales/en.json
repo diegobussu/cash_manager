@@ -181,5 +181,28 @@
   "registrationSuccessful": "Registration successful! Redirecting to login...",
   "emailAlreadyExists": "Email already exists",
   "registrationFailed": "Registration failed",
-  "alreadyHaveAccount": "Already have an account? Log In"
+  "alreadyHaveAccount": "Already have an account? Log In",
+
+  "rateOurApp": "Rate our app",
+  "leaveComment": "Leave a comment (optional)",
+  "submit": "Submit",
+  "pleaseSelectRating": "Please select a rating before submitting.",
+  "thankYou": "Thank you!",
+  "feedbackSubmitted": "Your feedback has been submitted successfully.",
+
+  "deleteCard": "Delete Card",
+  "deleteCardConfirmation": "Are you sure you want to delete this card?",
+  "cardDeletedSuccessfully": "Card deleted successfully.",
+  "failedToDeleteCard": "Failed to delete card",
+  "setAsDefault": "Set as Default",
+  "setDefaultCardConfirmation": "Do you want to set this card as your default card?",
+  "defaultCardUpdated": "Default card updated.",
+  "failedToSetDefaultCard": "Failed to set default card",
+  "cardOptions": "Card Options",
+  "default": "Default",
+  "expiry": "Expiry",
+  "loadingCards": "Loading cards...",
+  "noCardsYet": "No cards added yet",
+  "addCardDescription": "Add a credit or debit card to make payments easily and securely.",
+  "failedToLoadCards": "Failed to load cards"
 }

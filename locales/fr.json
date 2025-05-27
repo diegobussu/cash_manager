@@ -181,5 +181,28 @@
   "registrationSuccessful": "Inscription réussie ! Redirection vers la page de connexion...",
   "emailAlreadyExists": "Cet email existe déjà",
   "registrationFailed": "L'inscription a échoué",
-  "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous"
+  "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous",
+
+  "rateOurApp": "Évaluez notre application",
+  "leaveComment": "Laissez un commentaire (facultatif)",
+  "submit": "Envoyer",
+  "pleaseSelectRating": "Veuillez sélectionner une note avant d'envoyer.",
+  "thankYou": "Merci !",
+  "feedbackSubmitted": "Votre avis a été soumis avec succès.",
+
+  "deleteCard": "Supprimer la carte",
+  "deleteCardConfirmation": "Êtes-vous sûr de vouloir supprimer cette carte ?",
+  "cardDeletedSuccessfully": "Carte supprimée avec succès.",
+  "failedToDeleteCard": "Échec de la suppression de la carte",
+  "setAsDefault": "Définir par défaut",
+  "setDefaultCardConfirmation": "Voulez-vous définir cette carte comme votre carte par défaut ?",
+  "defaultCardUpdated": "Carte par défaut mise à jour.",
+  "failedToSetDefaultCard": "Échec de la définition de la carte par défaut",
+  "cardOptions": "Options de carte",
+  "default": "Par défaut",
+  "expiry": "Expiration",
+  "loadingCards": "Chargement des cartes...",
+  "noCardsYet": "Aucune carte ajoutée",
+  "addCardDescription": "Ajoutez une carte de crédit ou de débit pour effectuer des paiements facilement et en toute sécurité.",
+  "failedToLoadCards": "Échec du chargement des cartes"
 }

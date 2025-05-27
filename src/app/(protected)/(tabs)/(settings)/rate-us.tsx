@@ -10,18 +10,20 @@ import {
 } from "react-native";
 import { AppText } from "@/components/AppText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useLocalization } from "@/utils/i18n";
 
 export default function RateUsScreen() {
+  const { t } = useLocalization();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
   const handleSubmit = () => {
     if (rating === 0) {
-      Alert.alert("Error", "Please select a rating before submitting.");
+      Alert.alert(t("error"), t("pleaseSelectRating"));
       return;
     }
 
-    Alert.alert("Thank you!", "Your feedback has been submitted successfully.");
+    Alert.alert(t("thankYou"), t("feedbackSubmitted"));
 
     // Reset fields after submission
     setRating(0);
@@ -46,7 +48,7 @@ export default function RateUsScreen() {
           }}
         >
           <AppText size="heading" bold center className="mb-6">
-            Rate our app
+            {t("rateOurApp")}
           </AppText>
 
           {/* Star rating section */}
@@ -70,7 +72,7 @@ export default function RateUsScreen() {
 
           {/* Comment input field */}
           <TextInput
-            placeholder="Leave a comment (optional)"
+            placeholder={t("leaveComment")}
             value={comment}
             onChangeText={setComment}
             style={{
@@ -98,7 +100,7 @@ export default function RateUsScreen() {
             }}
           >
             <AppText bold color="white">
-              Submit
+              {t("submit")}
             </AppText>
           </TouchableOpacity>
         </View>
