@@ -492,7 +492,7 @@ export default function ProfileScreen() {
           elevation: 2,
         }}
       >
-        <AppText bold color="white" className="text-[15px] mb-1.5">
+        <AppText bold color="white" className="text-[15px]">
           {isEditing ? "Save" : "Update"}
         </AppText>
         <MaterialCommunityIcons
