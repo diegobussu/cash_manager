@@ -110,30 +110,11 @@ export default function IndexScreen() {
         ]);
         return;
       }
-
-      Alert.alert(
-        t("confirmPurchase"),
-        t("paymentConfirmation", {
-          total: totalPrice.toFixed(2),
-          cardDigits: Utils.getLast4Digits(selectedCard.card_number),
-        }),
-        [
-          { text: t("cancel"), style: "destructive" },
-          { text: t("payNow"), onPress: processCardPayment },
-        ],
-      );
+      // Direct: pas d'alerte, on lance le paiement
+      processCardPayment();
     } else {
-      // PayPal flow
-      Alert.alert(
-        t("confirmPurchase"),
-        t("paypalConfirmation", {
-          total: totalPrice.toFixed(2),
-        }),
-        [
-          { text: t("cancel"), style: "destructive" },
-          { text: t("payWithPayPal"), onPress: processPayPalPayment },
-        ],
-      );
+      // Direct: pas d'alerte, on lance le paiement PayPal
+      processPayPalPayment();
     }
   };
 
