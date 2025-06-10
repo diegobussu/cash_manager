@@ -150,7 +150,7 @@
   "addPaymentMethodPrompt": "Please add a payment method in your profile settings",
   "addCard": "Add Card",
   "confirmPurchase": "Confirm Purchase",
-  "paymentConfirmation": "Total: %{total} €\nPay with card ending in %{cardDigits}?",
+  "paymentConfirmation": "Total : %{total} €\nPay with card ending in %{cardDigits}?",
   "payNow": "Pay Now",
   "noCardSelected": "No payment card selected",
   "paymentFailed": "Payment Failed",
