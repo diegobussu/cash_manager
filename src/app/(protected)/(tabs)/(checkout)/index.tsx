@@ -6,6 +6,7 @@ import {
   Image,
   Alert,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import { CartContext, CartItem } from "@/utils/cartContext";
 import { AppText } from "@/components/AppText";
@@ -28,6 +29,9 @@ export default function IndexScreen() {
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const { t } = useLocalization();
+  const [editingItemId, setEditingItemId] = useState<number | null>(null);
+  const [editingQuantity, setEditingQuantity] = useState<string>("");
+
   // New state for payment method
   const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal">("card");
 
@@ -272,7 +276,64 @@ export default function IndexScreen() {
             >
               <MaterialCommunityIcons name="minus" size={18} color="#333" />
             </TouchableOpacity>
-            <AppText className="mx-3">{item.quantity}</AppText>
+            {editingItemId === item.product.id ? (
+              <TextInput
+                style={{
+                  width: 48,
+                  height: 32,
+                  textAlign: "center",
+                  fontSize: 18,
+                  fontWeight: "bold",
+                  marginHorizontal: 8,
+                  backgroundColor: "#f1f5f9",
+                  borderRadius: 8,
+                }}
+                keyboardType="number-pad"
+                value={editingQuantity}
+                autoFocus
+                onBlur={() => {
+                  let num = parseInt(
+                    editingQuantity.replace(/[^0-9]/g, ""),
+                    10,
+                  );
+                  if (isNaN(num)) num = 1;
+                  if (num < 1) num = 1;
+                  if (
+                    typeof item.product.quantity === "number" &&
+                    num > item.product.quantity
+                  )
+                    num = item.product.quantity;
+                  setEditingItemId(null);
+                  setEditingQuantity("");
+                  if (num !== item.quantity) handleQuantityChange(item, num);
+                }}
+                onChangeText={(text) => {
+                  let num = parseInt(text.replace(/[^0-9]/g, ""), 10);
+                  if (isNaN(num)) num = 1;
+                  else if (
+                    typeof item.product.quantity === "number" &&
+                    num > item.product.quantity
+                  )
+                    num = item.product.quantity;
+                  setEditingQuantity(num.toString());
+                }}
+                maxLength={
+                  item.product.quantity
+                    ? item.product.quantity.toString().length
+                    : 3
+                }
+                selectTextOnFocus
+              />
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  setEditingItemId(item.product.id);
+                  setEditingQuantity(item.quantity.toString());
+                }}
+              >
+                <AppText className="mx-3">{item.quantity}</AppText>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               className="p-1 bg-gray-200 rounded-full"
               onPress={() => handleQuantityChange(item, item.quantity + 1)}
