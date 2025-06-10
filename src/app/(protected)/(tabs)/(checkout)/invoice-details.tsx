@@ -13,6 +13,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ProductService from "@/services/productService";
 import { Product } from "@/models/Product";
 import { useLocalization } from "@/utils/i18n";
+import Utils from "@/utils/Utils";
 
 export default function InvoiceDetailsScreen() {
   const { invoice } = useLocalSearchParams();
@@ -68,7 +69,7 @@ export default function InvoiceDetailsScreen() {
             </View>
             <View>
               <AppText bold size="heading" className="mb-1">
-                {invoiceData.total_price.toFixed(2)} €
+                {Utils.formatPrice(invoiceData.total_price, locale)}
               </AppText>
               <AppText color="secondary" size="small">
                 {t("totalAmount")}
@@ -189,7 +190,7 @@ export default function InvoiceDetailsScreen() {
                   </AppText>
                   <AppText color="primary" bold>
                     {product && product.price
-                      ? `${product.price} € ${t("perUnit")}`
+                      ? `${Utils.formatPrice(product.price, locale)} ${t("perUnit")}`
                       : ""}
                   </AppText>
                 </View>

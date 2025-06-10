@@ -51,4 +51,17 @@ export default class Utils {
     if (/^3[47]/.test(digits)) return "Amex";
     return "Visa";
   }
+
+  public static formatPrice(
+    amount: number,
+    locale: string = "en",
+    currency: string | undefined = undefined,
+  ) {
+    const currencyCode = currency || (locale === "fr" ? "EUR" : "USD");
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currencyCode,
+      minimumFractionDigits: 2,
+    }).format(amount);
+  }
 }

@@ -12,6 +12,7 @@ import { AppText } from "@/components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { CartContext } from "@/utils/cartContext";
 import { useLocalization } from "@/utils/i18n";
+import Utils from "@/utils/Utils";
 
 export default function ProductModal() {
   const { product } = useLocalSearchParams();
@@ -22,7 +23,7 @@ export default function ProductModal() {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const maxQuantity = productData?.quantity;
-  const { t } = useLocalization();
+  const { t, locale } = useLocalization();
 
   const handleAddToCart = () => {
     const alreadyInCart =
@@ -156,7 +157,7 @@ export default function ProductModal() {
             </AppText>
             <AppText bold size="heading" color="primary">
               {productData.price
-                ? `${(productData.price * quantity).toFixed(2)} €`
+                ? Utils.formatPrice(productData.price * quantity, locale)
                 : t("na")}
             </AppText>
           </View>

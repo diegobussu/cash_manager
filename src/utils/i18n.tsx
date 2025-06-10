@@ -3,24 +3,24 @@ import * as Localization from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useContext, useEffect, useState } from "react";
 
-// Import des traductions
+// Import translations
 import en from "../../locales/en.json";
 import fr from "../../locales/fr.json";
 
-// Initialisation de l'objet i18n
+// Initialize i18n object
 const i18n = new I18n({
   en,
   fr,
 });
 
-// Définir la locale par défaut
+// Set default locale
 i18n.defaultLocale = "en";
 i18n.enableFallback = true;
 
-// Clé pour le stockage de la langue
+// Key for language storage
 const LANGUAGE_KEY = "user-language";
 
-// Créer un context pour gérer la langue dans toute l'application
+// Create a context to manage language throughout the app
 export const LocalizationContext = createContext({
   locale: Localization.locale.split("-")[0],
   setLocale: (locale: string) => {},
@@ -31,10 +31,10 @@ export const LocalizationContext = createContext({
   t: (scope: string, options?: object) => string;
 });
 
-// Hook pour utiliser le contexte de localisation
+// Hook to use the localization context
 export const useLocalization = () => useContext(LocalizationContext);
 
-// Provider pour la localisation
+// Localization provider
 export const LocalizationProvider = ({
   children,
 }: {
@@ -42,14 +42,14 @@ export const LocalizationProvider = ({
 }) => {
   const [locale, setLocale] = useState(Localization.locale.split("-")[0]);
 
-  // Charger la langue sauvegardée au démarrage
+  // Load saved language on startup
   useEffect(() => {
     const loadSavedLanguage = async () => {
       const savedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
       if (savedLanguage) {
         setLocale(savedLanguage);
       } else {
-        // Utiliser la langue du système si pas de préférence sauvegardée
+        // Use device language if no saved preference
         const deviceLanguage = Localization.locale.split("-")[0];
         const supportedLanguage = ["en", "fr"].includes(deviceLanguage)
           ? deviceLanguage
@@ -61,18 +61,18 @@ export const LocalizationProvider = ({
     loadSavedLanguage();
   }, []);
 
-  // Mettre à jour i18n quand la langue change
+  // Update i18n when language changes
   useEffect(() => {
     i18n.locale = locale;
   }, [locale]);
 
-  // Fonction pour changer la langue
+  // Function to change language
   const setLocaleWrapper = async (newLocale: string) => {
     await AsyncStorage.setItem(LANGUAGE_KEY, newLocale);
     setLocale(newLocale);
   };
 
-  // Fonction de traduction
+  // Translation function
   const t = (scope: string, options?: object) => {
     return i18n.t(scope, options);
   };

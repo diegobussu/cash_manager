@@ -20,7 +20,7 @@ export default function ProductDetailsScreen() {
   const router = useRouter();
   const navigation = useNavigation();
   const productData: Product = JSON.parse(product as string);
-  const { t } = useLocalization();
+  const { t, locale } = useLocalization();
   const [imageModalVisible, setImageModalVisible] = useState(false);
 
   useEffect(() => {
@@ -171,7 +171,9 @@ export default function ProductDetailsScreen() {
                 {t("price")}
               </AppText>
               <AppText size="small" bold className="w-2/3">
-                {productData.price ? `${productData.price} €` : t("na")}
+                {productData.price
+                  ? Utils.formatPrice(productData.price, locale)
+                  : t("na")}
               </AppText>
             </View>
           </View>

@@ -29,7 +29,7 @@ export default function IndexScreen() {
   const [selectedCard, setSelectedCard] = useState<CreditCard | null>(null);
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const { t } = useLocalization();
+  const { t, locale } = useLocalization();
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [editingQuantity, setEditingQuantity] = useState<string>("");
 
@@ -268,7 +268,7 @@ export default function IndexScreen() {
           </AppText>
           <AppText bold color="primary" className="mt-1">
             {item.product.price
-              ? `${(item.product.price * item.quantity).toFixed(2)} €`
+              ? Utils.formatPrice(item.product.price * item.quantity, locale)
               : t("na")}
           </AppText>
         </View>
@@ -432,7 +432,7 @@ export default function IndexScreen() {
           <View className="bg-white p-4 border-t border-gray-200">
             <View className="flex-row justify-between mb-2">
               <AppText>{t("subtotal")}</AppText>
-              <AppText bold>{totalPrice.toFixed(2)} €</AppText>
+              <AppText bold>{Utils.formatPrice(totalPrice, locale)}</AppText>
             </View>
 
             {/* Payment Method Selection */}

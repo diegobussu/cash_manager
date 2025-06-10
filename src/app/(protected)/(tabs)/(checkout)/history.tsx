@@ -12,6 +12,7 @@ import { AppText } from "@/components/AppText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
 import { useLocalization } from "@/utils/i18n";
+import Utils from "@/utils/Utils";
 
 export default function HistoryScreen() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -107,7 +108,7 @@ export default function HistoryScreen() {
           </View>
           <View>
             <AppText bold size="heading" color="primary">
-              {item.total_price.toFixed(2)} €
+              {Utils.formatPrice(item.total_price, locale)}
             </AppText>
           </View>
         </View>

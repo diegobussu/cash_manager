@@ -93,5 +93,32 @@ describe("Utils", () => {
       expect(Utils.detectCardType("")).toBe("Visa");
       expect(Utils.detectCardType("abcd")).toBe("Visa");
     });
+
+    describe("formatPrice", () => {
+      it("should format price in USD for en locale", () => {
+        expect(Utils.formatPrice(1234.56, "en", "USD")).toMatch(
+          /\$\s?1,234\.56/,
+        );
+      });
+
+      it("should format price in EUR for fr locale", () => {
+        expect(Utils.formatPrice(1234.56, "fr", "EUR")).toMatch(
+          /1\s?234,56\s?€/,
+        );
+      });
+
+      it("should use default currency USD for en locale if not provided", () => {
+        expect(Utils.formatPrice(100, "en")).toMatch(/\$\s?100\.00/);
+      });
+
+      it("should use default currency EUR for fr locale if not provided", () => {
+        expect(Utils.formatPrice(100, "fr")).toMatch(/100,00\s?€/);
+      });
+
+      it("should format zero correctly", () => {
+        expect(Utils.formatPrice(0, "en", "USD")).toMatch(/\$\s?0\.00/);
+        expect(Utils.formatPrice(0, "fr", "EUR")).toMatch(/0,00\s?€/);
+      });
+    });
   });
 });

@@ -14,9 +14,10 @@ import { AppText } from "@/components/AppText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
 import { useLocalization } from "@/utils/i18n";
+import Utils from "@/utils/Utils";
 
 export default function IndexScreen() {
-  const { t } = useLocalization();
+  const { t, locale } = useLocalization();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +77,7 @@ export default function IndexScreen() {
           {item.brand}
         </AppText>
         <AppText bold color="primary">
-          {item.price ? `${item.price} €` : "N/A"}
+          {Utils.formatPrice(item.price, locale)}
         </AppText>
         {item.quantity === 0 && (
           <View className="flex-row items-center mt-2">

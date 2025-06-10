@@ -14,12 +14,14 @@ export default function LanguagesScreen() {
       name: t("english"),
       flag: "🇺🇸",
       description: "English (United States)",
+      currency: "USD ($)",
     },
     {
       code: "fr",
       name: t("french"),
       flag: "🇫🇷",
       description: "Français (France)",
+      currency: "EUR (€)",
     },
   ];
 
@@ -66,6 +68,9 @@ export default function LanguagesScreen() {
                   </AppText>
                   <AppText size="small" color="secondary">
                     {lang.description}
+                  </AppText>
+                  <AppText size="small" color="secondary">
+                    {lang.currency}
                   </AppText>
                 </View>
               </View>
