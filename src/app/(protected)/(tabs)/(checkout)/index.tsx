@@ -19,6 +19,7 @@ import InvoiceService from "@/services/invoiceService";
 import ProductService from "@/services/productService";
 import { useLocalization } from "@/utils/i18n";
 import PayPalService from "@/services/payPalService";
+import * as Linking from "expo-linking";
 
 export default function IndexScreen() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } =
@@ -177,56 +178,82 @@ export default function IndexScreen() {
     setIsProcessingPayment(true);
 
     try {
-      // Step 1: Create a PayPal order
+      // 1
       const orderResponse = await PayPalService.createOrder(
         totalPrice,
         `Cash Manager Purchase - ${items.length} items`,
       );
 
-      if (!orderResponse.success || !orderResponse.orderId) {
+      if (
+        !orderResponse.success ||
+        !orderResponse.orderId ||
+        !orderResponse.approveUrl
+      ) {
         throw new Error(t("failedToCreatePayPalOrder"));
       }
 
-      // Step 2: Capture the payment
-      const captureResponse = await PayPalService.capturePayment(
-        orderResponse.orderId,
-      );
+      // 2
+      await Linking.openURL(orderResponse.approveUrl);
 
-      if (!captureResponse.success) {
-        throw new Error(t("paypalPaymentCaptureFailed"));
-      }
+      // 3
+      Alert.alert(t("paypalApprovalTitle"), t("paypalApprovalMessage"), [
+        {
+          text: t("cancel"),
+          style: "destructive",
+          onPress: () => setIsProcessingPayment(false),
+        },
+        {
+          text: t("continue"),
+          onPress: async () => {
+            try {
+              // 4
+              const captureResponse = await PayPalService.capturePayment(
+                orderResponse.orderId,
+              );
 
-      // Step 3: Process the order in our system
-      const invoiceItems = items.map((item) => ({
-        bar_code: item.product.bar_code,
-        product_name: item.product.name,
-        quantity: item.quantity,
-      }));
+              if (!captureResponse.success) {
+                throw new Error(t("paypalPaymentCaptureFailed"));
+              }
 
-      // Using "PAYPAL" as the card_number to identify PayPal payments
-      await InvoiceService.addInvoice(
-        "PAYPAL-" + orderResponse.orderId,
-        invoiceItems,
-      );
+              // 5
+              const invoiceItems = items.map((item) => ({
+                bar_code: item.product.bar_code,
+                product_name: item.product.name,
+                quantity: item.quantity,
+              }));
 
-      // Update product quantities
-      await Promise.all(
-        items.map((item) =>
-          ProductService.updateProductQuantity(
-            item.product.bar_code,
-            Math.max(0, (item.product.quantity ?? 0) - item.quantity),
-          ),
-        ),
-      );
+              await InvoiceService.addInvoice(
+                "PAYPAL-" + orderResponse.orderId,
+                invoiceItems,
+              );
 
-      clearCart();
-      router.navigate("/(protected)/(tabs)/(checkout)/history");
+              await Promise.all(
+                items.map((item) =>
+                  ProductService.updateProductQuantity(
+                    item.product.bar_code,
+                    Math.max(0, (item.product.quantity ?? 0) - item.quantity),
+                  ),
+                ),
+              );
+
+              clearCart();
+              router.navigate("/(protected)/(tabs)/(checkout)/history");
+            } catch (error: any) {
+              Alert.alert(
+                t("paymentFailed"),
+                error?.message || t("paypalProcessError"),
+              );
+            } finally {
+              setIsProcessingPayment(false);
+            }
+          },
+        },
+      ]);
     } catch (error: any) {
       Alert.alert(
         t("paymentFailed"),
         error?.message || t("paypalProcessError"),
       );
-    } finally {
       setIsProcessingPayment(false);
     }
   };

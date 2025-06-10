@@ -235,5 +235,7 @@
   "paypalConfirmation": "You will pay €{{total}} via PayPal",
   "failedToCreatePayPalOrder": "Failed to create PayPal order",
   "paypalPaymentCaptureFailed": "PayPal payment capture failed",
-  "paypalProcessError": "An error occurred during PayPal payment processing"
+  "paypalProcessError": "An error occurred during PayPal payment processing",
+  "paypalApprovalTitle": "Approve PayPal Payment",
+  "paypalApprovalMessage": "After approving the payment on PayPal, return here and tap Continue to finalize your order."
 }
