@@ -88,7 +88,7 @@ export default function IndexScreen() {
     try {
       const product = await ProductService.getProductByID(data);
       router.navigate({
-        pathname: "/(protected)/(tabs)/(products)/product",
+        pathname: "/(protected)/(tabs)/(products)/product-details",
         params: { product: JSON.stringify(product) },
       });
 

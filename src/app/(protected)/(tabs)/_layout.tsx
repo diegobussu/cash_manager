@@ -4,8 +4,10 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { CartContext } from "@/utils/cartContext";
 import { View } from "react-native";
 import { AppText } from "@/components/AppText";
+import { useLocalization } from "@/utils/i18n";
 
 export default function BottomTabsLayout() {
+  const { t } = useLocalization();
   const { totalItems } = useContext(CartContext);
 
   return (
@@ -19,7 +21,7 @@ export default function BottomTabsLayout() {
       <Tabs.Screen
         name="(home)"
         options={{
-          title: "Home",
+          title: t("home"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -33,7 +35,7 @@ export default function BottomTabsLayout() {
       <Tabs.Screen
         name="(products)"
         options={{
-          title: "Products",
+          title: t("products"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -47,7 +49,7 @@ export default function BottomTabsLayout() {
       <Tabs.Screen
         name="scanner"
         options={{
-          title: "Scan",
+          title: t("scan"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -61,7 +63,7 @@ export default function BottomTabsLayout() {
       <Tabs.Screen
         name="(checkout)"
         options={{
-          title: "Checkout",
+          title: t("checkout"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <React.Fragment>
@@ -101,7 +103,7 @@ export default function BottomTabsLayout() {
       <Tabs.Screen
         name="(settings)"
         options={{
-          title: "Settings",
+          title: t("settings"),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons

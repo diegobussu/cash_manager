@@ -4,6 +4,7 @@
   "login": "Connexion",
   "signup": "S'inscrire",
   "settings": "Paramètres",
+  "scan": "Scanner",
   "language": "Langue",
   "selectLanguage": "Choisir la langue",
   "languageDescription": "Choisissez votre langue préférée pour l'application",
@@ -25,6 +26,7 @@
   "deleteAccount": "Supprimer le compte",
   "deleteAccountConfirmation": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action ne peut pas être annulée.",
   "cancel": "Annuler",
+  "continue": "Continuer",
   "delete": "Supprimer",
   "error": "Erreur",
   "deleteAccountError": "Échec de la suppression du compte. Veuillez réessayer.",
@@ -149,7 +151,6 @@
   "addPaymentMethodPrompt": "Veuillez ajouter un moyen de paiement dans les paramètres de votre profil",
   "addCard": "Ajouter une carte",
   "confirmPurchase": "Confirmer l'achat",
-  "paymentConfirmation": "Total : %{total} €\nPayer avec la carte se terminant par %{cardDigits} ?",
   "payNow": "Payer maintenant",
   "noCardSelected": "Aucune carte de paiement sélectionnée",
   "paymentFailed": "Paiement échoué",
@@ -225,5 +226,14 @@
   "passwordUpdatedSuccess": "Mot de passe mis à jour avec succès. Vous allez être déconnecté.",
   "failedToUpdatePassword": "Échec de la mise à jour du mot de passe.",
   "emailUpdatedSuccess": "Email mis à jour avec succès. Vous allez être déconnecté.",
-  "failedToUpdateEmail": "Échec de la mise à jour de l'email."
+  "failedToUpdateEmail": "Échec de la mise à jour de l'email.",
+
+  "selectPaymentMethod": "Sélectionnez un mode de paiement",
+  "creditCard": "Carte de crédit",
+  "payWithPayPal": "Payer avec PayPal",
+  "failedToCreatePayPalOrder": "Échec de la création de la commande PayPal",
+  "paypalPaymentCaptureFailed": "Échec de la capture du paiement PayPal",
+  "paypalProcessError": "Une erreur s'est produite lors du traitement du paiement PayPal",
+  "paypalApprovalTitle": "Validez le paiement PayPal",
+  "paypalApprovalMessage": "Après avoir validé le paiement sur PayPal, revenez ici puis appuyez sur Continuer pour finaliser votre commande."
 }

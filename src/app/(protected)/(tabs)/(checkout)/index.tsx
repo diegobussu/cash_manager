@@ -6,6 +6,7 @@ import {
   Image,
   Alert,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import { CartContext, CartItem } from "@/utils/cartContext";
 import { AppText } from "@/components/AppText";
@@ -17,6 +18,8 @@ import Utils from "@/utils/Utils";
 import InvoiceService from "@/services/invoiceService";
 import ProductService from "@/services/productService";
 import { useLocalization } from "@/utils/i18n";
+import PayPalService from "@/services/payPalService";
+import * as Linking from "expo-linking";
 
 export default function IndexScreen() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } =
@@ -27,6 +30,11 @@ export default function IndexScreen() {
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const { t } = useLocalization();
+  const [editingItemId, setEditingItemId] = useState<number | null>(null);
+  const [editingQuantity, setEditingQuantity] = useState<string>("");
+
+  // New state for payment method
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "paypal">("card");
 
   // Load payment cards when needed
   const loadPaymentCards = async () => {
@@ -90,32 +98,28 @@ export default function IndexScreen() {
       return;
     }
 
-    if (!selectedCard) {
-      Alert.alert(t("noPaymentMethod"), t("addPaymentMethodPrompt"), [
-        { text: t("cancel"), style: "destructive" },
-        {
-          text: t("addCard"),
-          onPress: () =>
-            router.navigate("/(protected)/(tabs)/(settings)/credit-cards"),
-        },
-      ]);
-      return;
+    if (paymentMethod === "card") {
+      if (!selectedCard) {
+        Alert.alert(t("noPaymentMethod"), t("addPaymentMethodPrompt"), [
+          { text: t("cancel"), style: "destructive" },
+          {
+            text: t("addCard"),
+            onPress: () =>
+              router.navigate("/(protected)/(tabs)/(settings)/credit-cards"),
+          },
+        ]);
+        return;
+      }
+      // Direct: pas d'alerte, on lance le paiement
+      processCardPayment();
+    } else {
+      // Direct: pas d'alerte, on lance le paiement PayPal
+      processPayPalPayment();
     }
-
-    Alert.alert(
-      t("confirmPurchase"),
-      t("paymentConfirmation", {
-        total: totalPrice.toFixed(2),
-        cardDigits: Utils.getLast4Digits(selectedCard.card_number),
-      }),
-      [
-        { text: t("cancel"), style: "destructive" },
-        { text: t("payNow"), onPress: processPayment },
-      ],
-    );
   };
 
-  const processPayment = async () => {
+  // Renamed existing function for clarity
+  const processCardPayment = async () => {
     setIsProcessingPayment(true);
 
     try {
@@ -146,6 +150,91 @@ export default function IndexScreen() {
         error?.message || t("paymentProcessError"),
       );
     } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
+  // New function for PayPal payment flow
+  const processPayPalPayment = async () => {
+    setIsProcessingPayment(true);
+
+    try {
+      // 1
+      const orderResponse = await PayPalService.createOrder(
+        totalPrice,
+        `Cash Manager Purchase - ${items.length} items`,
+      );
+
+      if (
+        !orderResponse.success ||
+        !orderResponse.orderId ||
+        !orderResponse.approveUrl
+      ) {
+        throw new Error(t("failedToCreatePayPalOrder"));
+      }
+
+      // 2
+      await Linking.openURL(orderResponse.approveUrl);
+
+      // 3
+      Alert.alert(t("paypalApprovalTitle"), t("paypalApprovalMessage"), [
+        {
+          text: t("cancel"),
+          style: "destructive",
+          onPress: () => setIsProcessingPayment(false),
+        },
+        {
+          text: t("continue"),
+          onPress: async () => {
+            try {
+              // 4
+              const captureResponse = await PayPalService.capturePayment(
+                orderResponse.orderId,
+              );
+
+              if (!captureResponse.success) {
+                throw new Error(t("paypalPaymentCaptureFailed"));
+              }
+
+              // 5
+              const invoiceItems = items.map((item) => ({
+                bar_code: item.product.bar_code,
+                product_name: item.product.name,
+                quantity: item.quantity,
+              }));
+
+              await InvoiceService.addInvoice(
+                "PAYPAL-" + orderResponse.orderId,
+                invoiceItems,
+              );
+
+              await Promise.all(
+                items.map((item) =>
+                  ProductService.updateProductQuantity(
+                    item.product.bar_code,
+                    Math.max(0, (item.product.quantity ?? 0) - item.quantity),
+                  ),
+                ),
+              );
+
+              clearCart();
+              router.navigate("/(protected)/(tabs)/(checkout)/history");
+            } catch (error: any) {
+              Alert.alert(
+                t("paymentFailed"),
+                error?.message || t("paypalProcessError"),
+              );
+            } finally {
+              setIsProcessingPayment(false);
+            }
+          },
+        },
+      ]);
+    } catch (error: any) {
+      Alert.alert(
+        t("paymentFailed"),
+        error?.message || t("paypalProcessError"),
+      );
       setIsProcessingPayment(false);
     }
   };
@@ -195,7 +284,64 @@ export default function IndexScreen() {
             >
               <MaterialCommunityIcons name="minus" size={18} color="#333" />
             </TouchableOpacity>
-            <AppText className="mx-3">{item.quantity}</AppText>
+            {editingItemId === item.product.id ? (
+              <TextInput
+                style={{
+                  width: 48,
+                  height: 32,
+                  textAlign: "center",
+                  fontSize: 18,
+                  fontWeight: "bold",
+                  marginHorizontal: 8,
+                  backgroundColor: "#f1f5f9",
+                  borderRadius: 8,
+                }}
+                keyboardType="number-pad"
+                value={editingQuantity}
+                autoFocus
+                onBlur={() => {
+                  let num = parseInt(
+                    editingQuantity.replace(/[^0-9]/g, ""),
+                    10,
+                  );
+                  if (isNaN(num)) num = 1;
+                  if (num < 1) num = 1;
+                  if (
+                    typeof item.product.quantity === "number" &&
+                    num > item.product.quantity
+                  )
+                    num = item.product.quantity;
+                  setEditingItemId(null);
+                  setEditingQuantity("");
+                  if (num !== item.quantity) handleQuantityChange(item, num);
+                }}
+                onChangeText={(text) => {
+                  let num = parseInt(text.replace(/[^0-9]/g, ""), 10);
+                  if (isNaN(num)) num = 1;
+                  else if (
+                    typeof item.product.quantity === "number" &&
+                    num > item.product.quantity
+                  )
+                    num = item.product.quantity;
+                  setEditingQuantity(num.toString());
+                }}
+                maxLength={
+                  item.product.quantity
+                    ? item.product.quantity.toString().length
+                    : 3
+                }
+                selectTextOnFocus
+              />
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  setEditingItemId(item.product.id);
+                  setEditingQuantity(item.quantity.toString());
+                }}
+              >
+                <AppText className="mx-3">{item.quantity}</AppText>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               className="p-1 bg-gray-200 rounded-full"
               onPress={() => handleQuantityChange(item, item.quantity + 1)}
@@ -289,8 +435,51 @@ export default function IndexScreen() {
               <AppText bold>{totalPrice.toFixed(2)} €</AppText>
             </View>
 
-            {/* Payment Method Selector - Simple version */}
-            {paymentCards.length > 0 && (
+            {/* Payment Method Selection */}
+            <View className="my-3">
+              <AppText bold className="mb-2">
+                {t("selectPaymentMethod")}
+              </AppText>
+
+              <View className="flex-row mb-2">
+                <TouchableOpacity
+                  className={`flex-1 flex-row items-center p-3 rounded-lg mr-2 ${paymentMethod === "card" ? "bg-blue-100 border border-blue-500" : "bg-gray-100"}`}
+                  onPress={() => setPaymentMethod("card")}
+                >
+                  <MaterialCommunityIcons
+                    name="credit-card-outline"
+                    size={20}
+                    color={paymentMethod === "card" ? "#0853A9" : "#64748b"}
+                  />
+                  <AppText
+                    className="ml-2"
+                    color={paymentMethod === "card" ? "primary" : "secondary"}
+                  >
+                    {t("creditCard")}
+                  </AppText>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  className={`flex-1 flex-row items-center p-3 rounded-lg ${paymentMethod === "paypal" ? "bg-blue-100 border border-blue-500" : "bg-gray-100"}`}
+                  onPress={() => setPaymentMethod("paypal")}
+                >
+                  <MaterialCommunityIcons
+                    name="cash-multiple"
+                    size={20}
+                    color={paymentMethod === "paypal" ? "#0853A9" : "#64748b"}
+                  />
+                  <AppText
+                    className="ml-2"
+                    color={paymentMethod === "paypal" ? "primary" : "secondary"}
+                  >
+                    PayPal
+                  </AppText>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Card Selection (only show if card payment method is selected) */}
+            {paymentMethod === "card" && paymentCards.length > 0 && (
               <View className="flex-row justify-between items-center my-2">
                 <AppText>{t("paymentMethod")}</AppText>
                 <View className="flex-row items-center">
@@ -318,7 +507,9 @@ export default function IndexScreen() {
               onPress={handleProceedToPayment}
             >
               <AppText color="white" bold>
-                {t("proceedToCheckout")}
+                {paymentMethod === "card"
+                  ? t("proceedToCheckout")
+                  : t("payWithPayPal")}
               </AppText>
             </TouchableOpacity>
           </View>

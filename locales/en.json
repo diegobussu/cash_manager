@@ -4,6 +4,7 @@
   "login": "Login",
   "signup": "Sign Up",
   "settings": "Settings",
+  "scan": "Scan",
   "language": "Language",
   "selectLanguage": "Select Language",
   "languageDescription": "Choose your preferred language for the app",
@@ -25,6 +26,7 @@
   "deleteAccount": "Delete Account",
   "deleteAccountConfirmation": "Are you sure you want to delete your account? This action cannot be undone.",
   "cancel": "Cancel",
+  "continue": "Continue",
   "delete": "Delete",
   "error": "Error",
   "deleteAccountError": "Failed to delete account. Please try again.",
@@ -149,7 +151,6 @@
   "addPaymentMethodPrompt": "Please add a payment method in your profile settings",
   "addCard": "Add Card",
   "confirmPurchase": "Confirm Purchase",
-  "paymentConfirmation": "Total: %{total} €\nPay with card ending in %{cardDigits}?",
   "payNow": "Pay Now",
   "noCardSelected": "No payment card selected",
   "paymentFailed": "Payment Failed",
@@ -225,5 +226,15 @@
   "passwordUpdatedSuccess": "Password updated successfully. You will be logged out.",
   "failedToUpdatePassword": "Failed to update password.",
   "emailUpdatedSuccess": "Email updated successfully. You will be logged out.",
-  "failedToUpdateEmail": "Failed to update email."
+  "failedToUpdateEmail": "Failed to update email.",
+
+
+  "selectPaymentMethod": "Select Payment Method",
+  "creditCard": "Credit Card",
+  "payWithPayPal": "Pay with PayPal",
+  "failedToCreatePayPalOrder": "Failed to create PayPal order",
+  "paypalPaymentCaptureFailed": "PayPal payment capture failed",
+  "paypalProcessError": "An error occurred during PayPal payment processing",
+  "paypalApprovalTitle": "Approve PayPal Payment",
+  "paypalApprovalMessage": "After approving the payment on PayPal, return here and tap Continue to finalize your order."
 }
