@@ -38,7 +38,6 @@ export default function HistoryScreen() {
       );
     } catch (err: any) {
       setError(err.message || t("failedToLoadInvoices"));
-      Alert.alert(t("error"), err.message || t("failedToLoadInvoices"));
     } finally {
       setLoading(false);
     }
