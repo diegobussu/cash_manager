@@ -143,7 +143,7 @@ export default function IndexScreen() {
       );
 
       clearCart();
-      router.navigate("/(protected)/(tabs)/(history)/index");
+      router.navigate("/(protected)/(tabs)/(history)");
     } catch (error: any) {
       Alert.alert(
         t("paymentFailed"),
@@ -218,7 +218,7 @@ export default function IndexScreen() {
               );
 
               clearCart();
-              router.navigate("/(protected)/(tabs)/(history)/index");
+              router.navigate("/(protected)/(tabs)/(history)");
             } catch (error: any) {
               Alert.alert(
                 t("paymentFailed"),
