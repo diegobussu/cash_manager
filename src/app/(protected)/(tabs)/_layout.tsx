@@ -19,20 +19,6 @@ export default function BottomTabsLayout() {
       backBehavior="order"
     >
       <Tabs.Screen
-        name="(home)"
-        options={{
-          title: t("home"),
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="home-outline"
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="(products)"
         options={{
           title: t("products"),

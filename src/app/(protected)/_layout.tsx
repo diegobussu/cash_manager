@@ -8,7 +8,7 @@ export default function ProtectedLayout() {
 
   useEffect(() => {
     if (authState.isReady && authState.isLoggedIn) {
-      router.replace("/(protected)/(tabs)/(home)");
+      router.replace("/(protected)/(tabs)/(products)");
     }
   }, [authState.isReady, authState.isLoggedIn, router]);
 

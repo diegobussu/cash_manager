@@ -44,7 +44,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       console.log("Token:", token);
     }
 
-    router.replace("/(protected)/(tabs)/(home)");
+    router.replace("/(protected)/(tabs)/(products)");
   };
 
   const logOut = () => {
