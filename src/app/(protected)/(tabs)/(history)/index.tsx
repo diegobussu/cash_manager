@@ -4,7 +4,6 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import InvoiceService from "@/services/invoiceService";
 import { Invoice } from "@/models/Invoice";
@@ -14,7 +13,7 @@ import { router } from "expo-router";
 import { useLocalization } from "@/utils/i18n";
 import Utils from "@/utils/Utils";
 
-export default function HistoryScreen() {
+export default function IndexScreen() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +63,7 @@ export default function HistoryScreen() {
         style={{ elevation: 3 }}
         onPress={() => {
           router.navigate({
-            pathname: "/(protected)/(tabs)/(checkout)/invoice-details",
+            pathname: "/(protected)/(tabs)/(history)/invoice-details",
             params: { invoice: JSON.stringify(item) },
           });
         }}

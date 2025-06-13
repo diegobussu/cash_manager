@@ -87,6 +87,16 @@ export default function BottomTabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="(history)"
+        options={{
+          title: t("history"),
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="history" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="(settings)"
         options={{
           title: t("settings"),

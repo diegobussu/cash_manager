@@ -8,8 +8,12 @@ export default function Layout() {
       <Stack.Screen
         name="index"
         options={{
-          title: t("checkout"),
+          title: t("history"),
         }}
+      />
+      <Stack.Screen
+        name="invoice-details"
+        options={{ title: t("invoiceDetails") }}
       />
     </Stack>
   );
