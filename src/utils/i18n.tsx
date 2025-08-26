@@ -20,9 +20,15 @@ i18n.enableFallback = true;
 // Key for language storage
 const LANGUAGE_KEY = "user-language";
 
+// Helper to get initial locale safely
+const getInitialLocale = () => {
+  const deviceLocale = Localization.locale || "en";
+  return deviceLocale.split("-")[0];
+};
+
 // Create a context to manage language throughout the app
 export const LocalizationContext = createContext({
-  locale: Localization.locale.split("-")[0],
+  locale: getInitialLocale(),
   setLocale: (locale: string) => {},
   t: (scope: string, options?: object) => "",
 } as {
@@ -40,21 +46,27 @@ export const LocalizationProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [locale, setLocale] = useState(Localization.locale.split("-")[0]);
+  const [locale, setLocale] = useState(getInitialLocale());
 
   // Load saved language on startup
   useEffect(() => {
     const loadSavedLanguage = async () => {
-      const savedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
-      if (savedLanguage) {
-        setLocale(savedLanguage);
-      } else {
-        // Use device language if no saved preference
-        const deviceLanguage = Localization.locale.split("-")[0];
-        const supportedLanguage = ["en", "fr"].includes(deviceLanguage)
-          ? deviceLanguage
-          : "en";
-        setLocale(supportedLanguage);
+      try {
+        const savedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
+        if (savedLanguage) {
+          setLocale(savedLanguage);
+        } else {
+          // Use device language if no saved preference
+          const deviceLanguage = getInitialLocale();
+          const supportedLanguage = ["en", "fr"].includes(deviceLanguage)
+            ? deviceLanguage
+            : "en";
+          setLocale(supportedLanguage);
+        }
+      } catch (error) {
+        // If there's an error reading from AsyncStorage, fallback to English
+        console.warn("Error loading saved language:", error);
+        setLocale("en");
       }
     };
 
@@ -68,8 +80,12 @@ export const LocalizationProvider = ({
 
   // Function to change language
   const setLocaleWrapper = async (newLocale: string) => {
-    await AsyncStorage.setItem(LANGUAGE_KEY, newLocale);
-    setLocale(newLocale);
+    try {
+      await AsyncStorage.setItem(LANGUAGE_KEY, newLocale);
+      setLocale(newLocale);
+    } catch (error) {
+      console.warn("Error saving language preference:", error);
+    }
   };
 
   // Translation function
