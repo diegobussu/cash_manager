@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Cash Manager",
-    "slug": "Cash Manager",
-    "scheme": "Cash Manager",
+    "name": "cash_manager",
+    "slug": "cash-manager",
+    "scheme": "cash-manager",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/router-icon-cart.png",
@@ -35,7 +35,8 @@
           "recordAudioAndroid": true
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      "expo-font"
     ]
   }
 }
